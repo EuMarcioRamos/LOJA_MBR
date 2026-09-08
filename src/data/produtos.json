@@ -1,0 +1,4498 @@
+[
+  {
+    "id": "17promax-silver",
+    "modelo": "iPhone 17 Pro Max",
+    "cor": "Prata",
+    "corHex": "#C8C8CA",
+    "imagem": "/iphones/17promax-silver.png",
+    "destaque": true,
+    "opcoes": [
+      {
+        "armazenamento": "256GB",
+        "preco": 14999,
+        "disponivel": true
+      },
+      {
+        "armazenamento": "512GB",
+        "preco": 16499,
+        "disponivel": true
+      },
+      {
+        "armazenamento": "1TB",
+        "preco": 18999,
+        "disponivel": true
+      },
+      {
+        "armazenamento": "2TB",
+        "preco": 21999,
+        "disponivel": true
+      }
+    ]
+  },
+  {
+    "id": "17promax-deepblue",
+    "modelo": "iPhone 17 Pro Max",
+    "cor": "Azul Profundo",
+    "corHex": "#1B3A5C",
+    "imagem": "/iphones/17promax-deepblue.png",
+    "destaque": true,
+    "opcoes": [
+      {
+        "armazenamento": "256GB",
+        "preco": 14999,
+        "disponivel": true
+      },
+      {
+        "armazenamento": "512GB",
+        "preco": 16499,
+        "disponivel": true
+      },
+      {
+        "armazenamento": "1TB",
+        "preco": 18999,
+        "disponivel": false
+      },
+      {
+        "armazenamento": "2TB",
+        "preco": 21999,
+        "disponivel": false
+      }
+    ]
+  },
+  {
+    "id": "17promax-cosmicorange",
+    "modelo": "iPhone 17 Pro Max",
+    "cor": "Laranja Cósmico",
+    "corHex": "#D4540A",
+    "imagem": "/iphones/17promax-cosmicorange.png",
+    "destaque": false,
+    "opcoes": [
+      {
+        "armazenamento": "256GB",
+        "preco": 14999,
+        "disponivel": true
+      },
+      {
+        "armazenamento": "512GB",
+        "preco": 16499,
+        "disponivel": true
+      },
+      {
+        "armazenamento": "1TB",
+        "preco": 18999,
+        "disponivel": true
+      },
+      {
+        "armazenamento": "2TB",
+        "preco": 21999,
+        "disponivel": false
+      }
+    ]
+  },
+  {
+    "id": "17pro-silver",
+    "modelo": "iPhone 17 Pro",
+    "cor": "Prata",
+    "corHex": "#C8C8CA",
+    "imagem": "/iphones/17pro-silver.png",
+    "destaque": true,
+    "opcoes": [
+      {
+        "armazenamento": "256GB",
+        "preco": 12499,
+        "disponivel": true
+      },
+      {
+        "armazenamento": "512GB",
+        "preco": 13999,
+        "disponivel": true
+      },
+      {
+        "armazenamento": "1TB",
+        "preco": 15999,
+        "disponivel": true
+      }
+    ]
+  },
+  {
+    "id": "17pro-deepblue",
+    "modelo": "iPhone 17 Pro",
+    "cor": "Azul Profundo",
+    "corHex": "#1B3A5C",
+    "imagem": "/iphones/17pro-deepblue.png",
+    "destaque": false,
+    "opcoes": [
+      {
+        "armazenamento": "256GB",
+        "preco": 12499,
+        "disponivel": true
+      },
+      {
+        "armazenamento": "512GB",
+        "preco": 13999,
+        "disponivel": true
+      },
+      {
+        "armazenamento": "1TB",
+        "preco": 15999,
+        "disponivel": true
+      }
+    ]
+  },
+  {
+    "id": "17pro-cosmicorange",
+    "modelo": "iPhone 17 Pro",
+    "cor": "Laranja Cósmico",
+    "corHex": "#D4540A",
+    "imagem": "/iphones/17pro-cosmicorange.png",
+    "destaque": false,
+    "opcoes": [
+      {
+        "armazenamento": "256GB",
+        "preco": 12499,
+        "disponivel": true
+      },
+      {
+        "armazenamento": "512GB",
+        "preco": 13999,
+        "disponivel": true
+      },
+      {
+        "armazenamento": "1TB",
+        "preco": 15999,
+        "disponivel": false
+      }
+    ]
+  },
+  {
+    "id": "17-black",
+    "modelo": "iPhone 17",
+    "cor": "Preto",
+    "corHex": "#1C1C1E",
+    "imagem": "/iphones/17-black.png",
+    "destaque": false,
+    "opcoes": [
+      {
+        "armazenamento": "256GB",
+        "preco": 9999,
+        "disponivel": true
+      },
+      {
+        "armazenamento": "512GB",
+        "preco": 11499,
+        "disponivel": true
+      }
+    ]
+  },
+  {
+    "id": "17-white",
+    "modelo": "iPhone 17",
+    "cor": "Branco",
+    "corHex": "#F5F5F5",
+    "imagem": "/iphones/17-white.png",
+    "destaque": false,
+    "opcoes": [
+      {
+        "armazenamento": "256GB",
+        "preco": 9999,
+        "disponivel": true
+      },
+      {
+        "armazenamento": "512GB",
+        "preco": 11499,
+        "disponivel": true
+      }
+    ]
+  },
+  {
+    "id": "17-lavender",
+    "modelo": "iPhone 17",
+    "cor": "Lavanda",
+    "corHex": "#D4BFFF",
+    "imagem": "/iphones/17-lavender.png",
+    "destaque": false,
+    "opcoes": [
+      {
+        "armazenamento": "256GB",
+        "preco": 9999,
+        "disponivel": true
+      },
+      {
+        "armazenamento": "512GB",
+        "preco": 11499,
+        "disponivel": false
+      }
+    ]
+  },
+  {
+    "id": "17-sage",
+    "modelo": "iPhone 17",
+    "cor": "Sálvia",
+    "corHex": "#A8B89A",
+    "imagem": "/iphones/17-sage.png",
+    "destaque": false,
+    "opcoes": [
+      {
+        "armazenamento": "256GB",
+        "preco": 9999,
+        "disponivel": true
+      },
+      {
+        "armazenamento": "512GB",
+        "preco": 11499,
+        "disponivel": true
+      }
+    ]
+  },
+  {
+    "id": "17-mistblue",
+    "modelo": "iPhone 17",
+    "cor": "Azul Névoa",
+    "corHex": "#8BAFC5",
+    "imagem": "/iphones/17-mistblue.png",
+    "destaque": false,
+    "opcoes": [
+      {
+        "armazenamento": "256GB",
+        "preco": 9999,
+        "disponivel": true
+      },
+      {
+        "armazenamento": "512GB",
+        "preco": 11499,
+        "disponivel": true
+      }
+    ]
+  },
+  {
+    "id": "16promax-desert",
+    "modelo": "iPhone 16 Pro Max",
+    "cor": "Titânio Deserto",
+    "corHex": "#C4A882",
+    "imagem": "/iphones/16promax-desert.png",
+    "destaque": true,
+    "opcoes": [
+      {
+        "armazenamento": "256GB",
+        "preco": 12999,
+        "disponivel": true
+      },
+      {
+        "armazenamento": "512GB",
+        "preco": 14499,
+        "disponivel": true
+      },
+      {
+        "armazenamento": "1TB",
+        "preco": 16999,
+        "disponivel": true
+      }
+    ]
+  },
+  {
+    "id": "16promax-black",
+    "modelo": "iPhone 16 Pro Max",
+    "cor": "Titânio Preto",
+    "corHex": "#2C2C2E",
+    "imagem": "/iphones/16promax-black.png",
+    "destaque": false,
+    "opcoes": [
+      {
+        "armazenamento": "256GB",
+        "preco": 12999,
+        "disponivel": true
+      },
+      {
+        "armazenamento": "512GB",
+        "preco": 14499,
+        "disponivel": true
+      },
+      {
+        "armazenamento": "1TB",
+        "preco": 16999,
+        "disponivel": true
+      }
+    ]
+  },
+  {
+    "id": "16promax-white",
+    "modelo": "iPhone 16 Pro Max",
+    "cor": "Titânio Branco",
+    "corHex": "#E8E3DC",
+    "imagem": "/iphones/16promax-white.png",
+    "destaque": false,
+    "opcoes": [
+      {
+        "armazenamento": "256GB",
+        "preco": 12999,
+        "disponivel": true
+      },
+      {
+        "armazenamento": "512GB",
+        "preco": 14499,
+        "disponivel": true
+      },
+      {
+        "armazenamento": "1TB",
+        "preco": 16999,
+        "disponivel": true
+      }
+    ]
+  },
+  {
+    "id": "16promax-natural",
+    "modelo": "iPhone 16 Pro Max",
+    "cor": "Titânio Natural",
+    "corHex": "#9E8E7E",
+    "imagem": "/iphones/16promax-natural.png",
+    "destaque": false,
+    "opcoes": [
+      {
+        "armazenamento": "256GB",
+        "preco": 12999,
+        "disponivel": true
+      },
+      {
+        "armazenamento": "512GB",
+        "preco": 14499,
+        "disponivel": true
+      },
+      {
+        "armazenamento": "1TB",
+        "preco": 16999,
+        "disponivel": true
+      }
+    ]
+  },
+  {
+    "id": "16pro-desert",
+    "modelo": "iPhone 16 Pro",
+    "cor": "Titânio Deserto",
+    "corHex": "#C4A882",
+    "imagem": "/iphones/16pro-desert.png",
+    "destaque": false,
+    "opcoes": [
+      {
+        "armazenamento": "128GB",
+        "preco": 10499,
+        "disponivel": true
+      },
+      {
+        "armazenamento": "256GB",
+        "preco": 11499,
+        "disponivel": true
+      },
+      {
+        "armazenamento": "512GB",
+        "preco": 12999,
+        "disponivel": true
+      },
+      {
+        "armazenamento": "1TB",
+        "preco": 14999,
+        "disponivel": true
+      }
+    ]
+  },
+  {
+    "id": "16pro-black",
+    "modelo": "iPhone 16 Pro",
+    "cor": "Titânio Preto",
+    "corHex": "#2C2C2E",
+    "imagem": "/iphones/16pro-black.png",
+    "destaque": false,
+    "opcoes": [
+      {
+        "armazenamento": "128GB",
+        "preco": 10499,
+        "disponivel": true
+      },
+      {
+        "armazenamento": "256GB",
+        "preco": 11499,
+        "disponivel": true
+      },
+      {
+        "armazenamento": "512GB",
+        "preco": 12999,
+        "disponivel": true
+      },
+      {
+        "armazenamento": "1TB",
+        "preco": 14999,
+        "disponivel": false
+      }
+    ]
+  },
+  {
+    "id": "16pro-white",
+    "modelo": "iPhone 16 Pro",
+    "cor": "Titânio Branco",
+    "corHex": "#E8E3DC",
+    "imagem": "/iphones/16pro-white.png",
+    "destaque": false,
+    "opcoes": [
+      {
+        "armazenamento": "128GB",
+        "preco": 10499,
+        "disponivel": true
+      },
+      {
+        "armazenamento": "256GB",
+        "preco": 11499,
+        "disponivel": true
+      },
+      {
+        "armazenamento": "512GB",
+        "preco": 12999,
+        "disponivel": true
+      },
+      {
+        "armazenamento": "1TB",
+        "preco": 14999,
+        "disponivel": true
+      }
+    ]
+  },
+  {
+    "id": "16pro-natural",
+    "modelo": "iPhone 16 Pro",
+    "cor": "Titânio Natural",
+    "corHex": "#9E8E7E",
+    "imagem": "/iphones/16pro-natural.png",
+    "destaque": false,
+    "opcoes": [
+      {
+        "armazenamento": "128GB",
+        "preco": 10499,
+        "disponivel": true
+      },
+      {
+        "armazenamento": "256GB",
+        "preco": 11499,
+        "disponivel": true
+      },
+      {
+        "armazenamento": "512GB",
+        "preco": 12999,
+        "disponivel": true
+      },
+      {
+        "armazenamento": "1TB",
+        "preco": 14999,
+        "disponivel": true
+      }
+    ]
+  },
+  {
+    "id": "16plus-black",
+    "modelo": "iPhone 16 Plus",
+    "cor": "Preto",
+    "corHex": "#1C1C1E",
+    "imagem": "/iphones/16plus-black.png",
+    "destaque": false,
+    "opcoes": [
+      {
+        "armazenamento": "128GB",
+        "preco": 8999,
+        "disponivel": true
+      },
+      {
+        "armazenamento": "256GB",
+        "preco": 9999,
+        "disponivel": true
+      },
+      {
+        "armazenamento": "512GB",
+        "preco": 11499,
+        "disponivel": true
+      }
+    ]
+  },
+  {
+    "id": "16plus-ultramarine",
+    "modelo": "iPhone 16 Plus",
+    "cor": "Ultramarino",
+    "corHex": "#3A4E8C",
+    "imagem": "/iphones/16plus-ultramarine.png",
+    "destaque": false,
+    "opcoes": [
+      {
+        "armazenamento": "128GB",
+        "preco": 8999,
+        "disponivel": true
+      },
+      {
+        "armazenamento": "256GB",
+        "preco": 9999,
+        "disponivel": true
+      },
+      {
+        "armazenamento": "512GB",
+        "preco": 11499,
+        "disponivel": true
+      }
+    ]
+  },
+  {
+    "id": "16plus-teal",
+    "modelo": "iPhone 16 Plus",
+    "cor": "Azul-petróleo",
+    "corHex": "#3D7A6E",
+    "imagem": "/iphones/16plus-teal.png",
+    "destaque": false,
+    "opcoes": [
+      {
+        "armazenamento": "128GB",
+        "preco": 8999,
+        "disponivel": true
+      },
+      {
+        "armazenamento": "256GB",
+        "preco": 9999,
+        "disponivel": true
+      },
+      {
+        "armazenamento": "512GB",
+        "preco": 11499,
+        "disponivel": false
+      }
+    ]
+  },
+  {
+    "id": "16plus-pink",
+    "modelo": "iPhone 16 Plus",
+    "cor": "Rosa",
+    "corHex": "#F2A8B8",
+    "imagem": "/iphones/16plus-pink.png",
+    "destaque": false,
+    "opcoes": [
+      {
+        "armazenamento": "128GB",
+        "preco": 8999,
+        "disponivel": true
+      },
+      {
+        "armazenamento": "256GB",
+        "preco": 9999,
+        "disponivel": true
+      },
+      {
+        "armazenamento": "512GB",
+        "preco": 11499,
+        "disponivel": true
+      }
+    ]
+  },
+  {
+    "id": "16plus-white",
+    "modelo": "iPhone 16 Plus",
+    "cor": "Branco",
+    "corHex": "#F5F5F5",
+    "imagem": "/iphones/16plus-white.png",
+    "destaque": false,
+    "opcoes": [
+      {
+        "armazenamento": "128GB",
+        "preco": 8999,
+        "disponivel": true
+      },
+      {
+        "armazenamento": "256GB",
+        "preco": 9999,
+        "disponivel": true
+      },
+      {
+        "armazenamento": "512GB",
+        "preco": 11499,
+        "disponivel": true
+      }
+    ]
+  },
+  {
+    "id": "16-black",
+    "modelo": "iPhone 16",
+    "cor": "Preto",
+    "corHex": "#1C1C1E",
+    "imagem": "/iphones/16-black.png",
+    "destaque": false,
+    "opcoes": [
+      {
+        "armazenamento": "128GB",
+        "preco": 7499,
+        "disponivel": true
+      },
+      {
+        "armazenamento": "256GB",
+        "preco": 8499,
+        "disponivel": true
+      },
+      {
+        "armazenamento": "512GB",
+        "preco": 9999,
+        "disponivel": true
+      }
+    ]
+  },
+  {
+    "id": "16-ultramarine",
+    "modelo": "iPhone 16",
+    "cor": "Ultramarino",
+    "corHex": "#3A4E8C",
+    "imagem": "/iphones/16-ultramarine.png",
+    "destaque": false,
+    "opcoes": [
+      {
+        "armazenamento": "128GB",
+        "preco": 7499,
+        "disponivel": true
+      },
+      {
+        "armazenamento": "256GB",
+        "preco": 8499,
+        "disponivel": true
+      },
+      {
+        "armazenamento": "512GB",
+        "preco": 9999,
+        "disponivel": true
+      }
+    ]
+  },
+  {
+    "id": "16-teal",
+    "modelo": "iPhone 16",
+    "cor": "Azul-petróleo",
+    "corHex": "#3D7A6E",
+    "imagem": "/iphones/16-teal.png",
+    "destaque": false,
+    "opcoes": [
+      {
+        "armazenamento": "128GB",
+        "preco": 7499,
+        "disponivel": true
+      },
+      {
+        "armazenamento": "256GB",
+        "preco": 8499,
+        "disponivel": true
+      },
+      {
+        "armazenamento": "512GB",
+        "preco": 9999,
+        "disponivel": false
+      }
+    ]
+  },
+  {
+    "id": "16-pink",
+    "modelo": "iPhone 16",
+    "cor": "Rosa",
+    "corHex": "#F2A8B8",
+    "imagem": "/iphones/16-pink.png",
+    "destaque": false,
+    "opcoes": [
+      {
+        "armazenamento": "128GB",
+        "preco": 7499,
+        "disponivel": true
+      },
+      {
+        "armazenamento": "256GB",
+        "preco": 8499,
+        "disponivel": true
+      },
+      {
+        "armazenamento": "512GB",
+        "preco": 9999,
+        "disponivel": true
+      }
+    ]
+  },
+  {
+    "id": "16-white",
+    "modelo": "iPhone 16",
+    "cor": "Branco",
+    "corHex": "#F5F5F5",
+    "imagem": "/iphones/16-white.png",
+    "destaque": false,
+    "opcoes": [
+      {
+        "armazenamento": "128GB",
+        "preco": 7499,
+        "disponivel": true
+      },
+      {
+        "armazenamento": "256GB",
+        "preco": 8499,
+        "disponivel": true
+      },
+      {
+        "armazenamento": "512GB",
+        "preco": 9999,
+        "disponivel": true
+      }
+    ]
+  },
+  {
+    "id": "15promax-blacktitanium",
+    "modelo": "iPhone 15 Pro Max",
+    "cor": "Titânio Preto",
+    "corHex": "#3D3D3D",
+    "imagem": "/iphones/15promax-blacktitanium.png",
+    "destaque": false,
+    "opcoes": [
+      {
+        "armazenamento": "256GB",
+        "preco": 9499,
+        "disponivel": true
+      },
+      {
+        "armazenamento": "512GB",
+        "preco": 10999,
+        "disponivel": true
+      },
+      {
+        "armazenamento": "1TB",
+        "preco": 12499,
+        "disponivel": true
+      }
+    ]
+  },
+  {
+    "id": "15promax-whitetitanium",
+    "modelo": "iPhone 15 Pro Max",
+    "cor": "Titânio Branco",
+    "corHex": "#E8E3DC",
+    "imagem": "/iphones/15promax-whitetitanium.png",
+    "destaque": false,
+    "opcoes": [
+      {
+        "armazenamento": "256GB",
+        "preco": 9499,
+        "disponivel": true
+      },
+      {
+        "armazenamento": "512GB",
+        "preco": 10999,
+        "disponivel": true
+      },
+      {
+        "armazenamento": "1TB",
+        "preco": 12499,
+        "disponivel": true
+      }
+    ]
+  },
+  {
+    "id": "15promax-bluetitanium",
+    "modelo": "iPhone 15 Pro Max",
+    "cor": "Titânio Azul",
+    "corHex": "#4A6F8A",
+    "imagem": "/iphones/15promax-bluetitanium.png",
+    "destaque": false,
+    "opcoes": [
+      {
+        "armazenamento": "256GB",
+        "preco": 9499,
+        "disponivel": true
+      },
+      {
+        "armazenamento": "512GB",
+        "preco": 10999,
+        "disponivel": false
+      },
+      {
+        "armazenamento": "1TB",
+        "preco": 12499,
+        "disponivel": false
+      }
+    ]
+  },
+  {
+    "id": "15promax-naturaltitanium",
+    "modelo": "iPhone 15 Pro Max",
+    "cor": "Titânio Natural",
+    "corHex": "#B5A898",
+    "imagem": "/iphones/15promax-naturaltitanium.png",
+    "destaque": false,
+    "opcoes": [
+      {
+        "armazenamento": "256GB",
+        "preco": 9499,
+        "disponivel": true
+      },
+      {
+        "armazenamento": "512GB",
+        "preco": 10999,
+        "disponivel": true
+      },
+      {
+        "armazenamento": "1TB",
+        "preco": 12499,
+        "disponivel": true
+      }
+    ]
+  },
+  {
+    "id": "15pro-blacktitanium",
+    "modelo": "iPhone 15 Pro",
+    "cor": "Titânio Preto",
+    "corHex": "#3D3D3D",
+    "imagem": "/iphones/15pro-blacktitanium.png",
+    "destaque": false,
+    "opcoes": [
+      {
+        "armazenamento": "128GB",
+        "preco": 7499,
+        "disponivel": true
+      },
+      {
+        "armazenamento": "256GB",
+        "preco": 8499,
+        "disponivel": true
+      },
+      {
+        "armazenamento": "512GB",
+        "preco": 9999,
+        "disponivel": true
+      },
+      {
+        "armazenamento": "1TB",
+        "preco": 11499,
+        "disponivel": true
+      }
+    ]
+  },
+  {
+    "id": "15pro-whitetitanium",
+    "modelo": "iPhone 15 Pro",
+    "cor": "Titânio Branco",
+    "corHex": "#E8E3DC",
+    "imagem": "/iphones/15pro-whitetitanium.png",
+    "destaque": false,
+    "opcoes": [
+      {
+        "armazenamento": "128GB",
+        "preco": 7499,
+        "disponivel": true
+      },
+      {
+        "armazenamento": "256GB",
+        "preco": 8499,
+        "disponivel": true
+      },
+      {
+        "armazenamento": "512GB",
+        "preco": 9999,
+        "disponivel": true
+      },
+      {
+        "armazenamento": "1TB",
+        "preco": 11499,
+        "disponivel": true
+      }
+    ]
+  },
+  {
+    "id": "15pro-bluetitanium",
+    "modelo": "iPhone 15 Pro",
+    "cor": "Titânio Azul",
+    "corHex": "#4A6F8A",
+    "imagem": "/iphones/15pro-bluetitanium.png",
+    "destaque": false,
+    "opcoes": [
+      {
+        "armazenamento": "128GB",
+        "preco": 7499,
+        "disponivel": true
+      },
+      {
+        "armazenamento": "256GB",
+        "preco": 8499,
+        "disponivel": true
+      },
+      {
+        "armazenamento": "512GB",
+        "preco": 9999,
+        "disponivel": false
+      },
+      {
+        "armazenamento": "1TB",
+        "preco": 11499,
+        "disponivel": false
+      }
+    ]
+  },
+  {
+    "id": "15pro-naturaltitanium",
+    "modelo": "iPhone 15 Pro",
+    "cor": "Titânio Natural",
+    "corHex": "#B5A898",
+    "imagem": "/iphones/15pro-naturaltitanium.png",
+    "destaque": false,
+    "opcoes": [
+      {
+        "armazenamento": "128GB",
+        "preco": 7499,
+        "disponivel": true
+      },
+      {
+        "armazenamento": "256GB",
+        "preco": 8499,
+        "disponivel": true
+      },
+      {
+        "armazenamento": "512GB",
+        "preco": 9999,
+        "disponivel": true
+      },
+      {
+        "armazenamento": "1TB",
+        "preco": 11499,
+        "disponivel": true
+      }
+    ]
+  },
+  {
+    "id": "15-black",
+    "modelo": "iPhone 15",
+    "cor": "Preto",
+    "corHex": "#1C1C1E",
+    "imagem": "/iphones/15-black.png",
+    "destaque": false,
+    "opcoes": [
+      {
+        "armazenamento": "128GB",
+        "preco": 4999,
+        "disponivel": true
+      },
+      {
+        "armazenamento": "256GB",
+        "preco": 5999,
+        "disponivel": true
+      },
+      {
+        "armazenamento": "512GB",
+        "preco": 7499,
+        "disponivel": true
+      }
+    ]
+  },
+  {
+    "id": "15-blue",
+    "modelo": "iPhone 15",
+    "cor": "Azul",
+    "corHex": "#7BB3D4",
+    "imagem": "/iphones/15-blue.png",
+    "destaque": false,
+    "opcoes": [
+      {
+        "armazenamento": "128GB",
+        "preco": 4999,
+        "disponivel": true
+      },
+      {
+        "armazenamento": "256GB",
+        "preco": 5999,
+        "disponivel": true
+      },
+      {
+        "armazenamento": "512GB",
+        "preco": 7499,
+        "disponivel": true
+      }
+    ]
+  },
+  {
+    "id": "15-green",
+    "modelo": "iPhone 15",
+    "cor": "Verde",
+    "corHex": "#A8C9A8",
+    "imagem": "/iphones/15-green.png",
+    "destaque": false,
+    "opcoes": [
+      {
+        "armazenamento": "128GB",
+        "preco": 4999,
+        "disponivel": true
+      },
+      {
+        "armazenamento": "256GB",
+        "preco": 5999,
+        "disponivel": false
+      },
+      {
+        "armazenamento": "512GB",
+        "preco": 7499,
+        "disponivel": false
+      }
+    ]
+  },
+  {
+    "id": "15-yellow",
+    "modelo": "iPhone 15",
+    "cor": "Amarelo",
+    "corHex": "#F0D060",
+    "imagem": "/iphones/15-yellow.png",
+    "destaque": false,
+    "opcoes": [
+      {
+        "armazenamento": "128GB",
+        "preco": 4999,
+        "disponivel": true
+      },
+      {
+        "armazenamento": "256GB",
+        "preco": 5999,
+        "disponivel": true
+      },
+      {
+        "armazenamento": "512GB",
+        "preco": 7499,
+        "disponivel": true
+      }
+    ]
+  },
+  {
+    "id": "15-pink",
+    "modelo": "iPhone 15",
+    "cor": "Rosa",
+    "corHex": "#F4C2C2",
+    "imagem": "/iphones/15-pink.png",
+    "destaque": false,
+    "opcoes": [
+      {
+        "armazenamento": "128GB",
+        "preco": 4999,
+        "disponivel": true
+      },
+      {
+        "armazenamento": "256GB",
+        "preco": 5999,
+        "disponivel": true
+      },
+      {
+        "armazenamento": "512GB",
+        "preco": 7499,
+        "disponivel": true
+      }
+    ]
+  },
+  {
+    "id": "14promax-deeppurple",
+    "modelo": "iPhone 14 Pro Max",
+    "cor": "Roxo Profundo",
+    "corHex": "#4E3C6C",
+    "imagem": "/iphones/14promax-deeppurple.png",
+    "destaque": false,
+    "opcoes": [
+      {
+        "armazenamento": "128GB",
+        "preco": 5999,
+        "disponivel": true
+      },
+      {
+        "armazenamento": "256GB",
+        "preco": 6999,
+        "disponivel": true
+      },
+      {
+        "armazenamento": "512GB",
+        "preco": 8499,
+        "disponivel": true
+      },
+      {
+        "armazenamento": "1TB",
+        "preco": 9999,
+        "disponivel": true
+      }
+    ]
+  },
+  {
+    "id": "14promax-gold",
+    "modelo": "iPhone 14 Pro Max",
+    "cor": "Dourado",
+    "corHex": "#D4AF7A",
+    "imagem": "/iphones/14promax-gold.png",
+    "destaque": false,
+    "opcoes": [
+      {
+        "armazenamento": "128GB",
+        "preco": 5999,
+        "disponivel": true
+      },
+      {
+        "armazenamento": "256GB",
+        "preco": 6999,
+        "disponivel": true
+      },
+      {
+        "armazenamento": "512GB",
+        "preco": 8499,
+        "disponivel": false
+      },
+      {
+        "armazenamento": "1TB",
+        "preco": 9999,
+        "disponivel": false
+      }
+    ]
+  },
+  {
+    "id": "14promax-silver",
+    "modelo": "iPhone 14 Pro Max",
+    "cor": "Prata",
+    "corHex": "#C8C8CA",
+    "imagem": "/iphones/14promax-silver.png",
+    "destaque": false,
+    "opcoes": [
+      {
+        "armazenamento": "128GB",
+        "preco": 5999,
+        "disponivel": true
+      },
+      {
+        "armazenamento": "256GB",
+        "preco": 6999,
+        "disponivel": true
+      },
+      {
+        "armazenamento": "512GB",
+        "preco": 8499,
+        "disponivel": true
+      },
+      {
+        "armazenamento": "1TB",
+        "preco": 9999,
+        "disponivel": true
+      }
+    ]
+  },
+  {
+    "id": "14promax-spaceblack",
+    "modelo": "iPhone 14 Pro Max",
+    "cor": "Preto Espacial",
+    "corHex": "#2D2B2B",
+    "imagem": "/iphones/14promax-spaceblack.png",
+    "destaque": false,
+    "opcoes": [
+      {
+        "armazenamento": "128GB",
+        "preco": 5999,
+        "disponivel": true
+      },
+      {
+        "armazenamento": "256GB",
+        "preco": 6999,
+        "disponivel": true
+      },
+      {
+        "armazenamento": "512GB",
+        "preco": 8499,
+        "disponivel": true
+      },
+      {
+        "armazenamento": "1TB",
+        "preco": 9999,
+        "disponivel": false
+      }
+    ]
+  },
+  {
+    "id": "14pro-deeppurple",
+    "modelo": "iPhone 14 Pro",
+    "cor": "Roxo Profundo",
+    "corHex": "#4E3C6C",
+    "imagem": "/iphones/14pro-deeppurple.png",
+    "destaque": false,
+    "opcoes": [
+      {
+        "armazenamento": "128GB",
+        "preco": 4999,
+        "disponivel": true
+      },
+      {
+        "armazenamento": "256GB",
+        "preco": 5799,
+        "disponivel": true
+      },
+      {
+        "armazenamento": "512GB",
+        "preco": 7299,
+        "disponivel": true
+      },
+      {
+        "armazenamento": "1TB",
+        "preco": 8799,
+        "disponivel": true
+      }
+    ]
+  },
+  {
+    "id": "14pro-gold",
+    "modelo": "iPhone 14 Pro",
+    "cor": "Dourado",
+    "corHex": "#D4AF7A",
+    "imagem": "/iphones/14pro-gold.png",
+    "destaque": false,
+    "opcoes": [
+      {
+        "armazenamento": "128GB",
+        "preco": 4999,
+        "disponivel": true
+      },
+      {
+        "armazenamento": "256GB",
+        "preco": 5799,
+        "disponivel": true
+      },
+      {
+        "armazenamento": "512GB",
+        "preco": 7299,
+        "disponivel": false
+      },
+      {
+        "armazenamento": "1TB",
+        "preco": 8799,
+        "disponivel": false
+      }
+    ]
+  },
+  {
+    "id": "14pro-silver",
+    "modelo": "iPhone 14 Pro",
+    "cor": "Prata",
+    "corHex": "#C8C8CA",
+    "imagem": "/iphones/14pro-silver.png",
+    "destaque": false,
+    "opcoes": [
+      {
+        "armazenamento": "128GB",
+        "preco": 4999,
+        "disponivel": true
+      },
+      {
+        "armazenamento": "256GB",
+        "preco": 5799,
+        "disponivel": true
+      },
+      {
+        "armazenamento": "512GB",
+        "preco": 7299,
+        "disponivel": true
+      },
+      {
+        "armazenamento": "1TB",
+        "preco": 8799,
+        "disponivel": true
+      }
+    ]
+  },
+  {
+    "id": "14pro-spaceblack",
+    "modelo": "iPhone 14 Pro",
+    "cor": "Preto Espacial",
+    "corHex": "#2D2B2B",
+    "imagem": "/iphones/14pro-spaceblack.png",
+    "destaque": false,
+    "opcoes": [
+      {
+        "armazenamento": "128GB",
+        "preco": 4999,
+        "disponivel": true
+      },
+      {
+        "armazenamento": "256GB",
+        "preco": 5799,
+        "disponivel": true
+      },
+      {
+        "armazenamento": "512GB",
+        "preco": 7299,
+        "disponivel": true
+      },
+      {
+        "armazenamento": "1TB",
+        "preco": 8799,
+        "disponivel": false
+      }
+    ]
+  },
+  {
+    "id": "14-midnight",
+    "modelo": "iPhone 14",
+    "cor": "Meia-noite",
+    "corHex": "#1C1C1E",
+    "imagem": "/iphones/14-midnight.png",
+    "destaque": false,
+    "opcoes": [
+      {
+        "armazenamento": "128GB",
+        "preco": 3299,
+        "disponivel": true
+      },
+      {
+        "armazenamento": "256GB",
+        "preco": 3999,
+        "disponivel": true
+      },
+      {
+        "armazenamento": "512GB",
+        "preco": 4999,
+        "disponivel": true
+      }
+    ]
+  },
+  {
+    "id": "14-starlight",
+    "modelo": "iPhone 14",
+    "cor": "Luz das Estrelas",
+    "corHex": "#F5F0E8",
+    "imagem": "/iphones/14-starlight.png",
+    "destaque": false,
+    "opcoes": [
+      {
+        "armazenamento": "128GB",
+        "preco": 3299,
+        "disponivel": true
+      },
+      {
+        "armazenamento": "256GB",
+        "preco": 3999,
+        "disponivel": true
+      },
+      {
+        "armazenamento": "512GB",
+        "preco": 4999,
+        "disponivel": false
+      }
+    ]
+  },
+  {
+    "id": "14-blue",
+    "modelo": "iPhone 14",
+    "cor": "Azul",
+    "corHex": "#7BB3D4",
+    "imagem": "/iphones/14-blue.png",
+    "destaque": false,
+    "opcoes": [
+      {
+        "armazenamento": "128GB",
+        "preco": 3299,
+        "disponivel": true
+      },
+      {
+        "armazenamento": "256GB",
+        "preco": 3999,
+        "disponivel": true
+      },
+      {
+        "armazenamento": "512GB",
+        "preco": 4999,
+        "disponivel": true
+      }
+    ]
+  },
+  {
+    "id": "14-purple",
+    "modelo": "iPhone 14",
+    "cor": "Roxo",
+    "corHex": "#9B8FB5",
+    "imagem": "/iphones/14-purple.png",
+    "destaque": false,
+    "opcoes": [
+      {
+        "armazenamento": "128GB",
+        "preco": 3299,
+        "disponivel": true
+      },
+      {
+        "armazenamento": "256GB",
+        "preco": 3999,
+        "disponivel": false
+      },
+      {
+        "armazenamento": "512GB",
+        "preco": 4999,
+        "disponivel": false
+      }
+    ]
+  },
+  {
+    "id": "14-yellow",
+    "modelo": "iPhone 14",
+    "cor": "Amarelo",
+    "corHex": "#F0D060",
+    "imagem": "/iphones/14-yellow.png",
+    "destaque": false,
+    "opcoes": [
+      {
+        "armazenamento": "128GB",
+        "preco": 3299,
+        "disponivel": true
+      },
+      {
+        "armazenamento": "256GB",
+        "preco": 3999,
+        "disponivel": true
+      },
+      {
+        "armazenamento": "512GB",
+        "preco": 4999,
+        "disponivel": true
+      }
+    ]
+  },
+  {
+    "id": "13-midnight",
+    "modelo": "iPhone 13",
+    "cor": "Meia-noite",
+    "corHex": "#1C1C1E",
+    "imagem": "/iphones/13-midnight.png",
+    "destaque": false,
+    "opcoes": [
+      {
+        "armazenamento": "128GB",
+        "preco": 2799,
+        "disponivel": true
+      },
+      {
+        "armazenamento": "256GB",
+        "preco": 3299,
+        "disponivel": true
+      },
+      {
+        "armazenamento": "512GB",
+        "preco": 4299,
+        "disponivel": true
+      }
+    ]
+  },
+  {
+    "id": "13-starlight",
+    "modelo": "iPhone 13",
+    "cor": "Luz das Estrelas",
+    "corHex": "#F5F0E8",
+    "imagem": "/iphones/13-starlight.png",
+    "destaque": false,
+    "opcoes": [
+      {
+        "armazenamento": "128GB",
+        "preco": 2799,
+        "disponivel": true
+      },
+      {
+        "armazenamento": "256GB",
+        "preco": 3299,
+        "disponivel": true
+      },
+      {
+        "armazenamento": "512GB",
+        "preco": 4299,
+        "disponivel": false
+      }
+    ]
+  },
+  {
+    "id": "13-blue",
+    "modelo": "iPhone 13",
+    "cor": "Azul",
+    "corHex": "#7BB3D4",
+    "imagem": "/iphones/13-blue.png",
+    "destaque": false,
+    "opcoes": [
+      {
+        "armazenamento": "128GB",
+        "preco": 2799,
+        "disponivel": true
+      },
+      {
+        "armazenamento": "256GB",
+        "preco": 3299,
+        "disponivel": true
+      },
+      {
+        "armazenamento": "512GB",
+        "preco": 4299,
+        "disponivel": true
+      }
+    ]
+  },
+  {
+    "id": "13-pink",
+    "modelo": "iPhone 13",
+    "cor": "Rosa",
+    "corHex": "#F4C2C2",
+    "imagem": "/iphones/13-pink.png",
+    "destaque": false,
+    "opcoes": [
+      {
+        "armazenamento": "128GB",
+        "preco": 2799,
+        "disponivel": true
+      },
+      {
+        "armazenamento": "256GB",
+        "preco": 3299,
+        "disponivel": false
+      },
+      {
+        "armazenamento": "512GB",
+        "preco": 4299,
+        "disponivel": false
+      }
+    ]
+  },
+  {
+    "id": "13-green",
+    "modelo": "iPhone 13",
+    "cor": "Verde",
+    "corHex": "#A8C9A8",
+    "imagem": "/iphones/13-green.png",
+    "destaque": false,
+    "opcoes": [
+      {
+        "armazenamento": "128GB",
+        "preco": 2799,
+        "disponivel": true
+      },
+      {
+        "armazenamento": "256GB",
+        "preco": 3299,
+        "disponivel": false
+      },
+      {
+        "armazenamento": "512GB",
+        "preco": 4299,
+        "disponivel": false
+      }
+    ]
+  },
+  {
+    "id": "ipad10-azul",
+    "modelo": "iPad 10",
+    "cor": "Azul",
+    "corHex": "#5492C7",
+    "imagem": "/imgIphonePNG/ipad10-blue.png",
+    "destaque": false,
+    "opcoes": [
+      {
+        "armazenamento": "64GB",
+        "preco": 3499,
+        "disponivel": true
+      },
+      {
+        "armazenamento": "256GB",
+        "preco": 4299,
+        "disponivel": true
+      }
+    ]
+  },
+  {
+    "id": "ipad10-rosa",
+    "modelo": "iPad 10",
+    "cor": "Rosa",
+    "corHex": "#F2B3C6",
+    "imagem": "/imgIphonePNG/ipad10-pink.png",
+    "destaque": false,
+    "opcoes": [
+      {
+        "armazenamento": "64GB",
+        "preco": 3499,
+        "disponivel": true
+      },
+      {
+        "armazenamento": "256GB",
+        "preco": 4299,
+        "disponivel": true
+      }
+    ]
+  },
+  {
+    "id": "ipad10-prateado",
+    "modelo": "iPad 10",
+    "cor": "Prateado",
+    "corHex": "#C8C8CA",
+    "imagem": "/imgIphonePNG/ipad10-silver.png",
+    "destaque": false,
+    "opcoes": [
+      {
+        "armazenamento": "64GB",
+        "preco": 3499,
+        "disponivel": true
+      },
+      {
+        "armazenamento": "256GB",
+        "preco": 4299,
+        "disponivel": true
+      }
+    ]
+  },
+  {
+    "id": "ipad10-amarelo",
+    "modelo": "iPad 10",
+    "cor": "Amarelo",
+    "corHex": "#F5CF68",
+    "imagem": "/imgIphonePNG/ipad10-yellow.png",
+    "destaque": false,
+    "opcoes": [
+      {
+        "armazenamento": "64GB",
+        "preco": 3499,
+        "disponivel": true
+      },
+      {
+        "armazenamento": "256GB",
+        "preco": 4299,
+        "disponivel": true
+      }
+    ]
+  },
+  {
+    "id": "ipad11-azul",
+    "modelo": "iPad 11 A16",
+    "cor": "Azul",
+    "corHex": "#5492C7",
+    "imagem": "/imgIphonePNG/ipad10-blue.png",
+    "destaque": false,
+    "opcoes": [
+      {
+        "armazenamento": "128GB",
+        "preco": 4999,
+        "disponivel": true
+      },
+      {
+        "armazenamento": "256GB",
+        "preco": 5999,
+        "disponivel": true
+      },
+      {
+        "armazenamento": "512GB",
+        "preco": 7499,
+        "disponivel": true
+      }
+    ]
+  },
+  {
+    "id": "ipad11-rosa",
+    "modelo": "iPad 11 A16",
+    "cor": "Rosa",
+    "corHex": "#F2B3C6",
+    "imagem": "/imgIphonePNG/ipad10-pink.png",
+    "destaque": false,
+    "opcoes": [
+      {
+        "armazenamento": "128GB",
+        "preco": 4999,
+        "disponivel": true
+      },
+      {
+        "armazenamento": "256GB",
+        "preco": 5999,
+        "disponivel": true
+      },
+      {
+        "armazenamento": "512GB",
+        "preco": 7499,
+        "disponivel": true
+      }
+    ]
+  },
+  {
+    "id": "ipad11-prateado",
+    "modelo": "iPad 11 A16",
+    "cor": "Prateado",
+    "corHex": "#C8C8CA",
+    "imagem": "/imgIphonePNG/ipad10-silver.png",
+    "destaque": false,
+    "opcoes": [
+      {
+        "armazenamento": "128GB",
+        "preco": 4999,
+        "disponivel": true
+      },
+      {
+        "armazenamento": "256GB",
+        "preco": 5999,
+        "disponivel": true
+      },
+      {
+        "armazenamento": "512GB",
+        "preco": 7499,
+        "disponivel": true
+      }
+    ]
+  },
+  {
+    "id": "ipad11-amarelo",
+    "modelo": "iPad 11 A16",
+    "cor": "Amarelo",
+    "corHex": "#F5CF68",
+    "imagem": "/imgIphonePNG/ipad10-yellow.png",
+    "destaque": false,
+    "opcoes": [
+      {
+        "armazenamento": "128GB",
+        "preco": 4999,
+        "disponivel": true
+      },
+      {
+        "armazenamento": "256GB",
+        "preco": 5999,
+        "disponivel": true
+      },
+      {
+        "armazenamento": "512GB",
+        "preco": 7499,
+        "disponivel": true
+      }
+    ]
+  },
+  {
+    "id": "ipad-air-m3-11-azul",
+    "modelo": "iPad Air M3",
+    "cor": "Azul",
+    "corHex": "#5492C7",
+    "imagem": "/imgIphonePNG/ipad-air-m3-blue.png",
+    "destaque": false,
+    "opcoes": [
+      {
+        "armazenamento": "128GB",
+        "preco": 6499,
+        "disponivel": true
+      },
+      {
+        "armazenamento": "256GB",
+        "preco": 7499,
+        "disponivel": true
+      },
+      {
+        "armazenamento": "512GB",
+        "preco": 9499,
+        "disponivel": true
+      },
+      {
+        "armazenamento": "1TB",
+        "preco": 11999,
+        "disponivel": true
+      }
+    ],
+    "tamanho": "11\""
+  },
+  {
+    "id": "ipad-air-m3-11-roxo",
+    "modelo": "iPad Air M3",
+    "cor": "Roxo",
+    "corHex": "#9E8FBF",
+    "imagem": "/imgIphonePNG/ipad-air-m3-purple.png",
+    "destaque": false,
+    "opcoes": [
+      {
+        "armazenamento": "128GB",
+        "preco": 6499,
+        "disponivel": true
+      },
+      {
+        "armazenamento": "256GB",
+        "preco": 7499,
+        "disponivel": true
+      },
+      {
+        "armazenamento": "512GB",
+        "preco": 9499,
+        "disponivel": true
+      },
+      {
+        "armazenamento": "1TB",
+        "preco": 11999,
+        "disponivel": true
+      }
+    ],
+    "tamanho": "11\""
+  },
+  {
+    "id": "ipad-air-m3-11-starlight",
+    "modelo": "iPad Air M3",
+    "cor": "Starlight",
+    "corHex": "#E8E4DC",
+    "imagem": "/imgIphonePNG/ipad-air-m3-starlight.png",
+    "destaque": false,
+    "opcoes": [
+      {
+        "armazenamento": "128GB",
+        "preco": 6499,
+        "disponivel": true
+      },
+      {
+        "armazenamento": "256GB",
+        "preco": 7499,
+        "disponivel": true
+      },
+      {
+        "armazenamento": "512GB",
+        "preco": 9499,
+        "disponivel": true
+      },
+      {
+        "armazenamento": "1TB",
+        "preco": 11999,
+        "disponivel": true
+      }
+    ],
+    "tamanho": "11\""
+  },
+  {
+    "id": "ipad-air-m3-11-cinza-espacial",
+    "modelo": "iPad Air M3",
+    "cor": "Cinza Espacial",
+    "corHex": "#6E6C72",
+    "imagem": "/imgIphonePNG/ipad-air-m3-spacegray.png",
+    "destaque": false,
+    "opcoes": [
+      {
+        "armazenamento": "128GB",
+        "preco": 6499,
+        "disponivel": true
+      },
+      {
+        "armazenamento": "256GB",
+        "preco": 7499,
+        "disponivel": true
+      },
+      {
+        "armazenamento": "512GB",
+        "preco": 9499,
+        "disponivel": true
+      },
+      {
+        "armazenamento": "1TB",
+        "preco": 11999,
+        "disponivel": true
+      }
+    ],
+    "tamanho": "11\""
+  },
+  {
+    "id": "ipad-air-m3-13-azul",
+    "modelo": "iPad Air M3",
+    "cor": "Azul",
+    "corHex": "#5492C7",
+    "imagem": "/imgIphonePNG/ipad-air-m3-blue.png",
+    "destaque": false,
+    "opcoes": [
+      {
+        "armazenamento": "128GB",
+        "preco": 8499,
+        "disponivel": true
+      },
+      {
+        "armazenamento": "256GB",
+        "preco": 9499,
+        "disponivel": true
+      },
+      {
+        "armazenamento": "512GB",
+        "preco": 11499,
+        "disponivel": true
+      },
+      {
+        "armazenamento": "1TB",
+        "preco": 13999,
+        "disponivel": true
+      }
+    ],
+    "tamanho": "13\""
+  },
+  {
+    "id": "ipad-air-m3-13-roxo",
+    "modelo": "iPad Air M3",
+    "cor": "Roxo",
+    "corHex": "#9E8FBF",
+    "imagem": "/imgIphonePNG/ipad-air-m3-purple.png",
+    "destaque": false,
+    "opcoes": [
+      {
+        "armazenamento": "128GB",
+        "preco": 8499,
+        "disponivel": true
+      },
+      {
+        "armazenamento": "256GB",
+        "preco": 9499,
+        "disponivel": true
+      },
+      {
+        "armazenamento": "512GB",
+        "preco": 11499,
+        "disponivel": true
+      },
+      {
+        "armazenamento": "1TB",
+        "preco": 13999,
+        "disponivel": true
+      }
+    ],
+    "tamanho": "13\""
+  },
+  {
+    "id": "ipad-air-m3-13-starlight",
+    "modelo": "iPad Air M3",
+    "cor": "Starlight",
+    "corHex": "#E8E4DC",
+    "imagem": "/imgIphonePNG/ipad-air-m3-starlight.png",
+    "destaque": false,
+    "opcoes": [
+      {
+        "armazenamento": "128GB",
+        "preco": 8499,
+        "disponivel": true
+      },
+      {
+        "armazenamento": "256GB",
+        "preco": 9499,
+        "disponivel": true
+      },
+      {
+        "armazenamento": "512GB",
+        "preco": 11499,
+        "disponivel": true
+      },
+      {
+        "armazenamento": "1TB",
+        "preco": 13999,
+        "disponivel": true
+      }
+    ],
+    "tamanho": "13\""
+  },
+  {
+    "id": "ipad-air-m3-13-cinza-espacial",
+    "modelo": "iPad Air M3",
+    "cor": "Cinza Espacial",
+    "corHex": "#6E6C72",
+    "imagem": "/imgIphonePNG/ipad-air-m3-spacegray.png",
+    "destaque": false,
+    "opcoes": [
+      {
+        "armazenamento": "128GB",
+        "preco": 8499,
+        "disponivel": true
+      },
+      {
+        "armazenamento": "256GB",
+        "preco": 9499,
+        "disponivel": true
+      },
+      {
+        "armazenamento": "512GB",
+        "preco": 11499,
+        "disponivel": true
+      },
+      {
+        "armazenamento": "1TB",
+        "preco": 13999,
+        "disponivel": true
+      }
+    ],
+    "tamanho": "13\""
+  },
+  {
+    "id": "ipad-air-m4-11-azul",
+    "modelo": "iPad Air M4",
+    "cor": "Azul",
+    "corHex": "#5492C7",
+    "imagem": "/imgIphonePNG/ipad-air-m3-blue.png",
+    "destaque": false,
+    "opcoes": [
+      {
+        "armazenamento": "128GB",
+        "preco": 7499,
+        "disponivel": true
+      },
+      {
+        "armazenamento": "256GB",
+        "preco": 8499,
+        "disponivel": true
+      },
+      {
+        "armazenamento": "512GB",
+        "preco": 10499,
+        "disponivel": true
+      },
+      {
+        "armazenamento": "1TB",
+        "preco": 12999,
+        "disponivel": true
+      }
+    ],
+    "tamanho": "11\""
+  },
+  {
+    "id": "ipad-air-m4-11-roxo",
+    "modelo": "iPad Air M4",
+    "cor": "Roxo",
+    "corHex": "#9E8FBF",
+    "imagem": "/imgIphonePNG/ipad-air-m3-purple.png",
+    "destaque": false,
+    "opcoes": [
+      {
+        "armazenamento": "128GB",
+        "preco": 7499,
+        "disponivel": true
+      },
+      {
+        "armazenamento": "256GB",
+        "preco": 8499,
+        "disponivel": true
+      },
+      {
+        "armazenamento": "512GB",
+        "preco": 10499,
+        "disponivel": true
+      },
+      {
+        "armazenamento": "1TB",
+        "preco": 12999,
+        "disponivel": true
+      }
+    ],
+    "tamanho": "11\""
+  },
+  {
+    "id": "ipad-air-m4-11-starlight",
+    "modelo": "iPad Air M4",
+    "cor": "Starlight",
+    "corHex": "#E8E4DC",
+    "imagem": "/imgIphonePNG/ipad-air-m3-starlight.png",
+    "destaque": false,
+    "opcoes": [
+      {
+        "armazenamento": "128GB",
+        "preco": 7499,
+        "disponivel": true
+      },
+      {
+        "armazenamento": "256GB",
+        "preco": 8499,
+        "disponivel": true
+      },
+      {
+        "armazenamento": "512GB",
+        "preco": 10499,
+        "disponivel": true
+      },
+      {
+        "armazenamento": "1TB",
+        "preco": 12999,
+        "disponivel": true
+      }
+    ],
+    "tamanho": "11\""
+  },
+  {
+    "id": "ipad-air-m4-11-cinza-espacial",
+    "modelo": "iPad Air M4",
+    "cor": "Cinza Espacial",
+    "corHex": "#6E6C72",
+    "imagem": "/imgIphonePNG/ipad-air-m3-spacegray.png",
+    "destaque": false,
+    "opcoes": [
+      {
+        "armazenamento": "128GB",
+        "preco": 7499,
+        "disponivel": true
+      },
+      {
+        "armazenamento": "256GB",
+        "preco": 8499,
+        "disponivel": true
+      },
+      {
+        "armazenamento": "512GB",
+        "preco": 10499,
+        "disponivel": true
+      },
+      {
+        "armazenamento": "1TB",
+        "preco": 12999,
+        "disponivel": true
+      }
+    ],
+    "tamanho": "11\""
+  },
+  {
+    "id": "ipad-air-m4-13-azul",
+    "modelo": "iPad Air M4",
+    "cor": "Azul",
+    "corHex": "#5492C7",
+    "imagem": "/imgIphonePNG/ipad-air-m3-blue.png",
+    "destaque": false,
+    "opcoes": [
+      {
+        "armazenamento": "128GB",
+        "preco": 9499,
+        "disponivel": true
+      },
+      {
+        "armazenamento": "256GB",
+        "preco": 10499,
+        "disponivel": true
+      },
+      {
+        "armazenamento": "512GB",
+        "preco": 12499,
+        "disponivel": true
+      },
+      {
+        "armazenamento": "1TB",
+        "preco": 14999,
+        "disponivel": true
+      }
+    ],
+    "tamanho": "13\""
+  },
+  {
+    "id": "ipad-air-m4-13-roxo",
+    "modelo": "iPad Air M4",
+    "cor": "Roxo",
+    "corHex": "#9E8FBF",
+    "imagem": "/imgIphonePNG/ipad-air-m3-purple.png",
+    "destaque": false,
+    "opcoes": [
+      {
+        "armazenamento": "128GB",
+        "preco": 9499,
+        "disponivel": true
+      },
+      {
+        "armazenamento": "256GB",
+        "preco": 10499,
+        "disponivel": true
+      },
+      {
+        "armazenamento": "512GB",
+        "preco": 12499,
+        "disponivel": true
+      },
+      {
+        "armazenamento": "1TB",
+        "preco": 14999,
+        "disponivel": true
+      }
+    ],
+    "tamanho": "13\""
+  },
+  {
+    "id": "ipad-air-m4-13-starlight",
+    "modelo": "iPad Air M4",
+    "cor": "Starlight",
+    "corHex": "#E8E4DC",
+    "imagem": "/imgIphonePNG/ipad-air-m3-starlight.png",
+    "destaque": false,
+    "opcoes": [
+      {
+        "armazenamento": "128GB",
+        "preco": 9499,
+        "disponivel": true
+      },
+      {
+        "armazenamento": "256GB",
+        "preco": 10499,
+        "disponivel": true
+      },
+      {
+        "armazenamento": "512GB",
+        "preco": 12499,
+        "disponivel": true
+      },
+      {
+        "armazenamento": "1TB",
+        "preco": 14999,
+        "disponivel": true
+      }
+    ],
+    "tamanho": "13\""
+  },
+  {
+    "id": "ipad-air-m4-13-cinza-espacial",
+    "modelo": "iPad Air M4",
+    "cor": "Cinza Espacial",
+    "corHex": "#6E6C72",
+    "imagem": "/imgIphonePNG/ipad-air-m3-spacegray.png",
+    "destaque": false,
+    "opcoes": [
+      {
+        "armazenamento": "128GB",
+        "preco": 9499,
+        "disponivel": true
+      },
+      {
+        "armazenamento": "256GB",
+        "preco": 10499,
+        "disponivel": true
+      },
+      {
+        "armazenamento": "512GB",
+        "preco": 12499,
+        "disponivel": true
+      },
+      {
+        "armazenamento": "1TB",
+        "preco": 14999,
+        "disponivel": true
+      }
+    ],
+    "tamanho": "13\""
+  },
+  {
+    "id": "ipad-mini-a17-azul",
+    "modelo": "iPad mini A17 Pro",
+    "cor": "Azul",
+    "corHex": "#5A7FA0",
+    "imagem": "/imgIphonePNG/ipad-mini-blue.png",
+    "destaque": false,
+    "opcoes": [
+      {
+        "armazenamento": "128GB",
+        "preco": 5999,
+        "disponivel": true
+      },
+      {
+        "armazenamento": "256GB",
+        "preco": 6999,
+        "disponivel": true
+      },
+      {
+        "armazenamento": "512GB",
+        "preco": 8499,
+        "disponivel": true
+      }
+    ]
+  },
+  {
+    "id": "ipad-mini-a17-roxo",
+    "modelo": "iPad mini A17 Pro",
+    "cor": "Roxo",
+    "corHex": "#8E84B4",
+    "imagem": "/imgIphonePNG/ipad-mini-purple.png",
+    "destaque": false,
+    "opcoes": [
+      {
+        "armazenamento": "128GB",
+        "preco": 5999,
+        "disponivel": true
+      },
+      {
+        "armazenamento": "256GB",
+        "preco": 6999,
+        "disponivel": true
+      },
+      {
+        "armazenamento": "512GB",
+        "preco": 8499,
+        "disponivel": true
+      }
+    ]
+  },
+  {
+    "id": "ipad-mini-a17-starlight",
+    "modelo": "iPad mini A17 Pro",
+    "cor": "Starlight",
+    "corHex": "#E2DDD4",
+    "imagem": "/imgIphonePNG/ipad-mini-starlight.png",
+    "destaque": false,
+    "opcoes": [
+      {
+        "armazenamento": "128GB",
+        "preco": 5999,
+        "disponivel": true
+      },
+      {
+        "armazenamento": "256GB",
+        "preco": 6999,
+        "disponivel": true
+      },
+      {
+        "armazenamento": "512GB",
+        "preco": 8499,
+        "disponivel": true
+      }
+    ]
+  },
+  {
+    "id": "ipad-mini-a17-cinza-espacial",
+    "modelo": "iPad mini A17 Pro",
+    "cor": "Cinza Espacial",
+    "corHex": "#6E6C72",
+    "imagem": "/imgIphonePNG/ipad-mini-spacegray.png",
+    "destaque": false,
+    "opcoes": [
+      {
+        "armazenamento": "128GB",
+        "preco": 5999,
+        "disponivel": true
+      },
+      {
+        "armazenamento": "256GB",
+        "preco": 6999,
+        "disponivel": true
+      },
+      {
+        "armazenamento": "512GB",
+        "preco": 8499,
+        "disponivel": true
+      }
+    ]
+  },
+  {
+    "id": "ipad-pro-m4-11-preto-espacial",
+    "modelo": "iPad Pro M4",
+    "cor": "Preto Espacial",
+    "corHex": "#1A1A1A",
+    "imagem": "/imgIphonePNG/ipad-pro-m4-spaceblack.png",
+    "destaque": true,
+    "opcoes": [
+      {
+        "armazenamento": "256GB",
+        "preco": 9999,
+        "disponivel": true
+      },
+      {
+        "armazenamento": "512GB",
+        "preco": 11999,
+        "disponivel": true
+      },
+      {
+        "armazenamento": "1TB",
+        "preco": 14999,
+        "disponivel": true
+      },
+      {
+        "armazenamento": "2TB",
+        "preco": 18999,
+        "disponivel": true
+      }
+    ],
+    "tamanho": "11\""
+  },
+  {
+    "id": "ipad-pro-m4-11-prateado",
+    "modelo": "iPad Pro M4",
+    "cor": "Prateado",
+    "corHex": "#C8C8CA",
+    "imagem": "/imgIphonePNG/ipad-pro-m4-silver.png",
+    "destaque": true,
+    "opcoes": [
+      {
+        "armazenamento": "256GB",
+        "preco": 9999,
+        "disponivel": true
+      },
+      {
+        "armazenamento": "512GB",
+        "preco": 11999,
+        "disponivel": true
+      },
+      {
+        "armazenamento": "1TB",
+        "preco": 14999,
+        "disponivel": true
+      },
+      {
+        "armazenamento": "2TB",
+        "preco": 18999,
+        "disponivel": true
+      }
+    ],
+    "tamanho": "11\""
+  },
+  {
+    "id": "ipad-pro-m4-13-preto-espacial",
+    "modelo": "iPad Pro M4",
+    "cor": "Preto Espacial",
+    "corHex": "#1A1A1A",
+    "imagem": "/imgIphonePNG/ipad-pro-m4-spaceblack.png",
+    "destaque": true,
+    "opcoes": [
+      {
+        "armazenamento": "256GB",
+        "preco": 12999,
+        "disponivel": true
+      },
+      {
+        "armazenamento": "512GB",
+        "preco": 14999,
+        "disponivel": true
+      },
+      {
+        "armazenamento": "1TB",
+        "preco": 17999,
+        "disponivel": true
+      },
+      {
+        "armazenamento": "2TB",
+        "preco": 21999,
+        "disponivel": true
+      }
+    ],
+    "tamanho": "13\""
+  },
+  {
+    "id": "ipad-pro-m4-13-prateado",
+    "modelo": "iPad Pro M4",
+    "cor": "Prateado",
+    "corHex": "#C8C8CA",
+    "imagem": "/imgIphonePNG/ipad-pro-m4-silver.png",
+    "destaque": true,
+    "opcoes": [
+      {
+        "armazenamento": "256GB",
+        "preco": 12999,
+        "disponivel": true
+      },
+      {
+        "armazenamento": "512GB",
+        "preco": 14999,
+        "disponivel": true
+      },
+      {
+        "armazenamento": "1TB",
+        "preco": 17999,
+        "disponivel": true
+      },
+      {
+        "armazenamento": "2TB",
+        "preco": 21999,
+        "disponivel": true
+      }
+    ],
+    "tamanho": "13\""
+  },
+  {
+    "id": "ipad-pro-m5-11-preto-espacial",
+    "modelo": "iPad Pro M5",
+    "cor": "Preto Espacial",
+    "corHex": "#1A1A1A",
+    "imagem": "/imgIphonePNG/ipad-pro-m4-spaceblack.png",
+    "destaque": true,
+    "opcoes": [
+      {
+        "armazenamento": "256GB",
+        "preco": 10999,
+        "disponivel": true
+      },
+      {
+        "armazenamento": "512GB",
+        "preco": 12999,
+        "disponivel": true
+      },
+      {
+        "armazenamento": "1TB",
+        "preco": 15999,
+        "disponivel": true
+      },
+      {
+        "armazenamento": "2TB",
+        "preco": 19999,
+        "disponivel": true
+      }
+    ],
+    "tamanho": "11\""
+  },
+  {
+    "id": "ipad-pro-m5-11-prateado",
+    "modelo": "iPad Pro M5",
+    "cor": "Prateado",
+    "corHex": "#C8C8CA",
+    "imagem": "/imgIphonePNG/ipad-pro-m4-silver.png",
+    "destaque": true,
+    "opcoes": [
+      {
+        "armazenamento": "256GB",
+        "preco": 10999,
+        "disponivel": true
+      },
+      {
+        "armazenamento": "512GB",
+        "preco": 12999,
+        "disponivel": true
+      },
+      {
+        "armazenamento": "1TB",
+        "preco": 15999,
+        "disponivel": true
+      },
+      {
+        "armazenamento": "2TB",
+        "preco": 19999,
+        "disponivel": true
+      }
+    ],
+    "tamanho": "11\""
+  },
+  {
+    "id": "ipad-pro-m5-13-preto-espacial",
+    "modelo": "iPad Pro M5",
+    "cor": "Preto Espacial",
+    "corHex": "#1A1A1A",
+    "imagem": "/imgIphonePNG/ipad-pro-m4-spaceblack.png",
+    "destaque": true,
+    "opcoes": [
+      {
+        "armazenamento": "256GB",
+        "preco": 13999,
+        "disponivel": true
+      },
+      {
+        "armazenamento": "512GB",
+        "preco": 15999,
+        "disponivel": true
+      },
+      {
+        "armazenamento": "1TB",
+        "preco": 18999,
+        "disponivel": true
+      },
+      {
+        "armazenamento": "2TB",
+        "preco": 22999,
+        "disponivel": true
+      }
+    ],
+    "tamanho": "13\""
+  },
+  {
+    "id": "ipad-pro-m5-13-prateado",
+    "modelo": "iPad Pro M5",
+    "cor": "Prateado",
+    "corHex": "#C8C8CA",
+    "imagem": "/imgIphonePNG/ipad-pro-m4-silver.png",
+    "destaque": true,
+    "opcoes": [
+      {
+        "armazenamento": "256GB",
+        "preco": 13999,
+        "disponivel": true
+      },
+      {
+        "armazenamento": "512GB",
+        "preco": 15999,
+        "disponivel": true
+      },
+      {
+        "armazenamento": "1TB",
+        "preco": 18999,
+        "disponivel": true
+      },
+      {
+        "armazenamento": "2TB",
+        "preco": 22999,
+        "disponivel": true
+      }
+    ],
+    "tamanho": "13\""
+  },
+  {
+    "id": "watch-se2-meianoite-40",
+    "modelo": "Apple Watch SE 2ª",
+    "cor": "Meia-Noite",
+    "corHex": "#1B2332",
+    "imagem": "/watches/watch-compare-se2-preto.png",
+    "destaque": false,
+    "opcoes": [
+      {
+        "armazenamento": "GPS",
+        "preco": 1490,
+        "disponivel": true
+      }
+    ],
+    "tamanho": "40mm"
+  },
+  {
+    "id": "watch-se2-meianoite-44",
+    "modelo": "Apple Watch SE 2ª",
+    "cor": "Meia-Noite",
+    "corHex": "#1B2332",
+    "imagem": "/watches/watch-compare-se2-preto.png",
+    "destaque": false,
+    "opcoes": [
+      {
+        "armazenamento": "GPS",
+        "preco": 1590,
+        "disponivel": true
+      }
+    ],
+    "tamanho": "44mm"
+  },
+  {
+    "id": "watch-se2-starlight-40",
+    "modelo": "Apple Watch SE 2ª",
+    "cor": "Starlight",
+    "corHex": "#E8E4D9",
+    "imagem": "/watches/watch-compare-se2-estelar.png",
+    "destaque": false,
+    "opcoes": [
+      {
+        "armazenamento": "GPS",
+        "preco": 1490,
+        "disponivel": true
+      }
+    ],
+    "tamanho": "40mm"
+  },
+  {
+    "id": "watch-se2-starlight-44",
+    "modelo": "Apple Watch SE 2ª",
+    "cor": "Starlight",
+    "corHex": "#E8E4D9",
+    "imagem": "/watches/watch-compare-se2-estelar.png",
+    "destaque": false,
+    "opcoes": [
+      {
+        "armazenamento": "GPS",
+        "preco": 1590,
+        "disponivel": true
+      }
+    ],
+    "tamanho": "44mm"
+  },
+  {
+    "id": "watch-se2-prata-40",
+    "modelo": "Apple Watch SE 2ª",
+    "cor": "Prata",
+    "corHex": "#C8C8CA",
+    "imagem": "/watches/watch-compare-se2-cinza.png",
+    "destaque": false,
+    "opcoes": [
+      {
+        "armazenamento": "GPS",
+        "preco": 1490,
+        "disponivel": true
+      }
+    ],
+    "tamanho": "40mm"
+  },
+  {
+    "id": "watch-se2-prata-44",
+    "modelo": "Apple Watch SE 2ª",
+    "cor": "Prata",
+    "corHex": "#C8C8CA",
+    "imagem": "/watches/watch-compare-se2-cinza.png",
+    "destaque": false,
+    "opcoes": [
+      {
+        "armazenamento": "GPS",
+        "preco": 1590,
+        "disponivel": true
+      }
+    ],
+    "tamanho": "44mm"
+  },
+  {
+    "id": "watch-se3-meianoite-40",
+    "modelo": "Apple Watch SE 3ª",
+    "cor": "Meia-Noite",
+    "corHex": "#1B2332",
+    "imagem": "/watches/watch-compare-se-202509.png",
+    "destaque": false,
+    "opcoes": [
+      {
+        "armazenamento": "GPS",
+        "preco": 1790,
+        "disponivel": true
+      }
+    ],
+    "tamanho": "40mm"
+  },
+  {
+    "id": "watch-se3-meianoite-44",
+    "modelo": "Apple Watch SE 3ª",
+    "cor": "Meia-Noite",
+    "corHex": "#1B2332",
+    "imagem": "/watches/watch-compare-se-202509.png",
+    "destaque": false,
+    "opcoes": [
+      {
+        "armazenamento": "GPS",
+        "preco": 1990,
+        "disponivel": true
+      }
+    ],
+    "tamanho": "44mm"
+  },
+  {
+    "id": "watch-se3-starlight-40",
+    "modelo": "Apple Watch SE 3ª",
+    "cor": "Starlight",
+    "corHex": "#E8E4D9",
+    "imagem": "/watches/watch-compare-se3-estelar.png",
+    "destaque": false,
+    "opcoes": [
+      {
+        "armazenamento": "GPS",
+        "preco": 1790,
+        "disponivel": true
+      }
+    ],
+    "tamanho": "40mm"
+  },
+  {
+    "id": "watch-se3-starlight-44",
+    "modelo": "Apple Watch SE 3ª",
+    "cor": "Starlight",
+    "corHex": "#E8E4D9",
+    "imagem": "/watches/watch-compare-se3-estelar.png",
+    "destaque": false,
+    "opcoes": [
+      {
+        "armazenamento": "GPS",
+        "preco": 1990,
+        "disponivel": true
+      }
+    ],
+    "tamanho": "44mm"
+  },
+  {
+    "id": "watch-s10-preto-jacto-42",
+    "modelo": "Apple Watch S10",
+    "cor": "Preto Jacto",
+    "corHex": "#1C1C1E",
+    "imagem": "/watches/watch-compare-series10-preto.png",
+    "destaque": false,
+    "opcoes": [
+      {
+        "armazenamento": "GPS",
+        "preco": 2290,
+        "disponivel": true
+      }
+    ],
+    "tamanho": "42mm"
+  },
+  {
+    "id": "watch-s10-preto-jacto-46",
+    "modelo": "Apple Watch S10",
+    "cor": "Preto Jacto",
+    "corHex": "#1C1C1E",
+    "imagem": "/watches/watch-compare-series10-preto.png",
+    "destaque": false,
+    "opcoes": [
+      {
+        "armazenamento": "GPS",
+        "preco": 2490,
+        "disponivel": true
+      }
+    ],
+    "tamanho": "46mm"
+  },
+  {
+    "id": "watch-s10-ouro-rosa-42",
+    "modelo": "Apple Watch S10",
+    "cor": "Ouro Rosa",
+    "corHex": "#E8A4A0",
+    "imagem": "/watches/watch-compare-series10-rose.png",
+    "destaque": false,
+    "opcoes": [
+      {
+        "armazenamento": "GPS",
+        "preco": 2290,
+        "disponivel": true
+      }
+    ],
+    "tamanho": "42mm"
+  },
+  {
+    "id": "watch-s10-ouro-rosa-46",
+    "modelo": "Apple Watch S10",
+    "cor": "Ouro Rosa",
+    "corHex": "#E8A4A0",
+    "imagem": "/watches/watch-compare-series10-rose.png",
+    "destaque": false,
+    "opcoes": [
+      {
+        "armazenamento": "GPS",
+        "preco": 2490,
+        "disponivel": true
+      }
+    ],
+    "tamanho": "46mm"
+  },
+  {
+    "id": "watch-s10-prata-42",
+    "modelo": "Apple Watch S10",
+    "cor": "Prata",
+    "corHex": "#C8C8CA",
+    "imagem": "/watches/watch-compare-series10-prata.png",
+    "destaque": false,
+    "opcoes": [
+      {
+        "armazenamento": "GPS",
+        "preco": 2290,
+        "disponivel": true
+      }
+    ],
+    "tamanho": "42mm"
+  },
+  {
+    "id": "watch-s10-prata-46",
+    "modelo": "Apple Watch S10",
+    "cor": "Prata",
+    "corHex": "#C8C8CA",
+    "imagem": "/watches/watch-compare-series10-prata.png",
+    "destaque": false,
+    "opcoes": [
+      {
+        "armazenamento": "GPS",
+        "preco": 2490,
+        "disponivel": true
+      }
+    ],
+    "tamanho": "46mm"
+  },
+  {
+    "id": "watch-s11-preto-jacto-42",
+    "modelo": "Apple Watch S11",
+    "cor": "Preto Jacto",
+    "corHex": "#1C1C1E",
+    "imagem": "/watches/watch-compare-series11-preto.png",
+    "destaque": false,
+    "opcoes": [
+      {
+        "armazenamento": "GPS",
+        "preco": 2449,
+        "disponivel": true
+      }
+    ],
+    "tamanho": "42mm"
+  },
+  {
+    "id": "watch-s11-preto-jacto-46",
+    "modelo": "Apple Watch S11",
+    "cor": "Preto Jacto",
+    "corHex": "#1C1C1E",
+    "imagem": "/watches/watch-compare-series11-preto.png",
+    "destaque": false,
+    "opcoes": [
+      {
+        "armazenamento": "GPS",
+        "preco": 2590,
+        "disponivel": true
+      }
+    ],
+    "tamanho": "46mm"
+  },
+  {
+    "id": "watch-s11-ouro-rosa-42",
+    "modelo": "Apple Watch S11",
+    "cor": "Ouro Rosa",
+    "corHex": "#E8A4A0",
+    "imagem": "/watches/watch-compare-s11-202509.png",
+    "destaque": false,
+    "opcoes": [
+      {
+        "armazenamento": "GPS",
+        "preco": 2449,
+        "disponivel": true
+      }
+    ],
+    "tamanho": "42mm"
+  },
+  {
+    "id": "watch-s11-ouro-rosa-46",
+    "modelo": "Apple Watch S11",
+    "cor": "Ouro Rosa",
+    "corHex": "#E8A4A0",
+    "imagem": "/watches/watch-compare-s11-202509.png",
+    "destaque": false,
+    "opcoes": [
+      {
+        "armazenamento": "GPS",
+        "preco": 2590,
+        "disponivel": true
+      }
+    ],
+    "tamanho": "46mm"
+  },
+  {
+    "id": "watch-s11-prata-42",
+    "modelo": "Apple Watch S11",
+    "cor": "Prata",
+    "corHex": "#C8C8CA",
+    "imagem": "/watches/watch-compare-series11-cinza.png",
+    "destaque": false,
+    "opcoes": [
+      {
+        "armazenamento": "GPS",
+        "preco": 2449,
+        "disponivel": true
+      }
+    ],
+    "tamanho": "42mm"
+  },
+  {
+    "id": "watch-s11-prata-46",
+    "modelo": "Apple Watch S11",
+    "cor": "Prata",
+    "corHex": "#C8C8CA",
+    "imagem": "/watches/watch-compare-series11-cinza.png",
+    "destaque": false,
+    "opcoes": [
+      {
+        "armazenamento": "GPS",
+        "preco": 2590,
+        "disponivel": true
+      }
+    ],
+    "tamanho": "46mm"
+  },
+  {
+    "id": "watch-ultra2-titanio-natural",
+    "modelo": "Apple Watch Ultra 2",
+    "cor": "Titânio Natural",
+    "corHex": "#A8A79E",
+    "imagem": "/watches/watch-compare-ultra2-natural.png",
+    "destaque": true,
+    "opcoes": [
+      {
+        "armazenamento": "GPS",
+        "preco": 4390,
+        "disponivel": true
+      }
+    ]
+  },
+  {
+    "id": "watch-ultra2-titanio-preto",
+    "modelo": "Apple Watch Ultra 2",
+    "cor": "Titânio Preto",
+    "corHex": "#3A3A3C",
+    "imagem": "/watches/watch-compare-ultra2-202409.png",
+    "destaque": true,
+    "opcoes": [
+      {
+        "armazenamento": "GPS",
+        "preco": 4390,
+        "disponivel": true
+      }
+    ]
+  },
+  {
+    "id": "watch-ultra3-titanio-natural",
+    "modelo": "Apple Watch Ultra 3",
+    "cor": "Titânio Natural",
+    "corHex": "#A8A79E",
+    "imagem": "/watches/watch-compare-ultra3-202509.png",
+    "destaque": true,
+    "opcoes": [
+      {
+        "armazenamento": "GPS",
+        "preco": 4590,
+        "disponivel": true
+      }
+    ]
+  },
+  {
+    "id": "watch-ultra3-titanio-preto",
+    "modelo": "Apple Watch Ultra 3",
+    "cor": "Titânio Preto",
+    "corHex": "#3A3A3C",
+    "imagem": "/watches/watch-compare-ultra3-preto.png",
+    "destaque": true,
+    "opcoes": [
+      {
+        "armazenamento": "GPS",
+        "preco": 4590,
+        "disponivel": true
+      }
+    ]
+  },
+  {
+    "id": "airpods-3",
+    "modelo": "AirPods 3",
+    "cor": "Branco",
+    "corHex": "#F5F5F5",
+    "imagem": "/airpods/airpods3.png",
+    "destaque": false,
+    "opcoes": [
+      {
+        "armazenamento": "Padrão",
+        "preco": 850,
+        "disponivel": true
+      }
+    ]
+  },
+  {
+    "id": "airpods-pro-2",
+    "modelo": "AirPods Pro 2",
+    "cor": "Branco",
+    "corHex": "#F5F5F5",
+    "imagem": "/airpods/airpodspro2.png",
+    "destaque": false,
+    "opcoes": [
+      {
+        "armazenamento": "Padrão",
+        "preco": 1350,
+        "disponivel": true
+      }
+    ]
+  },
+  {
+    "id": "airpods-pro-3",
+    "modelo": "AirPods Pro 3",
+    "cor": "Branco",
+    "corHex": "#F5F5F5",
+    "imagem": "/airpods/airpodspro3.png",
+    "destaque": true,
+    "opcoes": [
+      {
+        "armazenamento": "Padrão",
+        "preco": 1650,
+        "disponivel": true
+      }
+    ]
+  },
+  {
+    "id": "airpods-4",
+    "modelo": "AirPods 4",
+    "cor": "Branco",
+    "corHex": "#F5F5F5",
+    "imagem": "/airpods/airpods4.png",
+    "destaque": false,
+    "opcoes": [
+      {
+        "armazenamento": "Padrão",
+        "preco": 870,
+        "disponivel": true
+      }
+    ]
+  },
+  {
+    "id": "airpods-4-anc",
+    "modelo": "AirPods 4 ANC",
+    "cor": "Branco",
+    "corHex": "#F5F5F5",
+    "imagem": "/airpods/airpods4-anc.png",
+    "destaque": false,
+    "opcoes": [
+      {
+        "armazenamento": "Padrão",
+        "preco": 1150,
+        "disponivel": true
+      }
+    ]
+  },
+  {
+    "id": "mac-mini-m2",
+    "modelo": "Mac mini M2",
+    "cor": "Prateado",
+    "corHex": "#E3E4E5",
+    "imagem": "/macbooks/mac-mini-m2.png",
+    "destaque": false,
+    "opcoes": [
+      {
+        "armazenamento": "8GB / 256GB",
+        "preco": 3690,
+        "disponivel": true
+      },
+      {
+        "armazenamento": "8GB / 512GB",
+        "preco": 4390,
+        "disponivel": true
+      }
+    ]
+  },
+  {
+    "id": "macbook-neo-rosa",
+    "modelo": "MacBook Neo",
+    "cor": "Rosa",
+    "corHex": "#F2C9CE",
+    "imagem": "/macbooks/macbook-neo-rosa.png",
+    "destaque": true,
+    "opcoes": [
+      {
+        "armazenamento": "8GB / 256GB",
+        "preco": 4990,
+        "disponivel": true
+      },
+      {
+        "armazenamento": "8GB / 512GB",
+        "preco": 5890,
+        "disponivel": true
+      }
+    ]
+  },
+  {
+    "id": "macbook-neo-prata",
+    "modelo": "MacBook Neo",
+    "cor": "Prata",
+    "corHex": "#D8D9DB",
+    "imagem": "/macbooks/macbook-neo-prata.png",
+    "destaque": false,
+    "opcoes": [
+      {
+        "armazenamento": "8GB / 256GB",
+        "preco": 4990,
+        "disponivel": true
+      },
+      {
+        "armazenamento": "8GB / 512GB",
+        "preco": 5890,
+        "disponivel": true
+      }
+    ]
+  },
+  {
+    "id": "macbook-neo-azul",
+    "modelo": "MacBook Neo",
+    "cor": "Azul",
+    "corHex": "#3A4E7A",
+    "imagem": "/macbooks/macbook-neo-azul.png",
+    "destaque": false,
+    "opcoes": [
+      {
+        "armazenamento": "8GB / 256GB",
+        "preco": 4990,
+        "disponivel": true
+      },
+      {
+        "armazenamento": "8GB / 512GB",
+        "preco": 5890,
+        "disponivel": true
+      }
+    ]
+  },
+  {
+    "id": "macbook-air-m1-13",
+    "modelo": "MacBook Air",
+    "chip": "M1",
+    "cor": "Dourado",
+    "corHex": "#E8D5B7",
+    "imagem": "/macbooks/macbook-air-13-m1.png",
+    "destaque": false,
+    "tamanho": "13\"",
+    "opcoes": [
+      {
+        "armazenamento": "8GB / 256GB",
+        "preco": 5990,
+        "disponivel": true
+      }
+    ]
+  },
+  {
+    "id": "macbook-air-m2-13-meia-noite",
+    "modelo": "MacBook Air",
+    "chip": "M2",
+    "cor": "Meia-noite",
+    "corHex": "#1D2951",
+    "imagem": "/macbooks/macbook-air-midnight.png",
+    "destaque": false,
+    "tamanho": "13\"",
+    "opcoes": [
+      {
+        "armazenamento": "8GB / 256GB",
+        "preco": 5990,
+        "disponivel": true
+      },
+      {
+        "armazenamento": "16GB / 256GB",
+        "preco": 6190,
+        "disponivel": true
+      }
+    ]
+  },
+  {
+    "id": "macbook-air-m2-13-starlight",
+    "modelo": "MacBook Air",
+    "chip": "M2",
+    "cor": "Starlight",
+    "corHex": "#F0E6D3",
+    "imagem": "/macbooks/macbook-air-starlight.png",
+    "destaque": false,
+    "tamanho": "13\"",
+    "opcoes": [
+      {
+        "armazenamento": "8GB / 256GB",
+        "preco": 5990,
+        "disponivel": true
+      },
+      {
+        "armazenamento": "16GB / 256GB",
+        "preco": 6190,
+        "disponivel": true
+      }
+    ]
+  },
+  {
+    "id": "macbook-air-m2-13-prata",
+    "modelo": "MacBook Air",
+    "chip": "M2",
+    "cor": "Prata",
+    "corHex": "#E3E4E5",
+    "imagem": "/macbooks/macbook-air-silver.png",
+    "destaque": false,
+    "tamanho": "13\"",
+    "opcoes": [
+      {
+        "armazenamento": "8GB / 256GB",
+        "preco": 5990,
+        "disponivel": true
+      },
+      {
+        "armazenamento": "16GB / 256GB",
+        "preco": 6190,
+        "disponivel": true
+      }
+    ]
+  },
+  {
+    "id": "macbook-air-m2-13-cinza-espacial",
+    "modelo": "MacBook Air",
+    "chip": "M2",
+    "cor": "Cinza-espacial",
+    "corHex": "#8E8E93",
+    "imagem": "/macbooks/macbook-air-spacegray.png",
+    "destaque": false,
+    "tamanho": "13\"",
+    "opcoes": [
+      {
+        "armazenamento": "8GB / 256GB",
+        "preco": 5990,
+        "disponivel": true
+      },
+      {
+        "armazenamento": "16GB / 256GB",
+        "preco": 6190,
+        "disponivel": true
+      }
+    ]
+  },
+  {
+    "id": "macbook-air-m3-13-meia-noite",
+    "modelo": "MacBook Air",
+    "chip": "M3",
+    "cor": "Meia-noite",
+    "corHex": "#1D2951",
+    "imagem": "/macbooks/macbook-air-midnight.png",
+    "destaque": false,
+    "tamanho": "13\"",
+    "opcoes": [
+      {
+        "armazenamento": "16GB / 256GB",
+        "preco": 6690,
+        "disponivel": true
+      },
+      {
+        "armazenamento": "8GB / 512GB",
+        "preco": 6490,
+        "disponivel": true
+      }
+    ]
+  },
+  {
+    "id": "macbook-air-m3-13-starlight",
+    "modelo": "MacBook Air",
+    "chip": "M3",
+    "cor": "Starlight",
+    "corHex": "#F0E6D3",
+    "imagem": "/macbooks/macbook-air-starlight.png",
+    "destaque": false,
+    "tamanho": "13\"",
+    "opcoes": [
+      {
+        "armazenamento": "16GB / 256GB",
+        "preco": 6690,
+        "disponivel": true
+      },
+      {
+        "armazenamento": "8GB / 512GB",
+        "preco": 6490,
+        "disponivel": true
+      }
+    ]
+  },
+  {
+    "id": "macbook-air-m3-13-prata",
+    "modelo": "MacBook Air",
+    "chip": "M3",
+    "cor": "Prata",
+    "corHex": "#E3E4E5",
+    "imagem": "/macbooks/macbook-air-silver.png",
+    "destaque": false,
+    "tamanho": "13\"",
+    "opcoes": [
+      {
+        "armazenamento": "16GB / 256GB",
+        "preco": 6690,
+        "disponivel": true
+      },
+      {
+        "armazenamento": "8GB / 512GB",
+        "preco": 6490,
+        "disponivel": true
+      }
+    ]
+  },
+  {
+    "id": "macbook-air-m3-13-cinza-espacial",
+    "modelo": "MacBook Air",
+    "chip": "M3",
+    "cor": "Cinza-espacial",
+    "corHex": "#8E8E93",
+    "imagem": "/macbooks/macbook-air-spacegray.png",
+    "destaque": false,
+    "tamanho": "13\"",
+    "opcoes": [
+      {
+        "armazenamento": "16GB / 256GB",
+        "preco": 6690,
+        "disponivel": true
+      },
+      {
+        "armazenamento": "8GB / 512GB",
+        "preco": 6490,
+        "disponivel": true
+      }
+    ]
+  },
+  {
+    "id": "macbook-air-m3-15-meia-noite",
+    "modelo": "MacBook Air",
+    "chip": "M3",
+    "cor": "Meia-noite",
+    "corHex": "#1D2951",
+    "imagem": "/macbooks/macbook-air-midnight.png",
+    "destaque": false,
+    "tamanho": "15\"",
+    "opcoes": [
+      {
+        "armazenamento": "8GB / 256GB",
+        "preco": 7390,
+        "disponivel": true
+      },
+      {
+        "armazenamento": "8GB / 512GB",
+        "preco": 7490,
+        "disponivel": true
+      },
+      {
+        "armazenamento": "16GB / 512GB",
+        "preco": 7990,
+        "disponivel": true
+      }
+    ]
+  },
+  {
+    "id": "macbook-air-m3-15-starlight",
+    "modelo": "MacBook Air",
+    "chip": "M3",
+    "cor": "Starlight",
+    "corHex": "#F0E6D3",
+    "imagem": "/macbooks/macbook-air-starlight.png",
+    "destaque": false,
+    "tamanho": "15\"",
+    "opcoes": [
+      {
+        "armazenamento": "8GB / 256GB",
+        "preco": 7390,
+        "disponivel": true
+      },
+      {
+        "armazenamento": "8GB / 512GB",
+        "preco": 7490,
+        "disponivel": true
+      },
+      {
+        "armazenamento": "16GB / 512GB",
+        "preco": 7990,
+        "disponivel": true
+      }
+    ]
+  },
+  {
+    "id": "macbook-air-m3-15-prata",
+    "modelo": "MacBook Air",
+    "chip": "M3",
+    "cor": "Prata",
+    "corHex": "#E3E4E5",
+    "imagem": "/macbooks/macbook-air-silver.png",
+    "destaque": false,
+    "tamanho": "15\"",
+    "opcoes": [
+      {
+        "armazenamento": "8GB / 256GB",
+        "preco": 7390,
+        "disponivel": true
+      },
+      {
+        "armazenamento": "8GB / 512GB",
+        "preco": 7490,
+        "disponivel": true
+      },
+      {
+        "armazenamento": "16GB / 512GB",
+        "preco": 7990,
+        "disponivel": true
+      }
+    ]
+  },
+  {
+    "id": "macbook-air-m3-15-cinza-espacial",
+    "modelo": "MacBook Air",
+    "chip": "M3",
+    "cor": "Cinza-espacial",
+    "corHex": "#8E8E93",
+    "imagem": "/macbooks/macbook-air-spacegray.png",
+    "destaque": false,
+    "tamanho": "15\"",
+    "opcoes": [
+      {
+        "armazenamento": "8GB / 256GB",
+        "preco": 7390,
+        "disponivel": true
+      },
+      {
+        "armazenamento": "8GB / 512GB",
+        "preco": 7490,
+        "disponivel": true
+      },
+      {
+        "armazenamento": "16GB / 512GB",
+        "preco": 7990,
+        "disponivel": true
+      }
+    ]
+  },
+  {
+    "id": "macbook-air-m4-13-meia-noite",
+    "modelo": "MacBook Air",
+    "chip": "M4",
+    "cor": "Meia-noite",
+    "corHex": "#1D2951",
+    "imagem": "/macbooks/macbook-air-midnight.png",
+    "destaque": false,
+    "tamanho": "13\"",
+    "opcoes": [
+      {
+        "armazenamento": "16GB / 256GB",
+        "preco": 7190,
+        "disponivel": true
+      },
+      {
+        "armazenamento": "16GB / 512GB",
+        "preco": 7590,
+        "disponivel": true
+      },
+      {
+        "armazenamento": "24GB / 512GB",
+        "preco": 9890,
+        "disponivel": true
+      }
+    ]
+  },
+  {
+    "id": "macbook-air-m4-13-starlight",
+    "modelo": "MacBook Air",
+    "chip": "M4",
+    "cor": "Starlight",
+    "corHex": "#F0E6D3",
+    "imagem": "/macbooks/macbook-air-starlight.png",
+    "destaque": false,
+    "tamanho": "13\"",
+    "opcoes": [
+      {
+        "armazenamento": "16GB / 256GB",
+        "preco": 7190,
+        "disponivel": true
+      },
+      {
+        "armazenamento": "16GB / 512GB",
+        "preco": 7590,
+        "disponivel": true
+      },
+      {
+        "armazenamento": "24GB / 512GB",
+        "preco": 9890,
+        "disponivel": true
+      }
+    ]
+  },
+  {
+    "id": "macbook-air-m4-13-prata",
+    "modelo": "MacBook Air",
+    "chip": "M4",
+    "cor": "Prata",
+    "corHex": "#E3E4E5",
+    "imagem": "/macbooks/macbook-air-silver.png",
+    "destaque": false,
+    "tamanho": "13\"",
+    "opcoes": [
+      {
+        "armazenamento": "16GB / 256GB",
+        "preco": 7190,
+        "disponivel": true
+      },
+      {
+        "armazenamento": "16GB / 512GB",
+        "preco": 7590,
+        "disponivel": true
+      },
+      {
+        "armazenamento": "24GB / 512GB",
+        "preco": 9890,
+        "disponivel": true
+      }
+    ]
+  },
+  {
+    "id": "macbook-air-m4-15-meia-noite",
+    "modelo": "MacBook Air",
+    "chip": "M4",
+    "cor": "Meia-noite",
+    "corHex": "#1D2951",
+    "imagem": "/macbooks/macbook-air-midnight.png",
+    "destaque": false,
+    "tamanho": "15\"",
+    "opcoes": [
+      {
+        "armazenamento": "16GB / 256GB",
+        "preco": 7890,
+        "disponivel": true
+      },
+      {
+        "armazenamento": "16GB / 512GB",
+        "preco": 9190,
+        "disponivel": true
+      },
+      {
+        "armazenamento": "24GB / 512GB",
+        "preco": 10390,
+        "disponivel": true
+      }
+    ]
+  },
+  {
+    "id": "macbook-air-m4-15-starlight",
+    "modelo": "MacBook Air",
+    "chip": "M4",
+    "cor": "Starlight",
+    "corHex": "#F0E6D3",
+    "imagem": "/macbooks/macbook-air-starlight.png",
+    "destaque": false,
+    "tamanho": "15\"",
+    "opcoes": [
+      {
+        "armazenamento": "16GB / 256GB",
+        "preco": 7890,
+        "disponivel": true
+      },
+      {
+        "armazenamento": "16GB / 512GB",
+        "preco": 9190,
+        "disponivel": true
+      },
+      {
+        "armazenamento": "24GB / 512GB",
+        "preco": 10390,
+        "disponivel": true
+      }
+    ]
+  },
+  {
+    "id": "macbook-air-m4-15-prata",
+    "modelo": "MacBook Air",
+    "chip": "M4",
+    "cor": "Prata",
+    "corHex": "#E3E4E5",
+    "imagem": "/macbooks/macbook-air-silver.png",
+    "destaque": false,
+    "tamanho": "15\"",
+    "opcoes": [
+      {
+        "armazenamento": "16GB / 256GB",
+        "preco": 7890,
+        "disponivel": true
+      },
+      {
+        "armazenamento": "16GB / 512GB",
+        "preco": 9190,
+        "disponivel": true
+      },
+      {
+        "armazenamento": "24GB / 512GB",
+        "preco": 10390,
+        "disponivel": true
+      }
+    ]
+  },
+  {
+    "id": "macbook-air-m5-13-meia-noite",
+    "modelo": "MacBook Air",
+    "chip": "M5",
+    "cor": "Meia-noite",
+    "corHex": "#1D2951",
+    "imagem": "/macbooks/macbook-air-midnight.png",
+    "destaque": true,
+    "tamanho": "13\"",
+    "opcoes": [
+      {
+        "armazenamento": "16GB / 512GB",
+        "preco": 8490,
+        "disponivel": true
+      },
+      {
+        "armazenamento": "24GB / 1TB",
+        "preco": 12890,
+        "disponivel": true
+      }
+    ]
+  },
+  {
+    "id": "macbook-air-m5-13-starlight",
+    "modelo": "MacBook Air",
+    "chip": "M5",
+    "cor": "Starlight",
+    "corHex": "#F0E6D3",
+    "imagem": "/macbooks/macbook-air-starlight.png",
+    "destaque": true,
+    "tamanho": "13\"",
+    "opcoes": [
+      {
+        "armazenamento": "16GB / 512GB",
+        "preco": 8490,
+        "disponivel": true
+      },
+      {
+        "armazenamento": "24GB / 1TB",
+        "preco": 12890,
+        "disponivel": true
+      }
+    ]
+  },
+  {
+    "id": "macbook-air-m5-13-prata",
+    "modelo": "MacBook Air",
+    "chip": "M5",
+    "cor": "Prata",
+    "corHex": "#E3E4E5",
+    "imagem": "/macbooks/macbook-air-silver.png",
+    "destaque": true,
+    "tamanho": "13\"",
+    "opcoes": [
+      {
+        "armazenamento": "16GB / 512GB",
+        "preco": 8490,
+        "disponivel": true
+      },
+      {
+        "armazenamento": "24GB / 1TB",
+        "preco": 12890,
+        "disponivel": true
+      }
+    ]
+  },
+  {
+    "id": "macbook-air-m5-15-meia-noite",
+    "modelo": "MacBook Air",
+    "chip": "M5",
+    "cor": "Meia-noite",
+    "corHex": "#1D2951",
+    "imagem": "/macbooks/macbook-air-midnight.png",
+    "destaque": true,
+    "tamanho": "15\"",
+    "opcoes": [
+      {
+        "armazenamento": "16GB / 512GB",
+        "preco": 9790,
+        "disponivel": true
+      },
+      {
+        "armazenamento": "16GB / 1TB",
+        "preco": 11790,
+        "disponivel": true
+      },
+      {
+        "armazenamento": "24GB / 1TB",
+        "preco": 13690,
+        "disponivel": true
+      }
+    ]
+  },
+  {
+    "id": "macbook-air-m5-15-starlight",
+    "modelo": "MacBook Air",
+    "chip": "M5",
+    "cor": "Starlight",
+    "corHex": "#F0E6D3",
+    "imagem": "/macbooks/macbook-air-starlight.png",
+    "destaque": true,
+    "tamanho": "15\"",
+    "opcoes": [
+      {
+        "armazenamento": "16GB / 512GB",
+        "preco": 9790,
+        "disponivel": true
+      },
+      {
+        "armazenamento": "16GB / 1TB",
+        "preco": 11790,
+        "disponivel": true
+      },
+      {
+        "armazenamento": "24GB / 1TB",
+        "preco": 13690,
+        "disponivel": true
+      }
+    ]
+  },
+  {
+    "id": "macbook-air-m5-15-prata",
+    "modelo": "MacBook Air",
+    "chip": "M5",
+    "cor": "Prata",
+    "corHex": "#E3E4E5",
+    "imagem": "/macbooks/macbook-air-silver.png",
+    "destaque": true,
+    "tamanho": "15\"",
+    "opcoes": [
+      {
+        "armazenamento": "16GB / 512GB",
+        "preco": 9790,
+        "disponivel": true
+      },
+      {
+        "armazenamento": "16GB / 1TB",
+        "preco": 11790,
+        "disponivel": true
+      },
+      {
+        "armazenamento": "24GB / 1TB",
+        "preco": 13690,
+        "disponivel": true
+      }
+    ]
+  },
+  {
+    "id": "macbook-pro-m4-m4-14-pretoespacial",
+    "modelo": "MacBook Pro M4",
+    "chip": "M4",
+    "cor": "Preto Espacial",
+    "corHex": "#2C2C2E",
+    "imagem": "/macbooks/macbook-pro-spaceblack.png",
+    "destaque": false,
+    "tamanho": "14\"",
+    "opcoes": [
+      {
+        "armazenamento": "16GB / 512GB",
+        "preco": 10490,
+        "disponivel": true
+      },
+      {
+        "armazenamento": "16GB / 1TB",
+        "preco": 11000,
+        "disponivel": true
+      },
+      {
+        "armazenamento": "24GB / 512GB",
+        "preco": 13000,
+        "disponivel": true
+      },
+      {
+        "armazenamento": "24GB / 1TB",
+        "preco": 15600,
+        "disponivel": true
+      }
+    ]
+  },
+  {
+    "id": "macbook-pro-m4-m4-14-prata",
+    "modelo": "MacBook Pro M4",
+    "chip": "M4",
+    "cor": "Prata",
+    "corHex": "#C8C8CA",
+    "imagem": "/macbooks/macbook-pro-silver.png",
+    "destaque": false,
+    "tamanho": "14\"",
+    "opcoes": [
+      {
+        "armazenamento": "16GB / 512GB",
+        "preco": 10490,
+        "disponivel": true
+      },
+      {
+        "armazenamento": "16GB / 1TB",
+        "preco": 11000,
+        "disponivel": true
+      },
+      {
+        "armazenamento": "24GB / 512GB",
+        "preco": 13000,
+        "disponivel": true
+      },
+      {
+        "armazenamento": "24GB / 1TB",
+        "preco": 15600,
+        "disponivel": true
+      }
+    ]
+  },
+  {
+    "id": "macbook-pro-m4-m4-16-pretoespacial",
+    "modelo": "MacBook Pro M4",
+    "chip": "M4",
+    "cor": "Preto Espacial",
+    "corHex": "#2C2C2E",
+    "imagem": "/macbooks/macbook-pro-spaceblack.png",
+    "destaque": false,
+    "tamanho": "16\"",
+    "opcoes": [
+      {
+        "armazenamento": "24GB / 512GB",
+        "preco": 16999.99,
+        "disponivel": true
+      },
+      {
+        "armazenamento": "48GB / 512GB",
+        "preco": 21000,
+        "disponivel": true
+      }
+    ]
+  },
+  {
+    "id": "macbook-pro-m4-m4-16-prata",
+    "modelo": "MacBook Pro M4",
+    "chip": "M4",
+    "cor": "Prata",
+    "corHex": "#C8C8CA",
+    "imagem": "/macbooks/macbook-pro-silver.png",
+    "destaque": false,
+    "tamanho": "16\"",
+    "opcoes": [
+      {
+        "armazenamento": "24GB / 512GB",
+        "preco": 16999.99,
+        "disponivel": true
+      },
+      {
+        "armazenamento": "48GB / 512GB",
+        "preco": 21000,
+        "disponivel": true
+      }
+    ]
+  },
+  {
+    "id": "macbook-pro-m4-m4pro-14-pretoespacial",
+    "modelo": "MacBook Pro M4",
+    "chip": "M4 Pro",
+    "cor": "Preto Espacial",
+    "corHex": "#2C2C2E",
+    "imagem": "/macbooks/macbook-pro-spaceblack.png",
+    "destaque": false,
+    "tamanho": "14\"",
+    "opcoes": [
+      {
+        "armazenamento": "24GB / 512GB",
+        "preco": 13500,
+        "disponivel": true
+      },
+      {
+        "armazenamento": "24GB / 1TB",
+        "preco": 15500,
+        "disponivel": true
+      },
+      {
+        "armazenamento": "48GB / 512GB",
+        "preco": 22000,
+        "disponivel": true
+      }
+    ]
+  },
+  {
+    "id": "macbook-pro-m4-m4pro-14-prata",
+    "modelo": "MacBook Pro M4",
+    "chip": "M4 Pro",
+    "cor": "Prata",
+    "corHex": "#C8C8CA",
+    "imagem": "/macbooks/macbook-pro-silver.png",
+    "destaque": false,
+    "tamanho": "14\"",
+    "opcoes": [
+      {
+        "armazenamento": "24GB / 512GB",
+        "preco": 13500,
+        "disponivel": true
+      },
+      {
+        "armazenamento": "24GB / 1TB",
+        "preco": 15500,
+        "disponivel": true
+      },
+      {
+        "armazenamento": "48GB / 512GB",
+        "preco": 22000,
+        "disponivel": true
+      }
+    ]
+  },
+  {
+    "id": "macbook-pro-m4-m4pro-16-pretoespacial",
+    "modelo": "MacBook Pro M4",
+    "chip": "M4 Pro",
+    "cor": "Preto Espacial",
+    "corHex": "#2C2C2E",
+    "imagem": "/macbooks/macbook-pro-spaceblack.png",
+    "destaque": false,
+    "tamanho": "16\"",
+    "opcoes": [
+      {
+        "armazenamento": "24GB / 512GB",
+        "preco": 17500,
+        "disponivel": true
+      },
+      {
+        "armazenamento": "48GB / 512GB",
+        "preco": 21000,
+        "disponivel": true
+      }
+    ]
+  },
+  {
+    "id": "macbook-pro-m4-m4pro-16-prata",
+    "modelo": "MacBook Pro M4",
+    "chip": "M4 Pro",
+    "cor": "Prata",
+    "corHex": "#C8C8CA",
+    "imagem": "/macbooks/macbook-pro-silver.png",
+    "destaque": false,
+    "tamanho": "16\"",
+    "opcoes": [
+      {
+        "armazenamento": "24GB / 512GB",
+        "preco": 17500,
+        "disponivel": true
+      },
+      {
+        "armazenamento": "48GB / 512GB",
+        "preco": 21000,
+        "disponivel": true
+      }
+    ]
+  },
+  {
+    "id": "macbook-pro-m4-m4max-14-pretoespacial",
+    "modelo": "MacBook Pro M4",
+    "chip": "M4 Max",
+    "cor": "Preto Espacial",
+    "corHex": "#2C2C2E",
+    "imagem": "/macbooks/macbook-pro-spaceblack.png",
+    "destaque": true,
+    "tamanho": "14\"",
+    "opcoes": [
+      {
+        "armazenamento": "36GB / 1TB",
+        "preco": 23900,
+        "disponivel": true
+      }
+    ]
+  },
+  {
+    "id": "macbook-pro-m4-m4max-14-prata",
+    "modelo": "MacBook Pro M4",
+    "chip": "M4 Max",
+    "cor": "Prata",
+    "corHex": "#C8C8CA",
+    "imagem": "/macbooks/macbook-pro-silver.png",
+    "destaque": true,
+    "tamanho": "14\"",
+    "opcoes": [
+      {
+        "armazenamento": "36GB / 1TB",
+        "preco": 23900,
+        "disponivel": true
+      }
+    ]
+  },
+  {
+    "id": "macbook-pro-m4-m4max-16-pretoespacial",
+    "modelo": "MacBook Pro M4",
+    "chip": "M4 Max",
+    "cor": "Preto Espacial",
+    "corHex": "#2C2C2E",
+    "imagem": "/macbooks/macbook-pro-spaceblack.png",
+    "destaque": true,
+    "tamanho": "16\"",
+    "opcoes": [
+      {
+        "armazenamento": "36GB / 1TB",
+        "preco": 26000,
+        "disponivel": true
+      },
+      {
+        "armazenamento": "48GB / 1TB",
+        "preco": 29000,
+        "disponivel": true
+      }
+    ]
+  },
+  {
+    "id": "macbook-pro-m4-m4max-16-prata",
+    "modelo": "MacBook Pro M4",
+    "chip": "M4 Max",
+    "cor": "Prata",
+    "corHex": "#C8C8CA",
+    "imagem": "/macbooks/macbook-pro-silver.png",
+    "destaque": true,
+    "tamanho": "16\"",
+    "opcoes": [
+      {
+        "armazenamento": "36GB / 1TB",
+        "preco": 26000,
+        "disponivel": true
+      },
+      {
+        "armazenamento": "48GB / 1TB",
+        "preco": 29000,
+        "disponivel": true
+      }
+    ]
+  },
+  {
+    "id": "macbook-pro-m5-m5-14-pretoespacial",
+    "modelo": "MacBook Pro M5",
+    "chip": "M5",
+    "cor": "Preto Espacial",
+    "corHex": "#2C2C2E",
+    "imagem": "/macbooks/macbook-pro-spaceblack.png",
+    "destaque": false,
+    "tamanho": "14\"",
+    "opcoes": [
+      {
+        "armazenamento": "16GB / 512GB",
+        "preco": 11990,
+        "disponivel": true
+      },
+      {
+        "armazenamento": "16GB / 1TB",
+        "preco": 12790,
+        "disponivel": true
+      },
+      {
+        "armazenamento": "24GB / 1TB",
+        "preco": 14690,
+        "disponivel": true
+      },
+      {
+        "armazenamento": "32GB / 1TB",
+        "preco": 18890,
+        "disponivel": true
+      },
+      {
+        "armazenamento": "48GB / 1TB",
+        "preco": 26790,
+        "disponivel": true
+      }
+    ]
+  },
+  {
+    "id": "macbook-pro-m5-m5-14-prata",
+    "modelo": "MacBook Pro M5",
+    "chip": "M5",
+    "cor": "Prata",
+    "corHex": "#C8C8CA",
+    "imagem": "/macbooks/macbook-pro-silver.png",
+    "destaque": false,
+    "tamanho": "14\"",
+    "opcoes": [
+      {
+        "armazenamento": "16GB / 512GB",
+        "preco": 11990,
+        "disponivel": true
+      },
+      {
+        "armazenamento": "16GB / 1TB",
+        "preco": 12790,
+        "disponivel": true
+      },
+      {
+        "armazenamento": "24GB / 1TB",
+        "preco": 14690,
+        "disponivel": true
+      },
+      {
+        "armazenamento": "32GB / 1TB",
+        "preco": 18890,
+        "disponivel": true
+      },
+      {
+        "armazenamento": "48GB / 1TB",
+        "preco": 26790,
+        "disponivel": true
+      }
+    ]
+  },
+  {
+    "id": "macbook-pro-m5-m5-16-pretoespacial",
+    "modelo": "MacBook Pro M5",
+    "chip": "M5",
+    "cor": "Preto Espacial",
+    "corHex": "#2C2C2E",
+    "imagem": "/macbooks/macbook-pro-spaceblack.png",
+    "destaque": false,
+    "tamanho": "16\"",
+    "opcoes": [
+      {
+        "armazenamento": "24GB / 1TB",
+        "preco": 19590,
+        "disponivel": true
+      },
+      {
+        "armazenamento": "32GB / 1TB",
+        "preco": 18890,
+        "disponivel": true
+      },
+      {
+        "armazenamento": "36GB / 2TB",
+        "preco": 29990,
+        "disponivel": true
+      }
+    ]
+  },
+  {
+    "id": "macbook-pro-m5-m5-16-prata",
+    "modelo": "MacBook Pro M5",
+    "chip": "M5",
+    "cor": "Prata",
+    "corHex": "#C8C8CA",
+    "imagem": "/macbooks/macbook-pro-silver.png",
+    "destaque": false,
+    "tamanho": "16\"",
+    "opcoes": [
+      {
+        "armazenamento": "24GB / 1TB",
+        "preco": 19590,
+        "disponivel": true
+      },
+      {
+        "armazenamento": "32GB / 1TB",
+        "preco": 18890,
+        "disponivel": true
+      },
+      {
+        "armazenamento": "36GB / 2TB",
+        "preco": 29990,
+        "disponivel": true
+      }
+    ]
+  },
+  {
+    "id": "macbook-pro-m5-m5pro-14-pretoespacial",
+    "modelo": "MacBook Pro M5",
+    "chip": "M5 Pro",
+    "cor": "Preto Espacial",
+    "corHex": "#2C2C2E",
+    "imagem": "/macbooks/macbook-pro-spaceblack.png",
+    "destaque": false,
+    "tamanho": "14\"",
+    "opcoes": [
+      {
+        "armazenamento": "24GB / 1TB",
+        "preco": 16490,
+        "disponivel": true
+      },
+      {
+        "armazenamento": "24GB / 2TB",
+        "preco": 18490,
+        "disponivel": true
+      }
+    ]
+  },
+  {
+    "id": "macbook-pro-m5-m5pro-14-prata",
+    "modelo": "MacBook Pro M5",
+    "chip": "M5 Pro",
+    "cor": "Prata",
+    "corHex": "#C8C8CA",
+    "imagem": "/macbooks/macbook-pro-silver.png",
+    "destaque": false,
+    "tamanho": "14\"",
+    "opcoes": [
+      {
+        "armazenamento": "24GB / 1TB",
+        "preco": 16490,
+        "disponivel": true
+      },
+      {
+        "armazenamento": "24GB / 2TB",
+        "preco": 18490,
+        "disponivel": true
+      }
+    ]
+  },
+  {
+    "id": "macbook-pro-m5-m5pro-16-pretoespacial",
+    "modelo": "MacBook Pro M5",
+    "chip": "M5 Pro",
+    "cor": "Preto Espacial",
+    "corHex": "#2C2C2E",
+    "imagem": "/macbooks/macbook-pro-spaceblack.png",
+    "destaque": false,
+    "tamanho": "16\"",
+    "opcoes": [
+      {
+        "armazenamento": "24GB / 1TB",
+        "preco": 19500,
+        "disponivel": true
+      },
+      {
+        "armazenamento": "48GB / 1TB",
+        "preco": 26990,
+        "disponivel": true
+      },
+      {
+        "armazenamento": "36GB / 2TB",
+        "preco": 29490,
+        "disponivel": true
+      }
+    ]
+  },
+  {
+    "id": "macbook-pro-m5-m5pro-16-prata",
+    "modelo": "MacBook Pro M5",
+    "chip": "M5 Pro",
+    "cor": "Prata",
+    "corHex": "#C8C8CA",
+    "imagem": "/macbooks/macbook-pro-silver.png",
+    "destaque": false,
+    "tamanho": "16\"",
+    "opcoes": [
+      {
+        "armazenamento": "24GB / 1TB",
+        "preco": 19500,
+        "disponivel": true
+      },
+      {
+        "armazenamento": "48GB / 1TB",
+        "preco": 26990,
+        "disponivel": true
+      },
+      {
+        "armazenamento": "36GB / 2TB",
+        "preco": 29490,
+        "disponivel": true
+      }
+    ]
+  },
+  {
+    "id": "macbook-pro-m5-m5max-14-pretoespacial",
+    "modelo": "MacBook Pro M5",
+    "chip": "M5 Max",
+    "cor": "Preto Espacial",
+    "corHex": "#2C2C2E",
+    "imagem": "/macbooks/macbook-pro-spaceblack.png",
+    "destaque": true,
+    "tamanho": "14\"",
+    "opcoes": [
+      {
+        "armazenamento": "36GB / 2TB",
+        "preco": 27990,
+        "disponivel": true
+      }
+    ]
+  },
+  {
+    "id": "macbook-pro-m5-m5max-14-prata",
+    "modelo": "MacBook Pro M5",
+    "chip": "M5 Max",
+    "cor": "Prata",
+    "corHex": "#C8C8CA",
+    "imagem": "/macbooks/macbook-pro-silver.png",
+    "destaque": true,
+    "tamanho": "14\"",
+    "opcoes": [
+      {
+        "armazenamento": "36GB / 2TB",
+        "preco": 27990,
+        "disponivel": true
+      }
+    ]
+  },
+  {
+    "id": "macbook-pro-m5-m5max-16-pretoespacial",
+    "modelo": "MacBook Pro M5",
+    "chip": "M5 Max",
+    "cor": "Preto Espacial",
+    "corHex": "#2C2C2E",
+    "imagem": "/macbooks/macbook-pro-spaceblack.png",
+    "destaque": true,
+    "tamanho": "16\"",
+    "opcoes": [
+      {
+        "armazenamento": "36GB / 2TB",
+        "preco": 28990,
+        "disponivel": true
+      },
+      {
+        "armazenamento": "48GB / 2TB",
+        "preco": 32990,
+        "disponivel": true
+      }
+    ]
+  },
+  {
+    "id": "macbook-pro-m5-m5max-16-prata",
+    "modelo": "MacBook Pro M5",
+    "chip": "M5 Max",
+    "cor": "Prata",
+    "corHex": "#C8C8CA",
+    "imagem": "/macbooks/macbook-pro-silver.png",
+    "destaque": true,
+    "tamanho": "16\"",
+    "opcoes": [
+      {
+        "armazenamento": "36GB / 2TB",
+        "preco": 28990,
+        "disponivel": true
+      },
+      {
+        "armazenamento": "48GB / 2TB",
+        "preco": 32990,
+        "disponivel": true
+      }
+    ]
+  },
+  {
+    "id": "macbook-air-m1-13-cinzaespacial",
+    "modelo": "MacBook Air",
+    "chip": "M1",
+    "cor": "Cinza-espacial",
+    "corHex": "#8E8E93",
+    "imagem": "/macbooks/macbook-air-m1-spacegray.png",
+    "destaque": false,
+    "tamanho": "13\"",
+    "opcoes": [
+      {
+        "armazenamento": "8GB / 256GB",
+        "preco": 5990,
+        "disponivel": true
+      }
+    ]
+  },
+  {
+    "id": "macbook-air-m1-13-prata",
+    "modelo": "MacBook Air",
+    "chip": "M1",
+    "cor": "Prata",
+    "corHex": "#E3E4E5",
+    "imagem": "/macbooks/macbook-air-m1-silver.png",
+    "destaque": false,
+    "tamanho": "13\"",
+    "opcoes": [
+      {
+        "armazenamento": "8GB / 256GB",
+        "preco": 5990,
+        "disponivel": true
+      }
+    ]
+  },
+  {
+    "id": "macbook-air-m4-13-skyblue",
+    "modelo": "MacBook Air",
+    "chip": "M4",
+    "cor": "Sky Blue",
+    "corHex": "#B9D6E8",
+    "imagem": "/macbooks/macbook-air-skyblue.png",
+    "destaque": false,
+    "tamanho": "13\"",
+    "opcoes": [
+      {
+        "armazenamento": "16GB / 256GB",
+        "preco": 7190,
+        "disponivel": true
+      },
+      {
+        "armazenamento": "16GB / 512GB",
+        "preco": 7590,
+        "disponivel": true
+      },
+      {
+        "armazenamento": "24GB / 512GB",
+        "preco": 9890,
+        "disponivel": true
+      }
+    ]
+  },
+  {
+    "id": "macbook-air-m4-15-skyblue",
+    "modelo": "MacBook Air",
+    "chip": "M4",
+    "cor": "Sky Blue",
+    "corHex": "#B9D6E8",
+    "imagem": "/macbooks/macbook-air-skyblue.png",
+    "destaque": false,
+    "tamanho": "15\"",
+    "opcoes": [
+      {
+        "armazenamento": "16GB / 256GB",
+        "preco": 7890,
+        "disponivel": true
+      },
+      {
+        "armazenamento": "16GB / 512GB",
+        "preco": 9190,
+        "disponivel": true
+      },
+      {
+        "armazenamento": "24GB / 512GB",
+        "preco": 10390,
+        "disponivel": true
+      }
+    ]
+  },
+  {
+    "id": "macbook-air-m5-13-skyblue",
+    "modelo": "MacBook Air",
+    "chip": "M5",
+    "cor": "Sky Blue",
+    "corHex": "#B9D6E8",
+    "imagem": "/macbooks/macbook-air-skyblue.png",
+    "destaque": true,
+    "tamanho": "13\"",
+    "opcoes": [
+      {
+        "armazenamento": "16GB / 512GB",
+        "preco": 8490,
+        "disponivel": true
+      },
+      {
+        "armazenamento": "24GB / 1TB",
+        "preco": 12890,
+        "disponivel": true
+      }
+    ]
+  },
+  {
+    "id": "macbook-air-m5-15-skyblue",
+    "modelo": "MacBook Air",
+    "chip": "M5",
+    "cor": "Sky Blue",
+    "corHex": "#B9D6E8",
+    "imagem": "/macbooks/macbook-air-skyblue.png",
+    "destaque": true,
+    "tamanho": "15\"",
+    "opcoes": [
+      {
+        "armazenamento": "16GB / 512GB",
+        "preco": 9790,
+        "disponivel": true
+      },
+      {
+        "armazenamento": "16GB / 1TB",
+        "preco": 11790,
+        "disponivel": true
+      },
+      {
+        "armazenamento": "24GB / 1TB",
+        "preco": 13690,
+        "disponivel": true
+      }
+    ]
+  }
+]
