@@ -5,7 +5,9 @@ import ModeloCard from './components/ModeloCard'
 import HeroCarousel from './components/HeroCarousel'
 import FaixaBeneficios from './components/FaixaBeneficios'
 import ProvaSocial from './components/ProvaSocial'
-import produtos from './data/produtos.json'
+import produtosBase from './data/produtos.json'
+import { PLANILHA_PRECOS_URL } from './config'
+import { buscarPrecosRemotos, aplicarPrecos } from './data/precosRemotos'
 
 const ORDEM_MODELOS = {
   iPhone: [
@@ -77,9 +79,22 @@ function useIsDesktop() {
 }
 
 export default function App() {
+  const [produtos, setProdutos] = useState(produtosBase)
   const [filtroCategoria, setFiltroCategoria] = useState('Destaque')
   const [filtroModelo, setFiltroModelo] = useState('Todos')
   const [mostrarTodos, setMostrarTodos] = useState(false)
+
+  useEffect(() => {
+    let cancelado = false
+    buscarPrecosRemotos(PLANILHA_PRECOS_URL)
+      .then(precos => {
+        if (!cancelado && precos) setProdutos(aplicarPrecos(produtosBase, precos))
+      })
+      .catch(() => {
+        // planilha fora do ar ou ainda não configurada: mantém os preços fixos do produtos.json
+      })
+    return () => { cancelado = true }
+  }, [])
   const isDesktop = useIsDesktop()
   const carouselRef = useRef(null)
   const filtrosRef = useRef(null)
@@ -110,7 +125,7 @@ export default function App() {
         .map(l => l.linha)
     }
     return ordemAtual.filter(m => produtos.some(p => p.modelo === m))
-  }, [filtroCategoria])
+  }, [filtroCategoria, produtos])
 
   const grupos = useMemo(() => {
     if (filtroCategoria === 'Destaque') {
@@ -133,7 +148,7 @@ export default function App() {
       map[p.modelo].push(p)
     })
     return ordemAtual.filter(m => map[m]).map(m => ({ modelo: m, variantes: map[m] }))
-  }, [filtroCategoria, filtroModelo])
+  }, [filtroCategoria, filtroModelo, produtos])
 
   const categoriaIndisponivel = filtroCategoria !== 'Destaque' && !ORDEM_MODELOS[filtroCategoria]
   const limitarLista = filtroModelo === 'Todos' && grupos.length > LIMITE_INICIAL && !mostrarTodos
