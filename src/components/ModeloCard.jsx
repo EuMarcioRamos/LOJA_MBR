@@ -49,8 +49,8 @@ export default function ModeloCard({ modelo, variantes }) {
   const next = () => irPara((safeIdx + 1) % varsFiltradas.length)
 
   const preco = opcaoAtual.preco.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })
-  const parcelamento = opcaoAtual.parcelas
-    ? `ou ${opcaoAtual.parcelas}x de ${(opcaoAtual.preco / opcaoAtual.parcelas).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })} sem juros`
+  const parcelamento = opcaoAtual.parcelas && opcaoAtual.valorParcela
+    ? `ou ${opcaoAtual.parcelas}x de ${opcaoAtual.valorParcela.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}`
     : null
   const tamanhoMsg = atual.tamanho ? `${atual.tamanho} ` : ''
   const linhaBase = modelo.replace(/ M\d+$/, '')
@@ -88,17 +88,12 @@ export default function ModeloCard({ modelo, variantes }) {
 
   return (
     <div
-      className="modelo-card-anim"
+      className="modelo-card-anim modelo-card"
       onMouseEnter={() => setHover(true)}
       onMouseLeave={() => setHover(false)}
       style={{
         background: hover ? '#1e1e1e' : '#161616',
         border: `1px solid ${hover ? '#333' : '#222'}`,
-        borderRadius: 16,
-        padding: '20px 20px 22px',
-        display: 'flex',
-        flexDirection: 'column',
-        gap: 14,
         transition: 'all 0.25s ease',
         transform: hover ? 'translateY(-3px)' : 'none',
         boxShadow: hover ? '0 16px 48px rgba(0,0,0,0.5)' : 'none',
@@ -118,16 +113,9 @@ export default function ModeloCard({ modelo, variantes }) {
       )}
 
       {/* Imagem */}
-      <div style={{
+      <div className="modelo-card-imagem" style={{
         position: 'relative',
-        width: '100%',
-        aspectRatio: '4 / 5',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
         background: 'radial-gradient(ellipse at 50% 65%, #2e2e32 0%, #131313 100%)',
-        borderRadius: 10,
-        overflow: 'hidden',
       }}>
         {varsFiltradas.length > 1 && (
           <>
@@ -141,6 +129,8 @@ export default function ModeloCard({ modelo, variantes }) {
             key={atual.id}
             src={atual.imagem}
             alt={`${atual.modelo} ${atual.cor}`}
+            loading="lazy"
+            decoding="async"
             style={{
               width: '100%', height: '100%',
               objectFit: 'contain',
@@ -332,7 +322,7 @@ export default function ModeloCard({ modelo, variantes }) {
             {preco}
           </p>
           {parcelamento && opcaoAtual.disponivel && (
-            <p style={{ fontSize: 11.5, color: '#888', marginTop: 2 }}>
+            <p style={{ fontSize: 14, fontWeight: 600, color: '#ddd', marginTop: 4 }}>
               {parcelamento}
             </p>
           )}

@@ -88,18 +88,40 @@ O **ID** de cada produto é a mesma coluna que já existe na aba `Precos`
 
 ---
 
-## Parcelamento ("ou 12x de R$ X sem juros")
+## Parcelamento com juros ("ou 12x de R$ X")
 
-Cada linha da aba `Precos` agora tem uma coluna extra, **Parcelas**. Se
-você preencher um número ali (ex.: `12`), o site calcula sozinho o valor
-da parcela (preço ÷ parcelas) e mostra "ou 12x de R$ ... sem juros" embaixo
-do preço daquele produto. Deixar em branco = não mostra parcelamento
-nenhum pra aquele item (é o padrão hoje, já que nenhuma linha tem isso
-preenchido ainda).
+Como o parcelamento tem juros, o site **não calcula mais** o valor da
+parcela sozinho (preço ÷ parcelas não serve mais, porque o total com
+juros é maior que o preço à vista). Agora são **duas colunas** na aba
+`Precos`:
 
-Se a sua conta já tinha a aba `Precos` criada antes dessa coluna existir,
-adicione a coluna manualmente: clique na primeira célula vazia depois da
-coluna ID (deve ser a coluna H) e escreva `Parcelas` no cabeçalho.
+- **Parcelas** — em quantas vezes (ex.: `12`).
+- **Valor Parcela** — o valor exato de cada parcela, **o mesmo número
+  que sua maquininha/banco já informa** quando você simula o
+  parcelamento daquele preço. Copie de lá, não precisa calcular nada.
+
+As duas colunas precisam estar preenchidas pro site mostrar a linha de
+parcelamento. Se faltar uma das duas (ou as duas), o produto mostra só
+o preço à vista, sem quebrar nada.
+
+**Exemplo:** produto de R$ 14.999,00, parcelado em 12x pela maquininha
+sai R$ 1.416,58 a parcela (com juros). Você preenche:
+
+```
+Parcelas | Valor Parcela
+12       | 1416.58
+```
+
+E o site mostra "ou 12x de R$ 1.416,58" embaixo do preço à vista.
+
+Se a sua conta já tinha a aba `Precos` criada antes dessas colunas
+existirem, adicione as colunas manualmente: depois da coluna ID (H),
+crie a coluna I com o cabeçalho `Valor Parcela` (a coluna `Parcelas` já
+deve existir na H).
+
+**Atenção:** você já tinha preenchido a coluna Parcelas em 31 produtos
+antes dessa mudança — esses vão parar de mostrar parcelamento até você
+preencher também o Valor Parcela correspondente a cada um.
 
 **Importante:** depois de colar a versão nova do script (a que tem o
 menu "Preços"), você precisa **atualizar a implantação existente** pra

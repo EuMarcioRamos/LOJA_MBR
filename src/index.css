@@ -66,6 +66,36 @@ body {
   animation: modeloCardIn 0.45s ease both;
 }
 
+.modelo-card {
+  border-radius: 16px;
+  padding: 20px 20px 22px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.modelo-card-imagem {
+  width: 100%;
+  aspect-ratio: 4 / 5;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+@media (max-width: 480px) {
+  .modelo-card {
+    border-radius: 14px;
+    padding: 14px 14px 16px;
+    gap: 10px;
+  }
+  .modelo-card-imagem {
+    aspect-ratio: 5 / 5.4;
+    border-radius: 8px;
+  }
+}
+
 .produtos-grid > .modelo-card-anim:nth-child(1),
 .produtos-carousel > .modelo-card-anim:nth-child(1) { animation-delay: 0s; }
 .produtos-grid > .modelo-card-anim:nth-child(2),

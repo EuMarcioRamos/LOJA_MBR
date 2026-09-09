@@ -20,7 +20,7 @@ function doGet() {
   const linhas = dados.slice(1) // remove o cabeçalho
 
   // Ordem das colunas na aba "Precos":
-  // 0=Categoria 1=Modelo 2=Cor 3=Armazenamento 4=Preco 5=Disponivel 6=ID 7=Parcelas
+  // 0=Categoria 1=Modelo 2=Cor 3=Armazenamento 4=Preco 5=Disponivel 6=ID 7=Parcelas 8=ValorParcela
   const precos = linhas
     .filter(linha => linha[6])
     .map(linha => ({
@@ -29,6 +29,7 @@ function doGet() {
       preco: Number(linha[4]) || 0,
       disponivel: String(linha[5]).trim().toUpperCase() === 'SIM',
       parcelas: Number(linha[7]) || null,
+      valorParcela: Number(linha[8]) || null,
     }))
 
   return ContentService
@@ -51,6 +52,7 @@ function onOpen() {
  * Lê a aba "Atualizar em Massa" e aplica os valores na aba "Precos".
  * Colunas dessa aba: ID | Armazenamento (opcional) | Novo Preço (opcional)
  * | Novo Disponível (opcional, SIM/NAO) | Novas Parcelas (opcional)
+ * | Novo Valor da Parcela (opcional)
  *
  * Deixar "Armazenamento" em branco aplica o novo preço em TODAS as
  * capacidades daquele ID. Deixar um campo em branco significa "não mexe
@@ -84,7 +86,7 @@ function aplicarAtualizacaoEmMassa() {
     const armazenamento = String(linha[3]).trim()
 
     listaAtualizacoes.forEach(atualizacao => {
-      const [idAlvo, armazenamentoAlvo, novoPreco, novoDisponivel, novasParcelas] = atualizacao
+      const [idAlvo, armazenamentoAlvo, novoPreco, novoDisponivel, novasParcelas, novoValorParcela] = atualizacao
       if (String(idAlvo).trim() !== id) return
       if (armazenamentoAlvo && String(armazenamentoAlvo).trim() !== armazenamento) return
 
@@ -99,6 +101,10 @@ function aplicarAtualizacaoEmMassa() {
       }
       if (novasParcelas !== '' && novasParcelas != null) {
         abaPrecos.getRange(i + 1, 8).setValue(Number(novasParcelas))
+        mudou = true
+      }
+      if (novoValorParcela !== '' && novoValorParcela != null) {
+        abaPrecos.getRange(i + 1, 9).setValue(Number(novoValorParcela))
         mudou = true
       }
       if (mudou) linhasAlteradas++
