@@ -49,6 +49,9 @@ export default function ModeloCard({ modelo, variantes }) {
   const next = () => irPara((safeIdx + 1) % varsFiltradas.length)
 
   const preco = opcaoAtual.preco.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })
+  const parcelamento = opcaoAtual.parcelas
+    ? `ou ${opcaoAtual.parcelas}x de ${(opcaoAtual.preco / opcaoAtual.parcelas).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })} sem juros`
+    : null
   const tamanhoMsg = atual.tamanho ? `${atual.tamanho} ` : ''
   const linhaBase = modelo.replace(/ M\d+$/, '')
   const nomeCompleto = atual.chip ? `${linhaBase} ${atual.chip}` : atual.modelo
@@ -328,6 +331,11 @@ export default function ModeloCard({ modelo, variantes }) {
           }}>
             {preco}
           </p>
+          {parcelamento && opcaoAtual.disponivel && (
+            <p style={{ fontSize: 11.5, color: '#888', marginTop: 2 }}>
+              {parcelamento}
+            </p>
+          )}
         </div>
 
         <a

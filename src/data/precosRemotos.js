@@ -25,6 +25,7 @@ export function aplicarPrecos(produtosBase, precos) {
         ...opcao,
         preco: Number(atualizado.preco) || opcao.preco,
         disponivel: atualizado.disponivel,
+        parcelas: atualizado.parcelas || null,
       }
     }),
   }))
