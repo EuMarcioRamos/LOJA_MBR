@@ -1,33 +1,62 @@
 // Busca preços atualizados na planilha do Google (via Apps Script) e mescla
 // com o catálogo fixo do produtos.json — sem alterar cor, imagem ou nome do
-// modelo, só o preço e a disponibilidade de cada opção de armazenamento.
+// modelo.
+//
+// O preço quase nunca varia por cor, então a planilha trata isso em duas
+// camadas:
+// 1. "Precos por Modelo" — o preço padrão de cada modelo+armazenamento,
+//    valendo pra todas as cores daquele produto.
+// 2. "Precos" (por cor) — só usada quando uma cor específica precisa de
+//    um preço diferente do padrão (exceção), e sempre pra controlar a
+//    disponibilidade de cada cor (isso sim varia peça a peça).
+
+export function modeloId(variante) {
+  return [variante.modelo, variante.chip, variante.tamanho].filter(Boolean).join(' ')
+}
 
 export async function buscarPrecosRemotos(url) {
   if (!url) return null
   const resposta = await fetch(url)
   if (!resposta.ok) throw new Error(`Planilha respondeu ${resposta.status}`)
-  const precos = await resposta.json()
-  if (!Array.isArray(precos)) throw new Error('Formato inesperado da planilha')
-  return precos
+  const dados = await resposta.json()
+  if (!dados || !Array.isArray(dados.porModelo) || !Array.isArray(dados.porCor)) {
+    throw new Error('Formato inesperado da planilha')
+  }
+  return dados
 }
 
-export function aplicarPrecos(produtosBase, precos) {
-  if (!precos || precos.length === 0) return produtosBase
+export function aplicarPrecos(produtosBase, dados) {
+  if (!dados) return produtosBase
 
-  const mapa = new Map(precos.map(p => [`${p.id}|${p.armazenamento}`, p]))
+  const mapaModelo = new Map(
+    (dados.porModelo || []).map(p => [`${p.modelo}|${p.armazenamento}`, p])
+  )
+  const mapaCor = new Map(
+    (dados.porCor || []).map(p => [`${p.id}|${p.armazenamento}`, p])
+  )
 
-  return produtosBase.map(variante => ({
-    ...variante,
-    opcoes: variante.opcoes.map(opcao => {
-      const atualizado = mapa.get(`${variante.id}|${opcao.armazenamento}`)
-      if (!atualizado) return opcao
-      return {
-        ...opcao,
-        preco: Number(atualizado.preco) || opcao.preco,
-        disponivel: atualizado.disponivel,
-        parcelas: atualizado.parcelas || null,
-        valorParcela: atualizado.valorParcela || null,
-      }
-    }),
-  }))
+  return produtosBase.map(variante => {
+    const chaveModelo = modeloId(variante)
+    return {
+      ...variante,
+      opcoes: variante.opcoes.map(opcao => {
+        const padrao = mapaModelo.get(`${chaveModelo}|${opcao.armazenamento}`)
+        const excecao = mapaCor.get(`${variante.id}|${opcao.armazenamento}`)
+
+        const preco = excecao?.preco || padrao?.preco
+        const parcelas = excecao?.parcelas || padrao?.parcelas || null
+        const valorParcela = excecao?.valorParcela || padrao?.valorParcela || null
+        // Disponibilidade é sempre por cor — não tem "padrão de modelo" aqui.
+        const disponivel = excecao ? excecao.disponivel : opcao.disponivel
+
+        return {
+          ...opcao,
+          preco: Number(preco) || opcao.preco,
+          disponivel,
+          parcelas,
+          valorParcela,
+        }
+      }),
+    }
+  })
 }

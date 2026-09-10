@@ -1,20 +1,34 @@
 ## Como funciona a atualização de preços via planilha
 
 O site guarda o catálogo (fotos, cores, nomes) em `src/data/produtos.json`,
-que não muda com frequência. O **preço** e a **disponibilidade** de cada
-opção de armazenamento, porém, podem ser atualizados por fora do código,
-através de uma planilha do Google.
+que não muda com frequência. O **preço**, a **disponibilidade** e o
+**parcelamento** de cada produto, porém, podem ser atualizados por fora
+do código, através de uma planilha do Google.
+
+### Duas camadas de preço
+
+O preço quase nunca varia por cor — então a planilha separa isso em duas
+abas:
+
+- **`Precos por Modelo`** — o preço padrão de cada modelo+armazenamento
+  (ex.: "iPhone 17 Pro Max, 256GB"), valendo pra **todas as cores** desse
+  produto de uma vez. **É aqui que você mexe no dia a dia**, na
+  imensa maioria dos casos.
+- **`Precos`** (por cor) — controla a **disponibilidade** de cada cor
+  (isso sim varia peça a peça — uma cor pode esgotar enquanto as outras
+  não) e serve pra registrar uma **exceção** de preço, só quando uma cor
+  específica realmente precisa custar diferente do padrão do modelo.
+  Fora dessas exceções, o campo Preço dessa aba fica em branco.
 
 ### Passo a passo (feito uma única vez)
 
 1. Crie uma planilha nova no Google Sheets, na sua conta Google normal.
 2. Renomeie a primeira aba para `Precos` (sem acento, exatamente assim).
 3. Importe o arquivo `precos-master-brpb.csv` (Arquivo → Importar → Fazer
-   upload → substituir a planilha atual) — ele já vem com todas as 496
-   opções de preço do catálogo, prontas para editar.
-4. Não apague nem edite a coluna **ID** — é ela que conecta cada linha da
-   planilha com o produto certo no site. Edite livremente **Preço** e
-   **Disponível** (SIM/NAO).
+   upload → substituir a planilha atual) — ele já vem com as 496 opções
+   de preço/disponibilidade do catálogo.
+4. Não apague nem edite a coluna **ID** — é ela que conecta cada linha
+   com o produto certo no site.
 5. Abra **Extensões → Apps Script**, apague o conteúdo padrão e cole o
    código de `docs/apps-script-precos.gs`.
 6. Clique em **Implantar → Nova implantação**, escolha o tipo **App da Web**,
@@ -27,13 +41,25 @@ através de uma planilha do Google.
 8. O Google te dá uma URL terminando em `/exec`. Copie essa URL e me envie
    — eu coloco em `src/config.js` (`PLANILHA_PRECOS_URL`) e o site passa a
    usar os preços da planilha a partir daí.
+9. Feche e abra a planilha de novo — isso faz o menu **Preços** aparecer
+   na barra de cima.
+10. Menu **Preços → Configurar Preços por Modelo (migração)**. Isso cria
+    a aba `Precos por Modelo` automaticamente a partir do que já está em
+    `Precos`, e limpa o preço das linhas de cor que não são exceção
+    (ficam controladas pelo modelo a partir daí). Só precisa rodar isso
+    uma vez (ou de novo se algum dia quiser reconstruir do zero).
 
 ### No dia a dia
 
-Pra mudar um preço só: abrir a planilha, achar a linha do produto, mudar
-o número da coluna Preço. O site pega a atualização na próxima vez que
-alguém carregar a página — não precisa mexer em código, não precisa
-avisar ninguém.
+Pra mudar o preço de um produto (todas as cores de uma vez): abrir a aba
+**`Precos por Modelo`**, achar a linha, mudar o número da coluna Preço.
+
+Pra mudar o preço de **uma cor específica** (exceção) ou marcar uma cor
+como indisponível: abrir a aba **`Precos`**, achar a linha daquela cor
+exata, mexer em Preço e/ou Disponível ali.
+
+O site pega a atualização na próxima vez que alguém carregar a página —
+não precisa mexer em código, não precisa avisar ninguém.
 
 Se a planilha cair ou a URL parar de responder por qualquer motivo, o
 site volta sozinho a usar os preços fixos salvos em `produtos.json`,
@@ -43,96 +69,82 @@ sem quebrar.
 
 ## Atualizando muitos preços de uma vez (sem editar linha por linha)
 
-Se já tem o script atualizado (versão com o menu "Preços" — veja se ele
-aparece na barra de menu lá em cima quando você abre a planilha), você
-tem duas ferramentas pra evitar o trabalho de editar 400 linhas na mão:
-
 ### 1. Reajuste percentual em tudo
 
 Quando o reajuste é geral (ex.: dólar subiu, todo o catálogo sobe 5%):
 
 1. Menu **Preços → Reajustar todos os preços em %**.
 2. Digite a porcentagem (ex.: `5` pra aumentar 5%, `-10` pra reduzir 10%).
-3. Confirma. Todos os preços da aba `Precos` são recalculados na hora.
+3. Confirma. Todos os preços da aba **`Precos por Modelo`** são
+   recalculados na hora (isso já vale pra todas as cores, já que o
+   preço vem do modelo).
 
 Não tem "desfazer" automático — se errar, é só rodar de novo com a
-porcentagem inversa, ou refazer a partir do CSV original.
+porcentagem inversa.
 
 ### 2. Atualização em massa por lista (pra mudanças específicas)
 
-Isso resolve o "enviar uma lista e isso ser atualizado": em vez de abrir
-a aba `Precos` e caçar linha por linha, você lista só o que mudou numa
-aba separada, e um clique aplica tudo de uma vez.
+Você lista só o que mudou numa aba separada, e um clique aplica tudo de
+uma vez. Cada linha pode mirar num **modelo inteiro** (todas as cores)
+ou numa **cor específica**, dependendo do que você escrever no
+Identificador.
 
-1. Crie uma aba nova na mesma planilha chamada exatamente `Atualizar em Massa`
-   (clique no `+` no rodapé da planilha, do lado das abas).
+1. Crie uma aba nova na mesma planilha chamada exatamente `Atualizar em Massa`.
 2. Nessa aba nova, importe ou copie o modelo `atualizar-em-massa-modelo.csv`
-   — ele mostra o formato: `ID | Armazenamento | Novo Preco | Novo Disponivel | Novas Parcelas`.
-3. Preencha uma linha pra cada mudança:
-   - Se preencher o **Armazenamento**, a mudança vale só pra aquela
-     capacidade específica (ex.: só o 256GB daquele produto).
-   - Se **deixar o Armazenamento em branco**, a mudança vale pra
-     **todas** as capacidades daquele ID de uma vez (útil quando o
-     preço de um produto inteiro muda, e ele tem várias opções de
-     armazenamento).
-   - Pode deixar Preço, Disponível ou Parcelas em branco se não quiser
-     mexer naquele campo específico.
-4. Menu **Preços → Aplicar atualização em massa**. Aparece um aviso
+   — formato: `Identificador | Armazenamento | Novo Preco | Novo Disponivel | Novas Parcelas | Novo Valor Parcela`.
+3. No **Identificador**, escreva:
+   - o **nome do Modelo** (ex.: `iPhone 17 Pro Max`, copiado da aba
+     `Precos por Modelo`) → muda o preço padrão, valendo pra todas as
+     cores desse produto.
+   - o **ID de uma cor** (ex.: `17promax-deepblue`, copiado da aba
+     `Precos`) → muda só aquela cor específica (preço-exceção e/ou
+     disponibilidade).
+4. Se preencher o **Armazenamento**, a mudança vale só pra aquela
+   capacidade. Deixando em branco, vale pra todas as capacidades
+   daquele Identificador.
+5. Deixe os campos que não quer alterar em branco.
+6. Menu **Preços → Aplicar atualização em massa**. Aparece um aviso
    dizendo quantas linhas foram alteradas.
-5. Pode apagar as linhas da aba `Atualizar em Massa` depois de aplicar,
+7. Pode apagar as linhas da aba `Atualizar em Massa` depois de aplicar,
    ou deixar lá — ela não é lida pelo site, só serve como "lista de
    entrada" pro botão.
-
-O **ID** de cada produto é a mesma coluna que já existe na aba `Precos`
-— copie de lá pra saber o ID certo do produto que quer mudar.
 
 ---
 
 ## Parcelamento com juros ("ou 12x de R$ X")
 
-Como o parcelamento tem juros, o site **não calcula mais** o valor da
-parcela sozinho (preço ÷ parcelas não serve mais, porque o total com
-juros é maior que o preço à vista). Agora são **duas colunas** na aba
-`Precos`:
+Como o parcelamento tem juros, o site **não calcula** o valor da parcela
+sozinho — você informa o valor exato, **o mesmo número que sua
+maquininha/banco já dá** quando simula o parcelamento daquele preço.
+
+Duas colunas, tanto em `Precos por Modelo` quanto em `Precos`:
 
 - **Parcelas** — em quantas vezes (ex.: `12`).
-- **Valor Parcela** — o valor exato de cada parcela, **o mesmo número
-  que sua maquininha/banco já informa** quando você simula o
-  parcelamento daquele preço. Copie de lá, não precisa calcular nada.
+- **Valor Parcela** — o valor de cada parcela (ex.: `1416.58`).
 
-As duas colunas precisam estar preenchidas pro site mostrar a linha de
-parcelamento. Se faltar uma das duas (ou as duas), o produto mostra só
-o preço à vista, sem quebrar nada.
+As duas precisam estar preenchidas pro site mostrar a linha de
+parcelamento (numa das duas abas — se preenchido no modelo, já vale pra
+todas as cores; se preenchido também numa cor específica na aba
+`Precos`, isso tem prioridade só naquela cor). Faltando uma das duas, o
+produto mostra só o preço à vista, sem quebrar nada.
 
 **Exemplo:** produto de R$ 14.999,00, parcelado em 12x pela maquininha
-sai R$ 1.416,58 a parcela (com juros). Você preenche:
+sai R$ 1.416,58 a parcela (com juros). Na aba `Precos por Modelo`:
 
 ```
 Parcelas | Valor Parcela
 12       | 1416.58
 ```
 
-E o site mostra "ou 12x de R$ 1.416,58" embaixo do preço à vista.
-
-Se a sua conta já tinha a aba `Precos` criada antes dessas colunas
-existirem, adicione as colunas manualmente: depois da coluna ID (H),
-crie a coluna I com o cabeçalho `Valor Parcela` (a coluna `Parcelas` já
-deve existir na H).
-
-**Atenção:** você já tinha preenchido a coluna Parcelas em 31 produtos
-antes dessa mudança — esses vão parar de mostrar parcelamento até você
-preencher também o Valor Parcela correspondente a cada um.
-
-**Importante:** depois de colar a versão nova do script (a que tem o
-menu "Preços"), você precisa **atualizar a implantação existente** pra
-essa coluna passar a ser lida pelo site — veja a próxima seção.
+E o site mostra "ou 12x de R$ 1.416,58" embaixo do preço à vista, em
+destaque (fonte maior e mais clara que o resto do texto do card).
 
 ---
 
 ## Atualizando o script depois de uma mudança
 
-Sempre que eu avisar que o `docs/apps-script-precos.gs` mudou (como
-agora, com o menu novo e a coluna Parcelas), o processo é:
+Sempre que eu avisar que o `docs/apps-script-precos.gs` mudou, o
+processo é:
 
 1. Abra **Extensões → Apps Script**, apague tudo e cole o conteúdo novo
    do arquivo.
@@ -149,4 +161,4 @@ editar a existente), aí sim o Google gera uma URL diferente — nesse
 caso me manda a URL nova que eu atualizo o `src/config.js`.
 
 Feche e abra a planilha de novo depois — é isso que faz o menu "Preços"
-aparecer na barra de cima (ele é criado quando a planilha é aberta).
+aparecer atualizado na barra de cima.
