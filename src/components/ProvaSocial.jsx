@@ -1,15 +1,22 @@
 const DEPOIMENTOS = [
   {
     imagem: '/prova-social/cliente-1.jpg',
-    texto: 'Cliente retirando o iPhone novinho direto na loja física, em Patos - PB.',
+    alt: 'Lucas Ribeiro, CEO da MasterBR',
+    destaque: true,
+    texto:
+      'Sou CEO da MasterBR. Entrei no mercado de celulares ainda jovem e logo me apaixonei pelo setor — hoje transformo essa paixão em propósito, aproximando a cidade de Patos da tecnologia Apple com produtos originais e um atendimento que faz a diferença na vida de cada cliente.',
+    nome: 'Lucas Ribeiro',
+    cargo: 'CEO da MasterBR',
   },
   {
     imagem: '/prova-social/cliente-2.jpg',
-    texto: 'Atendimento pessoal no balcão da loja, com produtos originais Apple prontos para entrega.',
+    alt: 'Cliente na loja',
+    texto: 'Cada produto passa por conferência antes da entrega, garantindo autenticidade e procedência Apple em todas as compras.',
   },
   {
     imagem: '/prova-social/cliente-3.jpg',
-    texto: 'Mais um cliente levando seu novo Mac pra casa, com a confiança de quem compra aqui.',
+    alt: 'Cliente na loja',
+    texto: 'Um espaço pensado para você testar, escolher e sair satisfeito, com o suporte de quem entende do assunto.',
   },
 ]
 
@@ -17,9 +24,9 @@ export default function ProvaSocial() {
   return (
     <section className="prova-social">
       <div className="prova-social-cabecalho">
-        <h2 className="prova-social-titulo">Momentos na loja</h2>
+        <h2 className="prova-social-titulo">Sobre a MasterBR</h2>
         <p className="prova-social-subtitulo">
-          Clientes retirando seus produtos Apple direto na nossa loja em Patos, Paraíba.
+          Quem comanda a MasterBR e os clientes que já vivem essa experiência em Patos, Paraíba.
         </p>
       </div>
 
@@ -30,10 +37,20 @@ export default function ProvaSocial() {
             key={item.imagem}
           >
             <div className="prova-social-foto">
-              <img src={item.imagem} alt="Cliente na loja" loading="lazy" />
+              <img src={item.imagem} alt={item.alt} loading="lazy" />
             </div>
             <div className="prova-social-conteudo">
-              <p className="prova-social-texto">{item.texto}</p>
+              {item.destaque ? (
+                <div className="prova-social-ceo">
+                  <p className="prova-social-ceo-texto">&ldquo;{item.texto}&rdquo;</p>
+                  <p className="prova-social-ceo-assinatura">
+                    <span className="prova-social-ceo-nome">{item.nome}</span>
+                    <span className="prova-social-ceo-cargo">{item.cargo}</span>
+                  </p>
+                </div>
+              ) : (
+                <p className="prova-social-texto">{item.texto}</p>
+              )}
             </div>
           </div>
         ))}
