@@ -17,7 +17,6 @@ export default function ProvaSocial() {
   return (
     <section className="prova-social">
       <div className="prova-social-cabecalho">
-        <p className="prova-social-eyebrow">Prova Social</p>
         <h2 className="prova-social-titulo">Momentos na loja</h2>
         <p className="prova-social-subtitulo">
           Clientes retirando seus produtos Apple direto na nossa loja em Patos, Paraíba.
