@@ -5,7 +5,7 @@ const SLIDES = [
     tipo: 'mascote',
     imagem: '/mascote.png',
     eyebrow: 'Assistência Especializada Apple',
-    titulo: 'Master BRPB',
+    titulo: 'MasterBR',
     subtitulo: 'o point Apple da Paraíba',
     texto: 'Escolha o modelo, a cor e o armazenamento ideal. Fale conosco direto pelo WhatsApp.',
   },
@@ -14,7 +14,7 @@ const SLIDES = [
     imagem: '/hero/iphone18-teaser.png',
     eyebrow: 'Em breve',
     titulo: 'iPhone 18 está chegando',
-    texto: 'A nova geração já tem data marcada pela Apple. Enquanto isso, as linhas 17, 16 e 15 já estão disponíveis na Master BRPB.',
+    texto: 'A nova geração já tem data marcada pela Apple. Enquanto isso, as linhas 17, 16 e 15 já estão disponíveis na MasterBR.',
     categoria: 'iPhone',
     cta: 'Ver iPhones disponíveis',
   },
@@ -23,7 +23,7 @@ const SLIDES = [
     imagem: '/hero/ipad-mini-finish-unselect-gallery-1-202410.png',
     eyebrow: 'iPad',
     titulo: 'iPads pra todo tipo de uso',
-    texto: 'Pro, Air, mini ou o iPad tradicional — encontre o ideal pra você na Master BRPB.',
+    texto: 'Pro, Air, mini ou o iPad tradicional — encontre o ideal pra você na MasterBR.',
     categoria: 'iPad',
     cta: 'Ver iPads',
   },
@@ -121,7 +121,7 @@ export default function HeroCarousel({ onEscolherCategoria }) {
               <div style={{ position: 'relative', height: '100%', display: 'flex', justifyContent: 'center' }}>
                 <img
                   src={slide.imagem}
-                  alt="Master BRPB"
+                  alt="MasterBR"
                   style={{ height: '86%', marginTop: '-4%', width: 'auto', display: 'block', objectFit: 'contain' }}
                 />
                 <div style={{

@@ -1,7 +1,7 @@
 const DEPOIMENTOS = [
   {
     imagem: '/prova-social/cliente-1.jpg',
-    texto: 'Cliente retirando o iPhone novinho direto na loja física da Master BRPB, em Patos - PB.',
+    texto: 'Cliente retirando o iPhone novinho direto na loja física, em Patos - PB.',
   },
   {
     imagem: '/prova-social/cliente-2.jpg',
@@ -9,7 +9,7 @@ const DEPOIMENTOS = [
   },
   {
     imagem: '/prova-social/cliente-3.jpg',
-    texto: 'Mais um cliente levando seu novo Mac pra casa, com a confiança de quem compra na Master BRPB.',
+    texto: 'Mais um cliente levando seu novo Mac pra casa, com a confiança de quem compra aqui.',
   },
 ]
 
@@ -18,7 +18,7 @@ export default function ProvaSocial() {
     <section className="prova-social">
       <div className="prova-social-cabecalho">
         <p className="prova-social-eyebrow">Prova Social</p>
-        <h2 className="prova-social-titulo">Momentos na Master BRPB</h2>
+        <h2 className="prova-social-titulo">Momentos na loja</h2>
         <p className="prova-social-subtitulo">
           Clientes retirando seus produtos Apple direto na nossa loja em Patos, Paraíba.
         </p>
@@ -31,7 +31,7 @@ export default function ProvaSocial() {
             key={item.imagem}
           >
             <div className="prova-social-foto">
-              <img src={item.imagem} alt="Cliente Master BRPB" loading="lazy" />
+              <img src={item.imagem} alt="Cliente na loja" loading="lazy" />
             </div>
             <div className="prova-social-conteudo">
               <p className="prova-social-texto">{item.texto}</p>

@@ -38,7 +38,7 @@ const BENEFICIOS = [
     icone: ItemAtendimento,
     titulo: 'Atendimento Especializado',
     texto: 'Da configuração aos reparos técnicos, conte com uma equipe especializada em produtos Apple.',
-    mensagem: 'Olá! Quero saber mais sobre o atendimento especializado da Master BRPB.',
+    mensagem: 'Olá! Quero saber mais sobre o atendimento especializado da MasterBR.',
   },
   {
     icone: ItemParcelamento,

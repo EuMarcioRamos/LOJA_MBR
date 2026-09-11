@@ -175,7 +175,7 @@ export default function App() {
           <div style={{ textAlign: 'center', padding: '100px 0' }}>
             <p style={{ fontSize: 40, marginBottom: 16 }}>🔜</p>
             <p style={{ fontSize: 22, fontWeight: 600, color: '#fff', marginBottom: 8 }}>{filtroCategoria}</p>
-            <p style={{ fontSize: 15, color: '#606060' }}>Em breve disponível na Master BRPB.</p>
+            <p style={{ fontSize: 15, color: '#606060' }}>Em breve disponível na MasterBR.</p>
           </div>
         ) : grupos.length === 0 ? (
           <div style={{ textAlign: 'center', padding: '80px 0', color: '#606060' }}>
@@ -231,7 +231,7 @@ export default function App() {
         padding: '24px', textAlign: 'center',
         color: '#404040', fontSize: 13,
       }}>
-        © {new Date().getFullYear()} Master BRPB — Assistência Especializada Apple
+        © {new Date().getFullYear()} MasterBR — Assistência Especializada Apple
       </footer>
     </div>
   )

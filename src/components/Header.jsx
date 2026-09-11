@@ -19,7 +19,7 @@ export default function Header() {
       }}>
         <img
           src="/logo.png"
-          alt="Master BRPB — Assistência Especializada Apple"
+          alt="MasterBR — Assistência Especializada Apple"
           style={{ height: 46, width: 'auto' }}
         />
 
