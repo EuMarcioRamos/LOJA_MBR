@@ -1,6 +1,6 @@
 import { useState } from 'react'
 
-export default function ModeloCard({ modelo, variantes }) {
+export default function ModeloCard({ modelo, variantes, precosProntos = true }) {
   const chips = [...new Set(variantes.map(v => v.chip).filter(Boolean))]
   const temChips = chips.length > 1
 
@@ -61,7 +61,6 @@ export default function ModeloCard({ modelo, variantes }) {
     `Olá! Tenho interesse no ${nomeCompleto} ${tamanhoMsg}${opcaoAtual.armazenamento} ${atual.cor}. Ainda está disponível?`
   )
   const whatsappUrl = `https://wa.me/5583991281912?text=${mensagem}`
-  const temDestaque = variantes.some(v => v.destaque)
 
   const btnNav = {
     position: 'absolute',
@@ -100,18 +99,6 @@ export default function ModeloCard({ modelo, variantes }) {
         position: 'relative',
       }}
     >
-      {temDestaque && (
-        <div style={{
-          position: 'absolute', top: 14, right: 14,
-          background: '#fff', color: '#000',
-          fontSize: 9, fontWeight: 700,
-          padding: '3px 9px', borderRadius: 50,
-          letterSpacing: '0.8px', textTransform: 'uppercase', zIndex: 3,
-        }}>
-          Destaque
-        </div>
-      )}
-
       {/* Imagem */}
       <div className="modelo-card-imagem" style={{
         position: 'relative',
@@ -314,17 +301,26 @@ export default function ModeloCard({ modelo, variantes }) {
       <div style={{ marginTop: 'auto', display: 'flex', flexDirection: 'column', gap: 10 }}>
         <div>
           <p style={{ fontSize: 10, color: '#555', marginBottom: 1 }}>Preço</p>
-          <p style={{
-            fontSize: 24, fontWeight: 700,
-            color: opcaoAtual.disponivel ? '#fff' : '#444',
-            letterSpacing: '-0.5px',
-          }}>
-            {preco}
-          </p>
-          {parcelamento && opcaoAtual.disponivel && (
-            <p style={{ fontSize: 14, fontWeight: 600, color: '#ddd', marginTop: 4 }}>
-              {parcelamento}
-            </p>
+          {precosProntos ? (
+            <>
+              <p style={{
+                fontSize: 24, fontWeight: 700,
+                color: opcaoAtual.disponivel ? '#fff' : '#444',
+                letterSpacing: '-0.5px',
+              }}>
+                {preco}
+              </p>
+              {parcelamento && opcaoAtual.disponivel && (
+                <p style={{ fontSize: 14, fontWeight: 600, color: '#ddd', marginTop: 4 }}>
+                  {parcelamento}
+                </p>
+              )}
+            </>
+          ) : (
+            <div className="preco-skeleton">
+              <div className="preco-skeleton-linha preco-skeleton-linha--preco" />
+              <div className="preco-skeleton-linha preco-skeleton-linha--parcela" />
+            </div>
           )}
         </div>
 

@@ -7,7 +7,7 @@ import FaixaBeneficios from './components/FaixaBeneficios'
 import ProvaSocial from './components/ProvaSocial'
 import produtosBase from './data/produtos.json'
 import { PLANILHA_PRECOS_URL } from './config'
-import { buscarPrecosRemotos, aplicarPrecos } from './data/precosRemotos'
+import { buscarPrecosRemotos, aplicarPrecos, lerPrecosCache, salvarPrecosCache } from './data/precosRemotos'
 
 const ORDEM_MODELOS = {
   iPhone: [
@@ -80,18 +80,32 @@ function useIsDesktop() {
 
 export default function App() {
   const [produtos, setProdutos] = useState(produtosBase)
+  const [precosProntos, setPrecosProntos] = useState(false)
   const [filtroCategoria, setFiltroCategoria] = useState('Destaque')
   const [filtroModelo, setFiltroModelo] = useState('Todos')
   const [mostrarTodos, setMostrarTodos] = useState(false)
 
   useEffect(() => {
     let cancelado = false
+
+    const precosCache = lerPrecosCache()
+    if (precosCache) {
+      setProdutos(aplicarPrecos(produtosBase, precosCache))
+      setPrecosProntos(true)
+    }
+
     buscarPrecosRemotos(PLANILHA_PRECOS_URL)
       .then(precos => {
-        if (!cancelado && precos) setProdutos(aplicarPrecos(produtosBase, precos))
+        if (!cancelado && precos) {
+          setProdutos(aplicarPrecos(produtosBase, precos))
+          salvarPrecosCache(precos)
+        }
       })
       .catch(() => {
         // planilha fora do ar ou ainda não configurada: mantém os preços fixos do produtos.json
+      })
+      .finally(() => {
+        if (!cancelado) setPrecosProntos(true)
       })
     return () => { cancelado = true }
   }, [])
@@ -199,7 +213,7 @@ export default function App() {
             )}
             <div className="produtos-carousel" ref={carouselRef}>
               {grupos.map(({ modelo, variantes }) => (
-                <ModeloCard key={modelo} modelo={modelo} variantes={variantes} />
+                <ModeloCard key={modelo} modelo={modelo} variantes={variantes} precosProntos={precosProntos} />
               ))}
             </div>
           </div>
@@ -207,7 +221,7 @@ export default function App() {
           <>
             <div className="produtos-grid">
               {gruposExibidos.map(({ modelo, variantes }) => (
-                <ModeloCard key={modelo} modelo={modelo} variantes={variantes} />
+                <ModeloCard key={modelo} modelo={modelo} variantes={variantes} precosProntos={precosProntos} />
               ))}
             </div>
             {limitarLista && (

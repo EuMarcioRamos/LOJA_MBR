@@ -25,6 +25,34 @@ export async function buscarPrecosRemotos(url) {
   return dados
 }
 
+// Cache local (por navegador) da última resposta da planilha, só pra evitar
+// mostrar o esqueleto de novo em visitas repetidas dentro de poucos minutos.
+// Nunca é a fonte da verdade — o fetch ao vivo sempre roda por cima e
+// atualiza tanto a tela quanto o cache.
+const CHAVE_CACHE_PRECOS = 'mbr-precos-cache-v1'
+const CACHE_PRECOS_TTL_MS = 5 * 60 * 1000 // 5 minutos
+
+export function lerPrecosCache() {
+  try {
+    const bruto = localStorage.getItem(CHAVE_CACHE_PRECOS)
+    if (!bruto) return null
+    const { timestamp, precos } = JSON.parse(bruto)
+    if (!timestamp || !precos) return null
+    if (Date.now() - timestamp > CACHE_PRECOS_TTL_MS) return null
+    return precos
+  } catch {
+    return null
+  }
+}
+
+export function salvarPrecosCache(precos) {
+  try {
+    localStorage.setItem(CHAVE_CACHE_PRECOS, JSON.stringify({ timestamp: Date.now(), precos }))
+  } catch {
+    // localStorage indisponível (modo privado, cota cheia, etc.) — segue sem cache
+  }
+}
+
 export function aplicarPrecos(produtosBase, dados) {
   if (!dados) return produtosBase
 

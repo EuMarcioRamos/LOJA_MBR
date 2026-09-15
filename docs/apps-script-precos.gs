@@ -20,7 +20,21 @@ const ABA_ATUALIZACAO = 'Atualizar em Massa'
 // ────────────────────────────────────────────────────────────
 // 1. API pública (lida pelo site) — não precisa mexer aqui
 // ────────────────────────────────────────────────────────────
+// Cache de 3 minutos: evita reler a planilha inteira em chamadas repetidas
+// (não reduz o tempo de despacho do próprio Apps Script como Web App, só
+// o tempo gasto lendo/montando os dados a cada chamada).
+const CACHE_SEGUNDOS = 180
+
 function doGet() {
+  const cache = CacheService.getScriptCache()
+  const cacheKey = 'precos-json'
+  const cacheado = cache.get(cacheKey)
+  if (cacheado) {
+    return ContentService
+      .createTextOutput(cacheado)
+      .setMimeType(ContentService.MimeType.JSON)
+  }
+
   const planilha = SpreadsheetApp.getActiveSpreadsheet()
 
   // Aba "Precos por Modelo": 0=Categoria 1=Modelo 2=Armazenamento
@@ -54,9 +68,24 @@ function doGet() {
         }))
     : []
 
+  const resposta = JSON.stringify({ porModelo, porCor })
+  cache.put(cacheKey, resposta, CACHE_SEGUNDOS)
+
   return ContentService
-    .createTextOutput(JSON.stringify({ porModelo, porCor }))
+    .createTextOutput(resposta)
     .setMimeType(ContentService.MimeType.JSON)
+}
+
+/**
+ * Roda automaticamente (via onEdit) sempre que alguém edita a planilha,
+ * limpando o cache pra próxima chamada do site já vir com o valor novo,
+ * em vez de esperar os 3 minutos do CACHE_SEGUNDOS expirarem sozinhos.
+ */
+function onEdit(e) {
+  const nomeAba = e.range.getSheet().getName()
+  if (nomeAba === ABA_PRECOS || nomeAba === ABA_PRECOS_MODELO) {
+    CacheService.getScriptCache().remove('precos-json')
+  }
 }
 
 // ────────────────────────────────────────────────────────────
