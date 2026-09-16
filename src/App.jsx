@@ -5,6 +5,7 @@ import ModeloCard from './components/ModeloCard'
 import HeroCarousel from './components/HeroCarousel'
 import FaixaBeneficios from './components/FaixaBeneficios'
 import ProvaSocial from './components/ProvaSocial'
+import CarrinhoFlutuante from './components/CarrinhoFlutuante'
 import produtosBase from './data/produtos.json'
 import { PLANILHA_PRECOS_URL } from './config'
 import { buscarPrecosRemotos, aplicarPrecos, lerPrecosCache, salvarPrecosCache } from './data/precosRemotos'
@@ -63,7 +64,7 @@ const LINHAS_POR_CATEGORIA = {
 }
 
 const LIMITE_INICIAL = 3
-const BREAKPOINT_DESKTOP = 768
+const BREAKPOINT_DESKTOP = 767
 
 function useIsDesktop() {
   const [isDesktop, setIsDesktop] = useState(() => window.innerWidth > BREAKPOINT_DESKTOP)
@@ -84,6 +85,24 @@ export default function App() {
   const [filtroCategoria, setFiltroCategoria] = useState('Destaque')
   const [filtroModelo, setFiltroModelo] = useState('Todos')
   const [mostrarTodos, setMostrarTodos] = useState(false)
+  const [carrinho, setCarrinho] = useState([])
+  const [carrinhoAberto, setCarrinhoAberto] = useState(false)
+  const [carrinhoAnimKey, setCarrinhoAnimKey] = useState(0)
+
+  const alternarCarrinho = (item) => {
+    setCarrinho(atual => {
+      const existe = atual.some(p => p.id === item.id)
+      if (existe) return atual.filter(p => p.id !== item.id)
+      setCarrinhoAnimKey(k => k + 1)
+      return [...atual, item]
+    })
+  }
+
+  const removerDoCarrinho = (id) => {
+    setCarrinho(atual => atual.filter(p => p.id !== id))
+  }
+
+  const carrinhoIds = useMemo(() => carrinho.map(p => p.id), [carrinho])
 
   useEffect(() => {
     let cancelado = false
@@ -170,7 +189,11 @@ export default function App() {
 
   return (
     <div style={{ minHeight: '100vh', background: '#0a0a0a' }}>
-      <Header />
+      <Header
+        carrinhoCount={carrinho.length}
+        carrinhoAnimKey={carrinhoAnimKey}
+        onAbrirCarrinho={() => setCarrinhoAberto(a => !a)}
+      />
 
       <HeroCarousel onEscolherCategoria={escolherCategoriaDoHero} />
 
@@ -213,7 +236,14 @@ export default function App() {
             )}
             <div className="produtos-carousel" ref={carouselRef}>
               {grupos.map(({ modelo, variantes }) => (
-                <ModeloCard key={modelo} modelo={modelo} variantes={variantes} precosProntos={precosProntos} />
+                <ModeloCard
+                  key={modelo}
+                  modelo={modelo}
+                  variantes={variantes}
+                  precosProntos={precosProntos}
+                  carrinhoIds={carrinhoIds}
+                  onAlternarCarrinho={alternarCarrinho}
+                />
               ))}
             </div>
           </div>
@@ -221,7 +251,14 @@ export default function App() {
           <>
             <div className="produtos-grid">
               {gruposExibidos.map(({ modelo, variantes }) => (
-                <ModeloCard key={modelo} modelo={modelo} variantes={variantes} precosProntos={precosProntos} />
+                <ModeloCard
+                  key={modelo}
+                  modelo={modelo}
+                  variantes={variantes}
+                  precosProntos={precosProntos}
+                  carrinhoIds={carrinhoIds}
+                  onAlternarCarrinho={alternarCarrinho}
+                />
               ))}
             </div>
             {limitarLista && (
@@ -247,6 +284,17 @@ export default function App() {
       }}>
         © {new Date().getFullYear()} MasterBR — Assistência Especializada Apple
       </footer>
+
+      <CarrinhoFlutuante
+        aberto={carrinhoAberto}
+        carrinho={carrinho}
+        onRemover={removerDoCarrinho}
+        onLimpar={() => {
+          setCarrinho([])
+          setCarrinhoAberto(false)
+        }}
+        onFechar={() => setCarrinhoAberto(false)}
+      />
     </div>
   )
 }
