@@ -1,3 +1,5 @@
+import { WHATSAPP_NUMERO } from '../config'
+
 export default function Header({ carrinhoCount = 0, carrinhoAnimKey = 0, onAbrirCarrinho }) {
   return (
     <header style={{
@@ -25,11 +27,11 @@ export default function Header({ carrinhoCount = 0, carrinhoAnimKey = 0, onAbrir
 
         <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
           <a
-            href="https://wa.me/5583991281912"
+            href={`https://wa.me/${WHATSAPP_NUMERO}`}
             target="_blank"
             rel="noreferrer"
             style={{
-              background: '#25D366',
+              background: 'var(--whatsapp)',
               color: '#fff',
               padding: '8px 18px',
               borderRadius: 50,
@@ -54,7 +56,7 @@ export default function Header({ carrinhoCount = 0, carrinhoAnimKey = 0, onAbrir
             className={`header-carrinho-btn${carrinhoAnimKey > 0 ? ' header-carrinho-btn--animar' : ''}`}
           >
             <span className="header-carrinho-label">Carrinho</span>
-            <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="#25D366" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="var(--whatsapp)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
               <circle cx="9" cy="21" r="1" />
               <circle cx="20" cy="21" r="1" />
               <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6" />

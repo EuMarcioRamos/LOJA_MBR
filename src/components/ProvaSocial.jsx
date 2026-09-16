@@ -1,3 +1,5 @@
+import Depoimentos from './Depoimentos'
+
 const CEO = {
   imagem: '/prova-social/cliente-1.jpg',
   alt: 'Lucas Ribeiro, CEO da MasterBR',
@@ -44,8 +46,13 @@ export default function ProvaSocial() {
         </div>
       </div>
 
+      <Depoimentos />
+
       <div className="clientes-master">
         <h3 className="clientes-master-titulo">Clientes Master</h3>
+        <p className="clientes-master-subtitulo">
+          Gente incrível que confia na MasterBR e vive a melhor experiência Apple em Patos.
+        </p>
         <div className="clientes-master-marquee">
           <div className="clientes-master-trilho">
             {[...CLIENTES_MASTER, ...CLIENTES_MASTER].map((src, i) => (

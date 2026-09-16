@@ -10,6 +10,18 @@ import produtosBase from './data/produtos.json'
 import { PLANILHA_PRECOS_URL } from './config'
 import { buscarPrecosRemotos, aplicarPrecos, lerPrecosCache, salvarPrecosCache } from './data/precosRemotos'
 
+const CARRINHO_STORAGE_KEY = 'mbr-carrinho-v1'
+
+function lerCarrinhoSalvo() {
+  try {
+    const bruto = localStorage.getItem(CARRINHO_STORAGE_KEY)
+    const dados = bruto ? JSON.parse(bruto) : []
+    return Array.isArray(dados) ? dados : []
+  } catch {
+    return []
+  }
+}
+
 const ORDEM_MODELOS = {
   iPhone: [
     'iPhone 17 Pro Max', 'iPhone 17 Pro', 'iPhone 17',
@@ -84,10 +96,19 @@ export default function App() {
   const [precosProntos, setPrecosProntos] = useState(false)
   const [filtroCategoria, setFiltroCategoria] = useState('Destaque')
   const [filtroModelo, setFiltroModelo] = useState('Todos')
+  const [busca, setBusca] = useState('')
   const [mostrarTodos, setMostrarTodos] = useState(false)
-  const [carrinho, setCarrinho] = useState([])
+  const [carrinho, setCarrinho] = useState(lerCarrinhoSalvo)
   const [carrinhoAberto, setCarrinhoAberto] = useState(false)
   const [carrinhoAnimKey, setCarrinhoAnimKey] = useState(0)
+
+  useEffect(() => {
+    try {
+      localStorage.setItem(CARRINHO_STORAGE_KEY, JSON.stringify(carrinho))
+    } catch {
+      // localStorage indisponível (modo privado, cota cheia, etc.) — segue sem persistir
+    }
+  }, [carrinho])
 
   const alternarCarrinho = (item) => {
     setCarrinho(atual => {
@@ -134,7 +155,7 @@ export default function App() {
 
   useEffect(() => {
     setMostrarTodos(false)
-  }, [filtroCategoria, filtroModelo])
+  }, [filtroCategoria, filtroModelo, busca])
 
   const escolherCategoriaDoHero = (categoria) => {
     setFiltroCategoria(categoria)
@@ -160,7 +181,18 @@ export default function App() {
     return ordemAtual.filter(m => produtos.some(p => p.modelo === m))
   }, [filtroCategoria, produtos])
 
+  const termoBusca = busca.trim().toLowerCase()
+
   const grupos = useMemo(() => {
+    if (termoBusca) {
+      const variantesFiltradas = produtos.filter(p => p.modelo.toLowerCase().includes(termoBusca))
+      const map = {}
+      variantesFiltradas.forEach(p => {
+        if (!map[p.modelo]) map[p.modelo] = []
+        map[p.modelo].push(p)
+      })
+      return Object.keys(map).map(m => ({ modelo: m, variantes: map[m] }))
+    }
     if (filtroCategoria === 'Destaque') {
       return DESTAQUE_MODELOS
         .map(({ modelo }) => ({ modelo, variantes: produtos.filter(p => p.modelo === modelo) }))
@@ -181,10 +213,10 @@ export default function App() {
       map[p.modelo].push(p)
     })
     return ordemAtual.filter(m => map[m]).map(m => ({ modelo: m, variantes: map[m] }))
-  }, [filtroCategoria, filtroModelo, produtos])
+  }, [filtroCategoria, filtroModelo, produtos, termoBusca])
 
-  const categoriaIndisponivel = filtroCategoria !== 'Destaque' && !ORDEM_MODELOS[filtroCategoria]
-  const limitarLista = filtroModelo === 'Todos' && grupos.length > LIMITE_INICIAL && !mostrarTodos
+  const categoriaIndisponivel = !termoBusca && filtroCategoria !== 'Destaque' && !ORDEM_MODELOS[filtroCategoria]
+  const limitarLista = (termoBusca || filtroModelo === 'Todos') && grupos.length > LIMITE_INICIAL && !mostrarTodos
   const gruposExibidos = limitarLista ? grupos.slice(0, LIMITE_INICIAL) : grupos
 
   return (
@@ -204,6 +236,8 @@ export default function App() {
           setFiltroCategoria={setFiltroCategoria}
           filtroModelo={filtroModelo}
           setFiltroModelo={setFiltroModelo}
+          busca={busca}
+          setBusca={setBusca}
         />
       </div>
 
@@ -280,7 +314,7 @@ export default function App() {
       <footer style={{
         borderTop: '1px solid #1a1a1a',
         padding: '24px', textAlign: 'center',
-        color: '#404040', fontSize: 13,
+        color: '#8a8a8a', fontSize: 13,
       }}>
         © {new Date().getFullYear()} MasterBR — Assistência Especializada Apple
       </footer>

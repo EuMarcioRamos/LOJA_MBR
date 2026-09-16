@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 
 const CATEGORIAS = [
   {
@@ -81,10 +81,22 @@ function rotuloCurto(modelo) {
   return modelo
 }
 
-export default function Filtros({ modelos, filtroCategoria, setFiltroCategoria, filtroModelo, setFiltroModelo }) {
+export default function Filtros({ modelos, filtroCategoria, setFiltroCategoria, filtroModelo, setFiltroModelo, busca, setBusca }) {
   const [modelosVisiveis, setModelosVisiveis] = useState(modelos)
   const [categoriaVisivel, setCategoriaVisivel] = useState(filtroCategoria)
   const [saindo, setSaindo] = useState(false)
+  const [buscaAberta, setBuscaAberta] = useState(false)
+  const buscaInputRef = useRef(null)
+  const buscaExpandida = buscaAberta || busca.trim() !== ''
+
+  const abrirBusca = () => {
+    setBuscaAberta(true)
+    requestAnimationFrame(() => buscaInputRef.current?.focus())
+  }
+
+  const aoDesfocarBusca = () => {
+    if (!busca.trim()) setBuscaAberta(false)
+  }
 
   useEffect(() => {
     if (modelos.length > 0) {
@@ -103,6 +115,43 @@ export default function Filtros({ modelos, filtroCategoria, setFiltroCategoria, 
   return (
     <div className="filtros-section">
 
+      {/* ── Busca ── */}
+      <div className="busca-row">
+        <div className={`busca-wrap${buscaExpandida ? ' busca-wrap--aberta' : ''}`}>
+          <button
+            type="button"
+            className="busca-icone-btn"
+            onClick={abrirBusca}
+            aria-label="Buscar produto"
+          >
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <circle cx="11" cy="11" r="7" />
+              <line x1="21" y1="21" x2="16.65" y2="16.65" />
+            </svg>
+          </button>
+          <input
+            ref={buscaInputRef}
+            type="text"
+            className="busca-input"
+            placeholder="Buscar produto..."
+            value={busca}
+            onChange={(e) => setBusca(e.target.value)}
+            onFocus={() => setBuscaAberta(true)}
+            onBlur={aoDesfocarBusca}
+            aria-label="Buscar produto"
+          />
+          {busca && (
+            <button
+              className="busca-limpar"
+              onClick={() => { setBusca(''); buscaInputRef.current?.focus() }}
+              aria-label="Limpar busca"
+            >
+              ×
+            </button>
+          )}
+        </div>
+      </div>
+
       {/* ── Categorias ── */}
       <div className="filtros-row">
         <div className="filtros-scroll categorias-scroll">
@@ -114,9 +163,10 @@ export default function Filtros({ modelos, filtroCategoria, setFiltroCategoria, 
                 if (cat.disponivel) {
                   setFiltroCategoria(cat.id)
                   setFiltroModelo('Todos')
+                  setBusca('')
                 }
               }}
-              className={`categoria-btn${filtroCategoria === cat.id ? ' ativo' : ''}${!cat.disponivel ? ' em-breve' : ''}`}
+              className={`categoria-btn${!busca.trim() && filtroCategoria === cat.id ? ' ativo' : ''}${!cat.disponivel ? ' em-breve' : ''}`}
             >
               <span className="categoria-icon">{cat.icon}</span>
               <span className="categoria-label">{cat.label}</span>
@@ -129,8 +179,8 @@ export default function Filtros({ modelos, filtroCategoria, setFiltroCategoria, 
 
       <div className="filtros-divider-h" />
 
-      {/* ── Modelos (só quando há modelos) ── */}
-      {modelosVisiveis.length > 0 && (
+      {/* ── Modelos (só quando há modelos e nenhuma busca ativa) ── */}
+      {!busca.trim() && modelosVisiveis.length > 0 && (
         <div
           className={`filtros-row filtros-modelo-anim${saindo ? ' saindo' : ''}`}
           key={categoriaVisivel}

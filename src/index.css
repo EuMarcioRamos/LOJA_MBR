@@ -158,6 +158,84 @@ body {
   margin-top: 24px;
 }
 
+.busca-row {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 16px 24px 0;
+}
+
+.busca-wrap {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  height: 34px;
+}
+
+.busca-icone-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  border: none;
+  color: #e0e0e0;
+  cursor: pointer;
+  padding: 6px;
+  flex-shrink: 0;
+  transition: color 0.15s ease;
+}
+
+.busca-icone-btn:hover {
+  color: #fff;
+}
+
+.busca-input {
+  width: 0;
+  min-width: 0;
+  background: transparent;
+  border: none;
+  border-bottom: 1.5px solid transparent;
+  padding: 8px 0;
+  font-size: 13.5px;
+  color: #fff;
+  font-family: inherit;
+  opacity: 0;
+  transition: width 0.25s ease, padding 0.25s ease, border-color 0.15s ease, opacity 0.2s ease;
+}
+
+.busca-wrap--aberta .busca-input {
+  width: 220px;
+  padding: 8px 26px 8px 8px;
+  border-bottom-color: #e0e0e0;
+  opacity: 1;
+}
+
+.busca-input::placeholder {
+  color: #888;
+}
+
+.busca-input:focus {
+  outline: none;
+}
+
+.busca-limpar {
+  position: absolute;
+  right: 2px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: transparent;
+  border: none;
+  color: #e0e0e0;
+  font-size: 18px;
+  line-height: 1;
+  cursor: pointer;
+  padding: 6px;
+  transition: color 0.15s ease;
+}
+
+.busca-limpar:hover {
+  color: #fff;
+}
+
 /* ── Botões de categoria ── */
 .categorias-scroll {
   padding: 14px 0 10px;
@@ -479,7 +557,7 @@ body {
 .beneficio-link {
   font-size: 13px;
   font-weight: 600;
-  color: #25D366;
+  color: var(--whatsapp);
   text-decoration: none;
   display: inline-flex;
   align-items: center;
@@ -529,7 +607,7 @@ body {
 
 .prova-social-subtitulo {
   font-size: 14px;
-  color: #aeaeae;
+  color: var(--whatsapp);
   max-width: 480px;
   margin: 0 auto;
 }
@@ -639,6 +717,141 @@ body {
   }
 }
 
+.depoimentos {
+  max-width: 1200px;
+  margin: 48px auto 0;
+  padding: 0 24px;
+}
+
+.depoimentos-cabecalho {
+  text-align: center;
+  margin-bottom: 36px;
+}
+
+.depoimentos-titulo {
+  font-size: clamp(24px, 3.4vw, 34px);
+  font-weight: 800;
+  color: #fff;
+  letter-spacing: -0.5px;
+  margin-bottom: 10px;
+}
+
+.depoimentos-subtitulo {
+  font-size: 14.5px;
+  color: var(--whatsapp);
+  margin-bottom: 14px;
+}
+
+.depoimentos-underline {
+  width: 56px;
+  height: 3px;
+  background: var(--whatsapp);
+  border-radius: 2px;
+  margin: 0 auto;
+}
+
+.depoimentos-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+}
+
+.depoimento-card {
+  position: relative;
+  background: #161616;
+  border: 1px solid #242424;
+  border-radius: 14px;
+  padding: 30px 24px 22px;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.depoimento-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 24px;
+  width: 34px;
+  height: 4px;
+  background: var(--whatsapp);
+  border-radius: 0 0 4px 4px;
+}
+
+.depoimento-aspas {
+  font-family: Georgia, 'Times New Roman', serif;
+  font-size: 50px;
+  line-height: 1;
+  color: #333;
+  font-weight: 700;
+}
+
+.depoimento-estrelas {
+  display: flex;
+  gap: 3px;
+  color: #ffc43d;
+  font-size: 15px;
+  margin: 4px 0 16px;
+}
+
+.depoimento-texto {
+  font-size: 15px;
+  color: #eaeaea;
+  line-height: 1.55;
+  flex: 1;
+  margin-bottom: 24px;
+}
+
+.depoimento-rodape {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding-top: 16px;
+  border-top: 1px solid #242424;
+}
+
+.depoimento-avatar {
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  background: var(--whatsapp);
+  color: #fff;
+  font-size: 13px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.depoimento-nome {
+  font-size: 14.5px;
+  font-weight: 700;
+  color: #fff;
+}
+
+.depoimento-cargo {
+  font-size: 12px;
+  color: var(--whatsapp);
+  margin-top: 1px;
+}
+
+@media (max-width: 900px) {
+  .depoimentos-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 600px) {
+  .depoimentos-grid {
+    grid-template-columns: 1fr;
+    gap: 14px;
+  }
+  .depoimento-card {
+    padding: 24px 20px 18px;
+  }
+}
+
 .clientes-master {
   max-width: 1200px;
   margin: 40px auto 0;
@@ -651,7 +864,15 @@ body {
   color: #fff;
   text-align: center;
   letter-spacing: -0.3px;
-  margin-bottom: 22px;
+  margin-bottom: 8px;
+}
+
+.clientes-master-subtitulo {
+  font-size: 14px;
+  color: var(--whatsapp);
+  text-align: center;
+  max-width: 480px;
+  margin: 0 auto 22px;
 }
 
 .clientes-master-marquee {
@@ -739,7 +960,7 @@ body {
 }
 
 .header-carrinho-label {
-  color: #25d366;
+  color: var(--whatsapp);
   font-size: 13px;
   font-weight: 600;
   font-family: inherit;
@@ -773,7 +994,7 @@ body {
   position: absolute;
   top: -5px;
   right: -6px;
-  background: #25d366;
+  background: var(--whatsapp);
   color: #fff;
   font-size: 10.5px;
   font-weight: 700;
@@ -955,7 +1176,7 @@ body {
 }
 
 .carrinho-enviar {
-  background: #25d366;
+  background: var(--whatsapp);
   color: #fff;
   text-align: center;
   padding: 12px;

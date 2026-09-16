@@ -1,4 +1,5 @@
-const WHATSAPP_NUMERO = '5583991281912'
+import { WHATSAPP_NUMERO } from '../config'
+
 const ENDERECO = 'R. Geraldo Cabral, 106B - São Sebastião, Patos - PB, 58706-300'
 
 function linkWhatsapp(mensagem) {

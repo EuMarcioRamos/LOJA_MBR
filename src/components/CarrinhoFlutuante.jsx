@@ -1,4 +1,4 @@
-const WHATSAPP_NUMERO = '5583991281912'
+import { WHATSAPP_NUMERO } from '../config'
 
 function formatarPreco(valor) {
   return valor.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })
