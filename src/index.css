@@ -441,6 +441,187 @@ body {
   }
 }
 
+/* ── Giro do iPhone (abertura da página) ── */
+.giro {
+  position: relative;
+  height: 300vh;
+}
+
+.giro-fixo {
+  position: sticky;
+  top: 70px;
+  height: calc(100vh - 70px);
+  overflow: hidden;
+  display: flex;
+  justify-content: center;
+  /* Brilho vinho bem leve atrás do aparelho, puxando a cor dele */
+  background: radial-gradient(ellipse 38% 46% at 72% 52%, rgba(120, 20, 45, 0.2), rgba(10, 10, 10, 0) 70%);
+}
+
+.giro-conteudo {
+  width: 100%;
+  max-width: 1200px;
+  height: 100%;
+  padding: 0 24px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  align-items: center;
+  gap: 24px;
+}
+
+.giro-textos {
+  position: relative;
+  height: 340px;
+}
+
+.giro canvas {
+  justify-self: center;
+  /* Relativo à tela: dentro do grid a porcentagem não resolve e o iPhone passava da altura visível */
+  height: min(calc((100vh - 70px) * 0.88), 860px);
+  width: auto;
+  aspect-ratio: 1000 / 1250;
+  display: block;
+}
+
+.giro-texto {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  opacity: 0;
+  transform: translateY(16px);
+  will-change: opacity, transform;
+  pointer-events: none;
+}
+
+.giro-eyebrow {
+  font-size: 12px;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: #9a9a9a;
+  margin-bottom: 12px;
+}
+
+.giro-texto h1,
+.giro-texto h2 {
+  font-size: clamp(32px, 4.6vw, 60px);
+  font-weight: 700;
+  letter-spacing: -1.5px;
+  line-height: 1.05;
+  color: #fff;
+}
+
+.giro-sub {
+  margin-top: 14px;
+  font-size: clamp(15px, 1.5vw, 19px);
+  color: #c9c9c9;
+  line-height: 1.45;
+  max-width: 440px;
+}
+
+.giro-ctas {
+  margin-top: 24px;
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.giro-cta {
+  display: inline-flex;
+  align-items: center;
+  height: 46px;
+  padding: 0 22px;
+  border-radius: 50px;
+  border: none;
+  font-size: 15px;
+  font-weight: 600;
+  font-family: inherit;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.giro-cta-branco {
+  background: #fff;
+  color: #000;
+}
+
+.giro-cta-verde {
+  background: var(--whatsapp);
+  color: #0a0a0a;
+}
+
+.giro-dica {
+  position: absolute;
+  bottom: 22px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 12px;
+  color: #8a8a8a;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  transition: opacity 0.3s ease;
+}
+
+.giro-dica span {
+  width: 1px;
+  height: 28px;
+  background: linear-gradient(#8a8a8a, transparent);
+  animation: giroDicaDesce 1.6s ease-in-out infinite;
+}
+
+@keyframes giroDicaDesce {
+  0% { transform: scaleY(0); transform-origin: top; }
+  50% { transform: scaleY(1); transform-origin: top; }
+  51% { transform-origin: bottom; }
+  100% { transform: scaleY(0); transform-origin: bottom; }
+}
+
+/* Celular: aparelho no centro e textos por cima, na parte de baixo */
+@media (max-width: 899px) {
+  .giro { height: 260vh; }
+  .giro-fixo {
+    background: radial-gradient(ellipse 60% 40% at 50% 40%, rgba(120, 20, 45, 0.22), rgba(10, 10, 10, 0) 70%);
+  }
+  .giro-conteudo {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    padding: 12px 20px 0;
+  }
+  .giro canvas { height: 62%; }
+  .giro-textos {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 46%;
+  }
+  .giro-texto {
+    justify-content: flex-end;
+    align-items: center;
+    text-align: center;
+    padding: 0 20px 64px;
+    background: linear-gradient(to top, rgba(10, 10, 10, 0.96) 35%, rgba(10, 10, 10, 0));
+  }
+  .giro-sub { margin-left: auto; margin-right: auto; }
+  .giro-ctas { justify-content: center; }
+  .giro-dica { display: none; } /* ficava por cima do botão "Ver produtos" */
+}
+
+/* Quem desativou animações no aparelho vê o iPhone parado e os textos juntos */
+@media (prefers-reduced-motion: reduce) {
+  .giro { height: auto; }
+  .giro-fixo { position: static; height: auto; padding: 32px 0; }
+  .giro-conteudo { display: flex; flex-direction: column; height: auto; }
+  .giro-textos { position: static; height: auto; display: flex; flex-direction: column; gap: 32px; }
+  .giro-texto { position: static; opacity: 1; transform: none; pointer-events: auto; background: none; padding: 0; }
+  .giro canvas { height: 60vh; }
+  .giro-dica { display: none; }
+}
+
 .btn-ver-mais {
   display: block;
   margin: 28px auto 0;

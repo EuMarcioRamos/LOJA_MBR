@@ -2,7 +2,7 @@ import { useState, useMemo, useEffect, useRef } from 'react'
 import Header from './components/Header'
 import Filtros from './components/Filtros'
 import ModeloCard from './components/ModeloCard'
-import HeroCarousel from './components/HeroCarousel'
+import GiroIphone from './components/GiroIphone'
 import FaixaBeneficios from './components/FaixaBeneficios'
 import ProvaSocial from './components/ProvaSocial'
 import CarrinhoFlutuante from './components/CarrinhoFlutuante'
@@ -221,9 +221,12 @@ export default function App() {
         onAbrirCarrinho={() => setCarrinhoAberto(a => !a)}
       />
 
-      <HeroCarousel onEscolherCategoria={escolherCategoriaDoHero} />
+      <GiroIphone
+        onVerProdutos={() => filtrosRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' })}
+        onEscolherCategoria={escolherCategoriaDoHero}
+      />
 
-      <div ref={filtrosRef}>
+      <div ref={filtrosRef} style={{ scrollMarginTop: 70 }}>
         <Filtros
           modelos={modelos}
           filtroCategoria={filtroCategoria}
