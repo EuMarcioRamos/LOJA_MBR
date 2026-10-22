@@ -150,7 +150,6 @@ export default function App() {
     return () => { cancelado = true }
   }, [])
   const isDesktop = useIsDesktop()
-  const carouselRef = useRef(null)
   const filtrosRef = useRef(null)
 
   useEffect(() => {
@@ -161,12 +160,6 @@ export default function App() {
     setFiltroCategoria(categoria)
     setFiltroModelo('Todos')
     filtrosRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' })
-  }
-
-  const rolarCarrossel = (direcao) => {
-    const el = carouselRef.current
-    if (!el) return
-    el.scrollBy({ left: direcao * el.clientWidth * 0.9, behavior: 'smooth' })
   }
 
   const ordemAtual = ORDEM_MODELOS[filtroCategoria] || []
@@ -216,7 +209,8 @@ export default function App() {
   }, [filtroCategoria, filtroModelo, produtos, termoBusca])
 
   const categoriaIndisponivel = !termoBusca && filtroCategoria !== 'Destaque' && !ORDEM_MODELOS[filtroCategoria]
-  const limitarLista = (termoBusca || filtroModelo === 'Todos') && grupos.length > LIMITE_INICIAL && !mostrarTodos
+  // No computador a grade mostra todos os modelos; no celular começa com poucos e um "Ver mais".
+  const limitarLista = !isDesktop && (termoBusca || filtroModelo === 'Todos') && grupos.length > LIMITE_INICIAL && !mostrarTodos
   const gruposExibidos = limitarLista ? grupos.slice(0, LIMITE_INICIAL) : grupos
 
   return (
@@ -251,35 +245,6 @@ export default function App() {
         ) : grupos.length === 0 ? (
           <div style={{ textAlign: 'center', padding: '80px 0', color: '#606060' }}>
             <p style={{ fontSize: 16 }}>Nenhum produto encontrado.</p>
-          </div>
-        ) : isDesktop ? (
-          <div style={{ position: 'relative' }}>
-            {grupos.length > 4 && (
-              <>
-                <button
-                  className="carousel-nav carousel-nav-left"
-                  onClick={() => rolarCarrossel(-1)}
-                  aria-label="Anterior"
-                >‹</button>
-                <button
-                  className="carousel-nav carousel-nav-right"
-                  onClick={() => rolarCarrossel(1)}
-                  aria-label="Próximo"
-                >›</button>
-              </>
-            )}
-            <div className="produtos-carousel" ref={carouselRef}>
-              {grupos.map(({ modelo, variantes }) => (
-                <ModeloCard
-                  key={modelo}
-                  modelo={modelo}
-                  variantes={variantes}
-                  precosProntos={precosProntos}
-                  carrinhoIds={carrinhoIds}
-                  onAlternarCarrinho={alternarCarrinho}
-                />
-              ))}
-            </div>
           </div>
         ) : (
           <>

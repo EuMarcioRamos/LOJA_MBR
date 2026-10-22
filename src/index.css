@@ -124,18 +124,12 @@ body {
   }
 }
 
-.produtos-grid > .modelo-card-anim:nth-child(1),
-.produtos-carousel > .modelo-card-anim:nth-child(1) { animation-delay: 0s; }
-.produtos-grid > .modelo-card-anim:nth-child(2),
-.produtos-carousel > .modelo-card-anim:nth-child(2) { animation-delay: 0.06s; }
-.produtos-grid > .modelo-card-anim:nth-child(3),
-.produtos-carousel > .modelo-card-anim:nth-child(3) { animation-delay: 0.12s; }
-.produtos-grid > .modelo-card-anim:nth-child(4),
-.produtos-carousel > .modelo-card-anim:nth-child(4) { animation-delay: 0.18s; }
-.produtos-grid > .modelo-card-anim:nth-child(5),
-.produtos-carousel > .modelo-card-anim:nth-child(5) { animation-delay: 0.24s; }
-.produtos-grid > .modelo-card-anim:nth-child(n+6),
-.produtos-carousel > .modelo-card-anim:nth-child(n+6) { animation-delay: 0.3s; }
+.produtos-grid > .modelo-card-anim:nth-child(1) { animation-delay: 0s; }
+.produtos-grid > .modelo-card-anim:nth-child(2) { animation-delay: 0.06s; }
+.produtos-grid > .modelo-card-anim:nth-child(3) { animation-delay: 0.12s; }
+.produtos-grid > .modelo-card-anim:nth-child(4) { animation-delay: 0.18s; }
+.produtos-grid > .modelo-card-anim:nth-child(5) { animation-delay: 0.24s; }
+.produtos-grid > .modelo-card-anim:nth-child(n+6) { animation-delay: 0.3s; }
 
 .produtos-grid {
   display: grid;
@@ -445,59 +439,6 @@ body {
     width: 23px;
     height: 23px;
   }
-}
-
-.produtos-carousel {
-  display: flex;
-  gap: 16px;
-  overflow-x: auto;
-  scroll-snap-type: x mandatory;
-  scrollbar-width: none;
-  -ms-overflow-style: none;
-  padding: 4px 2px 12px;
-}
-
-.produtos-carousel::-webkit-scrollbar {
-  display: none;
-}
-
-.produtos-carousel > * {
-  flex: 0 0 clamp(262px, 23%, 300px);
-  scroll-snap-align: start;
-}
-
-.carousel-nav {
-  position: absolute;
-  top: 45%;
-  transform: translateY(-50%);
-  width: 44px;
-  height: 44px;
-  border-radius: 50%;
-  border: 1px solid #2a2a2a;
-  background: rgba(20, 20, 20, 0.9);
-  backdrop-filter: blur(4px);
-  color: #fff;
-  font-size: 22px;
-  line-height: 1;
-  cursor: pointer;
-  z-index: 2;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: all 0.18s ease;
-}
-
-.carousel-nav:hover {
-  background: #222;
-  border-color: #555;
-}
-
-.carousel-nav-left {
-  left: -18px;
-}
-
-.carousel-nav-right {
-  right: -18px;
 }
 
 .btn-ver-mais {
