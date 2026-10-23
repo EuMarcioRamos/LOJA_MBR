@@ -12,6 +12,9 @@ dist
 dist-ssr
 *.local
 
+# Fotos de clientes (originais do iCloud): ficam só no computador, o repositório é público
+Img_clientes/
+
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json

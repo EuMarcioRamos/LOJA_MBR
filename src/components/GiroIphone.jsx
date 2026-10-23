@@ -123,8 +123,10 @@ export default function GiroIphone({ onVerProdutos, onEscolherCategoria }) {
         atualizar()
       }
       // decode() só resolve com o frame já decodificado e pronto pra desenhar
-      // sem travar a thread principal na hora do drawImage
-      if (img.decode) img.decode().then(marcarPronto).catch(marcarPronto)
+      // sem travar a thread principal na hora do drawImage. Se falhar, só marca
+      // pronto se a imagem chegou mesmo: desenhar um frame quebrado lança erro e
+      // congelava os textos do banner (o desenho usa o vizinho que carregou)
+      if (img.decode) img.decode().then(marcarPronto).catch(() => { if (img.naturalWidth > 0) marcarPronto() })
       else img.onload = marcarPronto
     }
 

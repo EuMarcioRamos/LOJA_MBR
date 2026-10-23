@@ -720,6 +720,9 @@ body {
   position: sticky;
   top: 70px;
   height: calc(100vh - 70px);
+  /* svh = altura com a barra do navegador do celular visível; com vh, o botão
+     do banner ficava atrás dela (a linha de cima fica pra navegadores antigos) */
+  height: calc(100svh - 70px);
   overflow: hidden;
   display: flex;
   justify-content: center;

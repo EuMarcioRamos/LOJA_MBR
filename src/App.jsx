@@ -171,6 +171,7 @@ export default function App() {
   const escolherCategoriaDoHero = (categoria) => {
     setFiltroCategoria(categoria)
     setFiltroModelo('Todos')
+    setBusca('')
     irParaProdutos()
   }
 

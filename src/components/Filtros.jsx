@@ -195,10 +195,13 @@ export default function Filtros({ modelos, filtroCategoria, setFiltroCategoria, 
               aria-label="Buscar produto"
               tabIndex={pilulaAberta ? 0 : -1}
             />
+            {/* onMouseDown evita que o campo perca o foco ao clicar: com a barra
+                presa, perder o foco recolhe a pílula e o botão sumia antes do clique */}
             {pilulaAberta && busca && (
               <button
                 type="button"
                 className="busca-pilula-acao busca-pilula-limpar"
+                onMouseDown={(e) => e.preventDefault()}
                 onClick={() => { setBusca(''); buscaInputRef.current?.focus() }}
                 aria-label="Limpar busca"
               >
@@ -209,6 +212,7 @@ export default function Filtros({ modelos, filtroCategoria, setFiltroCategoria, 
               <button
                 type="button"
                 className="busca-pilula-acao busca-pilula-fechar"
+                onMouseDown={(e) => e.preventDefault()}
                 onClick={fecharMenu}
                 aria-label="Fechar menu"
               >
