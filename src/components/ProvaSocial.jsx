@@ -1,4 +1,4 @@
-import Depoimentos from './Depoimentos'
+import { revelar } from '../revelar'
 
 const CEO = {
   imagem: '/prova-social/cliente-1.jpg',
@@ -9,60 +9,30 @@ const CEO = {
   cargo: 'CEO da MasterBR',
 }
 
-const CLIENTES_MASTER = [
-  '/clientes-master/cliente-master-1.webp',
-  '/clientes-master/cliente-master-2.webp',
-  '/clientes-master/cliente-master-3.webp',
-  '/clientes-master/cliente-master-4.webp',
-  '/clientes-master/cliente-master-5.webp',
-  '/clientes-master/cliente-master-6.webp',
-  '/clientes-master/cliente-master-7.webp',
-]
-
 export default function ProvaSocial() {
   return (
     <section className="prova-social">
-      <div className="prova-social-cabecalho">
-        <h2 className="prova-social-titulo">Sobre a MasterBR</h2>
-        <p className="prova-social-subtitulo">
-          Quem comanda a MasterBR e os clientes que já vivem essa experiência em Patos, Paraíba.
-        </p>
-      </div>
+      <div className="prova-social-sobre">
+        <h2 className="prova-social-titulo revelar" ref={revelar}>Sobre a MasterBR</h2>
 
-      <div className="prova-social-linhas">
-        <div className="prova-social-row">
-          <div className="prova-social-foto">
-            <img src={CEO.imagem} alt={CEO.alt} loading="lazy" />
-          </div>
-          <div className="prova-social-conteudo">
-            <div className="prova-social-ceo">
-              <p className="prova-social-ceo-texto">&ldquo;{CEO.texto}&rdquo;</p>
-              <p className="prova-social-ceo-assinatura">
-                <span className="prova-social-ceo-nome">{CEO.nome}</span>
-                <span className="prova-social-ceo-cargo">{CEO.cargo}</span>
-              </p>
-            </div>
-          </div>
+        <div className="prova-social-foto revelar" ref={revelar}>
+          <img src={CEO.imagem} alt={CEO.alt} loading="lazy" />
         </div>
+
+        <figure className="prova-social-citacao revelar" ref={revelar}>
+          <blockquote>
+            <p>&ldquo;{CEO.texto}&rdquo;</p>
+          </blockquote>
+          <figcaption>
+            <span className="prova-social-nome">{CEO.nome}</span>
+            <span className="prova-social-cargo">{CEO.cargo}</span>
+          </figcaption>
+        </figure>
       </div>
 
-      <Depoimentos />
-
-      <div className="clientes-master">
-        <h3 className="clientes-master-titulo">Clientes Master</h3>
-        <p className="clientes-master-subtitulo">
-          Gente incrível que confia na MasterBR e vive a melhor experiência Apple em Patos.
-        </p>
-        <div className="clientes-master-marquee">
-          <div className="clientes-master-trilho">
-            {[...CLIENTES_MASTER, ...CLIENTES_MASTER].map((src, i) => (
-              <div className="clientes-master-item" key={i}>
-                <img src={src} alt="Cliente MasterBR com produto Apple" loading="lazy" />
-              </div>
-            ))}
-          </div>
-        </div>
-      </div>
+      {/* Depoimentos e o carrossel "Clientes Master" estão fora da página por
+          enquanto. Pra voltar, é só importar e colocar aqui <Depoimentos /> e
+          <ClientesMaster /> (componentes de mesmo nome nesta pasta). */}
     </section>
   )
 }

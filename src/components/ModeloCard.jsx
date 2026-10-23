@@ -72,9 +72,10 @@ export default function ModeloCard({ modelo, variantes, precosProntos = true, ca
     preco: opcaoAtual.preco,
   }
 
+  // Selecionado: o branco de sempre, um pouco transparente (--vidro-branco em index.css)
   const btnSelector = (sel, disabled = false) => ({
-    border: sel ? '1.5px solid #fff' : disabled ? '1.5px solid #2a2a2a' : '1.5px solid #666',
-    background: sel ? '#fff' : 'transparent',
+    border: sel ? '1.5px solid transparent' : disabled ? '1.5px solid #2a2a2a' : '1.5px solid #666',
+    background: sel ? 'var(--vidro-branco)' : 'transparent',
     color: disabled ? '#2e2e2e' : sel ? '#000' : '#e0e0e0',
     fontWeight: sel ? 600 : 400,
     cursor: disabled ? 'not-allowed' : 'pointer',
@@ -83,7 +84,7 @@ export default function ModeloCard({ modelo, variantes, precosProntos = true, ca
 
   return (
     <div
-      className="modelo-card-anim modelo-card"
+      className="modelo-card"
       onMouseEnter={() => setHover(true)}
       onMouseLeave={() => setHover(false)}
       style={{
@@ -307,7 +308,7 @@ export default function ModeloCard({ modelo, variantes, precosProntos = true, ca
             rel="noreferrer"
             style={{
               flex: 1,
-              background: opcaoAtual.disponivel ? 'var(--whatsapp)' : '#1a1a1a',
+              background: opcaoAtual.disponivel ? 'var(--vidro-verde)' : '#1a1a1a',
               color: opcaoAtual.disponivel ? '#fff' : '#3a3a3a',
               padding: '11px 0',
               borderRadius: 10,

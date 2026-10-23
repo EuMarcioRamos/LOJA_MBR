@@ -1,3 +1,5 @@
+import { revelar } from '../revelar'
+
 const DEPOIMENTOS = [
   { nome: 'Henzoo', texto: 'Muito obrigado pelo produto e atendimento!' },
   { nome: 'Cristiano Saulo', texto: 'Vocês são os melhores no que fazem! Continuem com essa energia e atendimento top.' },
@@ -19,7 +21,7 @@ function iniciais(nome) {
 export default function Depoimentos() {
   return (
     <div className="depoimentos">
-      <div className="depoimentos-cabecalho">
+      <div className="depoimentos-cabecalho revelar" ref={revelar}>
         <h3 className="depoimentos-titulo">O que nossos clientes dizem</h3>
         <p className="depoimentos-subtitulo">Depoimentos reais de clientes MasterBR</p>
         <div className="depoimentos-underline" />
@@ -27,7 +29,7 @@ export default function Depoimentos() {
 
       <div className="depoimentos-grid">
         {DEPOIMENTOS.map(dep => (
-          <div className="depoimento-card" key={dep.nome}>
+          <div className="depoimento-card revelar" ref={revelar} key={dep.nome}>
             <span className="depoimento-aspas" aria-hidden="true">&ldquo;</span>
             <div className="depoimento-estrelas" aria-hidden="true">
               {Array.from({ length: 5 }).map((_, i) => <span key={i}>★</span>)}

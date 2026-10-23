@@ -9,6 +9,7 @@ import CarrinhoFlutuante from './components/CarrinhoFlutuante'
 import produtosBase from './data/produtos.json'
 import { PLANILHA_PRECOS_URL } from './config'
 import { buscarPrecosRemotos, aplicarPrecos, lerPrecosCache, salvarPrecosCache } from './data/precosRemotos'
+import { revelar } from './revelar'
 
 const CARRINHO_STORAGE_KEY = 'mbr-carrinho-v1'
 
@@ -24,6 +25,7 @@ function lerCarrinhoSalvo() {
 
 const ORDEM_MODELOS = {
   iPhone: [
+    'iPhone 18 Pro Max', 'iPhone 18 Pro',
     'iPhone 17 Pro Max', 'iPhone 17 Pro', 'iPhone 17',
     'iPhone 16 Pro Max', 'iPhone 16 Pro', 'iPhone 16 Plus', 'iPhone 16',
     'iPhone 15 Pro Max', 'iPhone 15 Pro', 'iPhone 15',
@@ -54,8 +56,10 @@ const ORDEM_MODELOS = {
   ],
 }
 
-// Aba "Destaque": mostra a linha topo de cada categoria, uma ao lado da outra.
+// Aba "Destaque": mostra a linha topo de cada categoria, uma ao lado da outra
+// (no iPhone, o lançamento 18 Pro Max vem antes do 17 Pro Max).
 const DESTAQUE_MODELOS = [
+  { categoria: 'iPhone', modelo: 'iPhone 18 Pro Max' },
   { categoria: 'iPhone', modelo: 'iPhone 17 Pro Max' },
   { categoria: 'iPad', modelo: 'iPad Pro M5' },
   { categoria: 'Apple Watch', modelo: 'Apple Watch Ultra 3' },
@@ -67,6 +71,7 @@ const DESTAQUE_MODELOS = [
 // as variantes Pro Max / Pro / Plus / base daquela geração.
 const LINHAS_POR_CATEGORIA = {
   iPhone: [
+    { linha: 'Linha 18', modelos: ['iPhone 18 Pro Max', 'iPhone 18 Pro'] },
     { linha: 'Linha 17', modelos: ['iPhone 17 Pro Max', 'iPhone 17 Pro', 'iPhone 17'] },
     { linha: 'Linha 16', modelos: ['iPhone 16 Pro Max', 'iPhone 16 Pro', 'iPhone 16 Plus', 'iPhone 16'] },
     { linha: 'Linha 15', modelos: ['iPhone 15 Pro Max', 'iPhone 15 Pro', 'iPhone 15'] },
@@ -156,10 +161,17 @@ export default function App() {
     setMostrarTodos(false)
   }, [filtroCategoria, filtroModelo, busca])
 
+  // Rola até a lista, deixando o começo dela logo abaixo do Header (70px).
+  // scrollTo com a posição calculada: o scrollIntoView parava antes no celular
+  const irParaProdutos = () => {
+    const loja = filtrosRef.current
+    if (loja) window.scrollTo({ top: loja.getBoundingClientRect().top + window.scrollY - 70, behavior: 'smooth' })
+  }
+
   const escolherCategoriaDoHero = (categoria) => {
     setFiltroCategoria(categoria)
     setFiltroModelo('Todos')
-    filtrosRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+    irParaProdutos()
   }
 
   const ordemAtual = ORDEM_MODELOS[filtroCategoria] || []
@@ -222,11 +234,13 @@ export default function App() {
       />
 
       <GiroIphone
-        onVerProdutos={() => filtrosRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' })}
+        onVerProdutos={irParaProdutos}
         onEscolherCategoria={escolherCategoriaDoHero}
       />
 
-      <div ref={filtrosRef} style={{ scrollMarginTop: 70 }}>
+      {/* Menu e grade na mesma seção: a barra do menu fica presa embaixo do
+          header enquanto a lista está na tela e vai embora junto com ela */}
+      <section className="loja" ref={filtrosRef} aria-label="Produtos">
         <Filtros
           modelos={modelos}
           filtroCategoria={filtroCategoria}
@@ -235,52 +249,56 @@ export default function App() {
           setFiltroModelo={setFiltroModelo}
           busca={busca}
           setBusca={setBusca}
+          onIrParaLista={irParaProdutos}
         />
-      </div>
 
-      <div style={{ maxWidth: 1200, margin: '0 auto', padding: '24px 24px 60px' }}>
-        {categoriaIndisponivel ? (
-          <div style={{ textAlign: 'center', padding: '100px 0' }}>
-            <p style={{ fontSize: 40, marginBottom: 16 }}>🔜</p>
-            <p style={{ fontSize: 22, fontWeight: 600, color: '#fff', marginBottom: 8 }}>{filtroCategoria}</p>
-            <p style={{ fontSize: 15, color: '#606060' }}>Em breve disponível na MasterBR.</p>
-          </div>
-        ) : grupos.length === 0 ? (
-          <div style={{ textAlign: 'center', padding: '80px 0', color: '#606060' }}>
-            <p style={{ fontSize: 16 }}>Nenhum produto encontrado.</p>
-          </div>
-        ) : (
-          <>
-            <div className="produtos-grid">
-              {gruposExibidos.map(({ modelo, variantes }) => (
-                <ModeloCard
-                  key={modelo}
-                  modelo={modelo}
-                  variantes={variantes}
-                  precosProntos={precosProntos}
-                  carrinhoIds={carrinhoIds}
-                  onAlternarCarrinho={alternarCarrinho}
-                />
-              ))}
+        <div style={{ maxWidth: 1200, margin: '0 auto', padding: '24px 24px 60px' }}>
+          {categoriaIndisponivel ? (
+            <div style={{ textAlign: 'center', padding: '100px 0' }}>
+              <p style={{ fontSize: 40, marginBottom: 16 }}>🔜</p>
+              <p style={{ fontSize: 22, fontWeight: 600, color: '#fff', marginBottom: 8 }}>{filtroCategoria}</p>
+              <p style={{ fontSize: 15, color: '#606060' }}>Em breve disponível na MasterBR.</p>
             </div>
-            {limitarLista && (
-              <button
-                className="btn-ver-mais"
-                onClick={() => setMostrarTodos(true)}
-              >
-                Ver mais modelos ({grupos.length - LIMITE_INICIAL})
-              </button>
-            )}
-          </>
-        )}
-      </div>
+          ) : grupos.length === 0 ? (
+            <div style={{ textAlign: 'center', padding: '80px 0', color: '#606060' }}>
+              <p style={{ fontSize: 16 }}>Nenhum produto encontrado.</p>
+            </div>
+          ) : (
+            <>
+              <div className="produtos-grid">
+                {gruposExibidos.map(({ modelo, variantes }) => (
+                  // O aparecer fica num envoltório porque o card usa transform e
+                  // transition inline no hover, que anulariam o efeito nele
+                  <div className="revelar" ref={revelar} key={modelo}>
+                    <ModeloCard
+                      modelo={modelo}
+                      variantes={variantes}
+                      precosProntos={precosProntos}
+                      carrinhoIds={carrinhoIds}
+                      onAlternarCarrinho={alternarCarrinho}
+                    />
+                  </div>
+                ))}
+              </div>
+              {limitarLista && (
+                <button
+                  className="btn-ver-mais"
+                  onClick={() => setMostrarTodos(true)}
+                >
+                  Ver mais modelos ({grupos.length - LIMITE_INICIAL})
+                </button>
+              )}
+            </>
+          )}
+        </div>
+      </section>
 
       <FaixaBeneficios />
 
       <ProvaSocial />
 
       <footer style={{
-        borderTop: '1px solid #1a1a1a',
+        background: 'linear-gradient(var(--bg-primary), var(--bg-elevado))',
         padding: '24px', textAlign: 'center',
         color: '#8a8a8a', fontSize: 13,
       }}>

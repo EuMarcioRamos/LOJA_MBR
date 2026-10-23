@@ -7,6 +7,9 @@
 :root {
   --bg-primary: #0a0a0a;
   --bg-secondary: #111111;
+  /* Seções "elevadas" (no lugar de linhas divisórias): um preto um pouco mais
+     claro, usado como luz suave que se dissolve no preto da página */
+  --bg-elevado: #131313;
   --bg-card: #1a1a1a;
   --bg-card-hover: #222222;
   --border: #2a2a2a;
@@ -17,6 +20,12 @@
   --accent: #ffffff;
   --whatsapp: #25D366;
   --whatsapp-hover: #20bf5b;
+
+  /* Botões "de vidro" como no iOS 26 (WhatsApp): o mesmo desenho de sempre,
+     só que as cores sólidas ficam um pouco transparentes */
+  --vidro-branco: rgba(255, 255, 255, 0.9);
+  --vidro-verde: rgba(37, 211, 102, 0.85);
+  --vidro-verde-hover: rgba(37, 211, 102, 0.95);
 }
 
 body {
@@ -75,25 +84,6 @@ body {
   animation: filtrosModeloIn 0.35s ease both;
 }
 
-@keyframes filtrosModeloOut {
-  from { opacity: 1; transform: translateY(0); }
-  to   { opacity: 0; transform: translateY(-10px); }
-}
-
-.filtros-modelo-anim.saindo {
-  animation: filtrosModeloOut 0.3s ease forwards;
-  pointer-events: none;
-}
-
-@keyframes modeloCardIn {
-  from { opacity: 0; transform: translateY(16px); }
-  to   { opacity: 1; transform: translateY(0); }
-}
-
-.modelo-card-anim {
-  animation: modeloCardIn 0.45s ease both;
-}
-
 .modelo-card {
   border-radius: 16px;
   padding: 20px 20px 22px;
@@ -124,12 +114,34 @@ body {
   }
 }
 
-.produtos-grid > .modelo-card-anim:nth-child(1) { animation-delay: 0s; }
-.produtos-grid > .modelo-card-anim:nth-child(2) { animation-delay: 0.06s; }
-.produtos-grid > .modelo-card-anim:nth-child(3) { animation-delay: 0.12s; }
-.produtos-grid > .modelo-card-anim:nth-child(4) { animation-delay: 0.18s; }
-.produtos-grid > .modelo-card-anim:nth-child(5) { animation-delay: 0.24s; }
-.produtos-grid > .modelo-card-anim:nth-child(n+6) { animation-delay: 0.3s; }
+/* ── Revelar ao rolar (ver src/revelar.js) ── */
+.revelar {
+  opacity: 0;
+  transform: translateY(16px);
+  transition:
+    opacity 0.7s ease var(--revelar-atraso, 0s),
+    transform 0.7s cubic-bezier(0.22, 1, 0.36, 1) var(--revelar-atraso, 0s);
+}
+
+.revelar.revelado {
+  opacity: 1;
+  transform: none;
+}
+
+/* Cada card de produto fica dentro de um .revelar (ver App.jsx). O display grid
+   faz o card ocupar a altura toda da linha da grade, como antes — é isso que
+   mantém preço e botões alinhados entre os cards da mesma linha. */
+.produtos-grid > .revelar {
+  display: grid;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .revelar {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+}
 
 .produtos-grid {
   display: grid;
@@ -147,87 +159,344 @@ body {
   .produtos-grid { grid-template-columns: 1fr; gap: 10px; }
 }
 
-.filtros-section {
-  border-bottom: 1px solid #1a1a1a;
-  margin-top: 24px;
+/* ── Menu de produtos ── */
+/* .loja envolve a barra do menu e a grade: a barra gruda embaixo do header
+   enquanto a lista está na tela e vai embora junto com ela (antes dos Benefícios) */
+.loja {
+  padding-top: 24px;
 }
 
-.busca-row {
+/* Marca onde a barra começa, pra saber quando ela está presa (ver Filtros.jsx) */
+.filtros-sentinela {
+  height: 1px;
+  margin-bottom: -1px;
+}
+
+.filtros-barra {
+  position: sticky;
+  top: 70px;
+  z-index: 50;
+  background: rgba(10, 10, 10, 0.6);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  backdrop-filter: blur(20px) saturate(180%);
+}
+
+.filtros-barra-conteudo {
   max-width: 1200px;
   margin: 0 auto;
-  padding: 16px 24px 0;
-}
-
-.busca-wrap {
-  position: relative;
-  display: inline-flex;
-  align-items: center;
-  height: 34px;
-}
-
-.busca-icone-btn {
+  padding: 10px 24px;
   display: flex;
   align-items: center;
-  justify-content: center;
-  background: transparent;
-  border: none;
-  color: #e0e0e0;
-  cursor: pointer;
-  padding: 6px;
-  flex-shrink: 0;
-  transition: color 0.15s ease;
+  gap: 10px;
 }
 
-.busca-icone-btn:hover {
-  color: #fff;
+/* ── Pílula "Buscar produto": fechada é um botão; aberta vira o campo de busca ── */
+@property --busca-angulo {
+  syntax: '<angle>';
+  inherits: false;
+  initial-value: 0deg;
 }
 
-.busca-input {
-  width: 0;
-  min-width: 0;
+.busca-pilula {
+  position: relative;
+  flex: none;
+  width: 236px;
+  max-width: 100%;
+  height: 52px;
+  border-radius: 50px;
+  /* miolo escuro um pouco transparente: com a barra presa, os cards aparecem
+     de leve por trás (como a barra do WhatsApp no iOS 26) */
+  background: rgba(21, 21, 21, 0.6);
+  box-shadow: 0 8px 28px rgba(37, 211, 102, 0.14);
+  transition: width 0.45s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.2s ease;
+}
+
+/* Anel com um brilho verde e branco girando em volta. É um degradê recortado
+   por máscara (só a borda aparece), pra o miolo poder ser transparente */
+.busca-pilula::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  padding: 1.5px;
+  border-radius: inherit;
+  background: conic-gradient(from var(--busca-angulo), #3a3a3a 0deg, #3a3a3a 210deg, var(--whatsapp) 290deg, #fff 325deg, #3a3a3a 360deg);
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  mask-composite: exclude;
+  animation: buscaBrilho 4s linear infinite;
+  pointer-events: none;
+}
+
+@keyframes buscaBrilho {
+  to { --busca-angulo: 360deg; }
+}
+
+.busca-pilula:hover {
+  box-shadow: 0 8px 34px rgba(37, 211, 102, 0.26);
+}
+
+.busca-pilula--aberta {
+  width: min(520px, 100%);
+}
+
+.busca-pilula-lupa {
+  position: absolute;
+  left: 19px;
+  top: 50%;
+  transform: translateY(-50%);
+  display: flex;
+  color: #fff;
+  pointer-events: none;
+}
+
+.busca-pilula-input {
+  width: 100%;
+  height: 100%;
+  padding: 0 86px 0 48px;
   background: transparent;
   border: none;
-  border-bottom: 1.5px solid transparent;
-  padding: 8px 0;
-  font-size: 13.5px;
+  border-radius: inherit;
   color: #fff;
+  font-size: 15px;
   font-family: inherit;
   opacity: 0;
-  transition: width 0.25s ease, padding 0.25s ease, border-color 0.15s ease, opacity 0.2s ease;
+  transition: opacity 0.15s ease;
 }
 
-.busca-wrap--aberta .busca-input {
-  width: 220px;
-  padding: 8px 26px 8px 8px;
-  border-bottom-color: #e0e0e0;
+/* O campo aparece logo depois de a pílula começar a crescer */
+.busca-pilula--aberta .busca-pilula-input {
   opacity: 1;
+  transition: opacity 0.25s ease 0.12s;
 }
 
-.busca-input::placeholder {
-  color: #888;
-}
-
-.busca-input:focus {
+.busca-pilula-input:focus {
   outline: none;
 }
 
-.busca-limpar {
-  position: absolute;
-  right: 2px;
-  top: 50%;
-  transform: translateY(-50%);
-  background: transparent;
-  border: none;
-  color: #e0e0e0;
-  font-size: 18px;
-  line-height: 1;
-  cursor: pointer;
-  padding: 6px;
-  transition: color 0.15s ease;
+.busca-pilula-input::placeholder {
+  color: #8a8a8a;
 }
 
-.busca-limpar:hover {
+/* Abaixo de 16px o iPhone dá zoom na página ao tocar no campo */
+@media (pointer: coarse) {
+  .busca-pilula-input {
+    font-size: 16px;
+  }
+}
+
+.busca-pilula-botao {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 0 20px 0 48px;
+  border: none;
+  border-radius: inherit;
+  background: transparent;
   color: #fff;
+  font-size: 15px;
+  font-weight: 600;
+  font-family: inherit;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: opacity 0.2s ease 0.1s;
+}
+
+.busca-pilula--aberta .busca-pilula-botao {
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.1s ease;
+}
+
+.busca-pilula-rotulo {
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.busca-pilula-seta {
+  display: flex;
+  margin-left: auto;
+  color: #9a9a9a;
+}
+
+/* Limpar (×) e fechar (seta pra cima) dentro do campo aberto. Centralizados
+   com margin auto (e não transform), porque a animação fadeIn usa transform */
+.busca-pilula-acao {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  margin: auto 0;
+  width: 34px;
+  height: 34px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  border-radius: 50%;
+  background: transparent;
+  color: #cfcfcf;
+  font-size: 19px;
+  line-height: 1;
+  font-family: inherit;
+  cursor: pointer;
+  animation: fadeIn 0.2s ease 0.15s both;
+  transition: color 0.15s ease, background 0.15s ease;
+}
+
+.busca-pilula-acao:hover {
+  color: #fff;
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.busca-pilula-fechar {
+  right: 8px;
+}
+
+.busca-pilula-fechar svg {
+  transform: rotate(180deg);
+}
+
+.busca-pilula-limpar {
+  right: 44px;
+}
+
+/* Filtro em uso (ex.: [ícone do iPhone] Linha 17); o × volta pro Destaque */
+.filtros-ativo {
+  min-width: 0;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  height: 34px;
+  padding: 0 12px 0 14px;
+  border-radius: 50px;
+  border: none;
+  background: var(--vidro-branco);
+  color: #000;
+  font-size: 13px;
+  font-weight: 600;
+  font-family: inherit;
+  cursor: pointer;
+  animation: fadeIn 0.25s ease both;
+}
+
+.filtros-ativo-icone {
+  display: flex;
+  margin-right: -2px;
+}
+
+.filtros-ativo-icone svg {
+  width: 15px;
+  height: 15px;
+}
+
+.filtros-ativo-texto {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* Celular: pílula um pouco menor; aberta, ocupa a largura toda */
+@media (max-width: 768px) {
+  .busca-pilula {
+    width: 200px;
+    height: 48px;
+  }
+  .busca-pilula--aberta {
+    width: 100%;
+  }
+  .busca-pilula-lupa {
+    left: 16px;
+  }
+  .busca-pilula-botao {
+    gap: 8px;
+    padding: 0 16px 0 44px;
+    font-size: 14px;
+  }
+  .busca-pilula-input {
+    padding: 0 84px 0 44px;
+  }
+}
+
+/* Celulares estreitos (360px): aperta um pouco pra o resumo do filtro caber ao lado */
+@media (max-width: 380px) {
+  .filtros-barra-conteudo {
+    gap: 8px;
+  }
+  .busca-pilula {
+    width: 188px;
+  }
+  .busca-pilula--aberta {
+    width: 100%;
+  }
+  .filtros-ativo {
+    gap: 6px;
+    padding: 0 10px 0 12px;
+  }
+}
+
+/* Abre e fecha animando a altura (0fr -> 1fr), empurrando os produtos */
+.filtros-painel {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows 0.3s ease;
+}
+
+.filtros-painel--aberto {
+  grid-template-rows: 1fr;
+}
+
+.filtros-painel-conteudo {
+  min-height: 0;
+  overflow: hidden;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+
+.filtros-painel--aberto .filtros-painel-conteudo {
+  opacity: 1;
+}
+
+/* Linha de modelos: mesma técnica, pra ela abrir e recolher sem os cards pularem */
+.filtros-modelos {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows 0.35s ease;
+}
+
+.filtros-modelos--visivel {
+  grid-template-rows: 1fr;
+}
+
+.filtros-modelos-conteudo {
+  min-height: 0;
+  overflow: hidden;
+  opacity: 0;
+  transform: translateY(-8px);
+  transition: opacity 0.25s ease, transform 0.35s ease;
+}
+
+.filtros-modelos--visivel .filtros-modelos-conteudo {
+  opacity: 1;
+  transform: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .busca-pilula::before,
+  .busca-pilula-acao,
+  .filtros-ativo {
+    animation: none;
+  }
+  .busca-pilula,
+  .busca-pilula-input,
+  .busca-pilula-botao,
+  .filtros-painel,
+  .filtros-painel-conteudo,
+  .filtros-modelos,
+  .filtros-modelos-conteudo {
+    transition: none;
+  }
 }
 
 /* ── Botões de categoria ── */
@@ -257,12 +526,12 @@ body {
 .categoria-btn:hover:not(:disabled):not(.ativo) {
   border-color: #999;
   color: #fff;
-  background: #161616;
+  background: rgba(255, 255, 255, 0.06);
 }
 
 .categoria-btn.ativo {
-  background: #fff;
-  border-color: #fff;
+  background: var(--vidro-branco);
+  border-color: transparent;
   color: #000;
   font-weight: 600;
 }
@@ -366,8 +635,8 @@ body {
 }
 
 .filtro-btn.ativo {
-  background: #fff;
-  border-color: #fff;
+  background: var(--vidro-branco);
+  border-color: transparent;
   color: #000;
   font-weight: 600;
 }
@@ -539,16 +808,25 @@ body {
   font-family: inherit;
   text-decoration: none;
   cursor: pointer;
+  transition: background-color 0.18s ease;
 }
 
 .giro-cta-branco {
-  background: #fff;
+  background: var(--vidro-branco);
   color: #000;
 }
 
+.giro-cta-branco:hover {
+  background: #fff;
+}
+
 .giro-cta-verde {
-  background: var(--whatsapp);
-  color: #0a0a0a;
+  background: var(--vidro-verde);
+  color: #fff;
+}
+
+.giro-cta-verde:hover {
+  background: var(--vidro-verde-hover);
 }
 
 .giro-dica {
@@ -639,12 +917,14 @@ body {
 
 .btn-ver-mais:hover {
   border-color: #555;
-  background: #161616;
+  background: rgba(255, 255, 255, 0.06);
 }
 
+/* Luz suave no centro da seção, que chega ao preto da página antes das bordas
+   de cima e de baixo: marca a seção sem virar uma faixa cinza nem criar emenda */
 .faixa-beneficios {
-  border-top: 1px solid #1a1a1a;
-  padding: 44px 24px;
+  background: radial-gradient(farthest-side, var(--bg-elevado), var(--bg-primary));
+  padding: clamp(56px, 7vw, 88px) 24px;
 }
 
 .faixa-beneficios-grid {
@@ -656,7 +936,8 @@ body {
 }
 
 .beneficio-icone {
-  color: #fff;
+  font-size: 30px;
+  line-height: 1;
   margin-bottom: 16px;
 }
 
@@ -700,142 +981,144 @@ body {
   }
 }
 
+/* Computador: tudo um pouco maior (~1,2x), na mesma proporção, pra a seção
+   acompanhar o tamanho do resto da página */
+@media (min-width: 1024px) {
+  .faixa-beneficios-grid {
+    gap: 40px;
+  }
+  .beneficio-icone {
+    font-size: 36px;
+    margin-bottom: 18px;
+  }
+  .beneficio-titulo {
+    font-size: 20px;
+    margin-bottom: 10px;
+  }
+  .beneficio-texto {
+    font-size: 16px;
+    margin-bottom: 14px;
+    max-width: 380px;
+  }
+  .beneficio-link {
+    font-size: 15px;
+  }
+}
+
 .prova-social {
-  border-top: 1px solid #1a1a1a;
-  padding: 48px 24px 52px;
+  padding: clamp(64px, 8vw, 104px) 24px;
+  /* o brilho atrás da foto passa das bordas no celular; sem isso a página
+     ganhava rolagem lateral */
+  overflow-x: clip;
 }
 
-.prova-social-cabecalho {
+/* Foto e citação soltas na página, sem caixa: foto à esquerda e, ao lado, o
+   título pequeno + a citação grande, centralizados na altura da foto */
+.prova-social-sobre {
   max-width: 1200px;
-  margin: 0 auto 32px;
-  text-align: center;
-}
-
-.prova-social-eyebrow {
-  font-size: 11px;
-  color: #666;
-  letter-spacing: 3px;
-  text-transform: uppercase;
-  margin-bottom: 10px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: minmax(0, 2fr) minmax(0, 3fr);
+  grid-template-rows: 1fr auto auto 1fr;
+  grid-template-areas:
+    "foto ."
+    "foto titulo"
+    "foto citacao"
+    "foto .";
+  column-gap: clamp(40px, 7vw, 96px);
 }
 
 .prova-social-titulo {
-  font-size: clamp(22px, 3vw, 28px);
+  grid-area: titulo;
+  font-size: clamp(20px, 2.2vw, 28px);
   font-weight: 700;
-  color: #fff;
-  letter-spacing: -0.5px;
-  margin-bottom: 8px;
-}
-
-.prova-social-subtitulo {
-  font-size: 14px;
+  /* em letra grande, o espaçamento entre letras precisa ser proporcionalmente menor */
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
   color: var(--whatsapp);
-  max-width: 480px;
-  margin: 0 auto;
-}
-
-.prova-social-linhas {
-  max-width: 1200px;
-  margin: 0 auto;
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-}
-
-.prova-social-row {
-  display: flex;
-  align-items: stretch;
-  height: 460px;
-  background: #111111;
-  border: 1px solid #1e1e1e;
-  border-radius: 16px;
-  overflow: hidden;
-}
-
-.prova-social-row--inverso {
-  flex-direction: row-reverse;
+  margin-bottom: 24px;
 }
 
 .prova-social-foto {
-  flex: 0 0 34%;
-  min-width: 0;
+  grid-area: foto;
+  align-self: center;
+  position: relative;
+  /* garante que o brilho (z-index -1) fique atrás só da foto, não da seção */
+  isolation: isolate;
+}
+
+/* Brilho verde bem leve atrás da foto, puxando o verde da parede */
+.prova-social-foto::before {
+  content: '';
+  position: absolute;
+  inset: -6% -14% -10%;
+  z-index: -1;
+  background: radial-gradient(closest-side, rgba(37, 211, 102, 0.2) 45%, transparent);
+  filter: blur(40px);
+  pointer-events: none;
 }
 
 .prova-social-foto img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
   display: block;
+  width: 100%;
+  aspect-ratio: 4 / 5;
+  object-fit: cover;
+  object-position: 50% 40%;
+  border-radius: 28px;
 }
 
-.prova-social-conteudo {
-  flex: 1 1 66%;
-  display: flex;
-  align-items: center;
-  padding: 28px 44px;
+.prova-social-citacao {
+  grid-area: citacao;
 }
 
-.prova-social-texto {
+.prova-social-citacao p {
   font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
   font-weight: 500;
-  font-size: clamp(21px, 2.4vw, 28px);
-  color: #f5f5f5;
-  line-height: 1.5;
+  font-size: clamp(22px, 2.4vw, 32px);
+  line-height: 1.4;
+  letter-spacing: -0.3px;
+  /* branco puxando um pouco pro cinza */
+  color: #e2e2e2;
 }
 
-.prova-social-ceo {
+.prova-social-citacao figcaption {
+  margin-top: 28px;
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  gap: 4px;
 }
 
-.prova-social-ceo-texto {
-  font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-  font-weight: 500;
-  font-size: clamp(21px, 2.4vw, 28px);
-  line-height: 1.5;
-  color: #f5f5f5;
-  letter-spacing: 0.1px;
-}
-
-.prova-social-ceo-assinatura {
-  display: flex;
-  flex-direction: column;
-  gap: 3px;
-}
-
-.prova-social-ceo-nome {
-  font-size: 15px;
+.prova-social-nome {
+  font-size: 16px;
   font-weight: 700;
   color: #fff;
-  letter-spacing: 0.3px;
 }
 
-.prova-social-ceo-cargo {
+.prova-social-cargo {
   font-size: 12.5px;
   color: #888;
   text-transform: uppercase;
   letter-spacing: 1.5px;
 }
 
+/* Celular: título, foto e citação um embaixo do outro */
 @media (max-width: 768px) {
-  .prova-social-row,
-  .prova-social-row--inverso {
-    flex-direction: column;
-    height: auto;
+  .prova-social-sobre {
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-rows: none;
+    grid-template-areas:
+      "titulo"
+      "foto"
+      "citacao";
   }
-  .prova-social-foto {
-    flex: 0 0 auto;
-    height: 320px;
+  .prova-social-titulo {
+    margin-bottom: 18px;
   }
-  .prova-social-conteudo {
-    padding: 24px 22px;
+  .prova-social-foto img {
+    border-radius: 22px;
   }
-  .prova-social-texto {
-    font-size: 19px;
-  }
-  .prova-social-ceo-texto {
-    font-size: 19px;
+  .prova-social-citacao {
+    margin-top: 28px;
   }
 }
 
@@ -1041,13 +1324,6 @@ body {
     width: 190px;
     height: 253px;
   }
-}
-
-.filtros-divider-h {
-  height: 1px;
-  background: #1a1a1a;
-  max-width: 1200px;
-  margin: 0 auto;
 }
 
 ::-webkit-scrollbar {
@@ -1298,7 +1574,7 @@ body {
 }
 
 .carrinho-enviar {
-  background: var(--whatsapp);
+  background: var(--vidro-verde);
   color: #fff;
   text-align: center;
   padding: 12px;
@@ -1306,11 +1582,11 @@ body {
   font-size: 13.5px;
   font-weight: 600;
   text-decoration: none;
-  transition: opacity 0.2s ease;
+  transition: background-color 0.2s ease;
 }
 
 .carrinho-enviar:hover {
-  opacity: 0.9;
+  background: var(--vidro-verde-hover);
 }
 
 @media (max-width: 480px) {

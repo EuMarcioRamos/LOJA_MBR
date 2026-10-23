@@ -1,10 +1,230 @@
 [
   {
+    "id": "18promax-bordo",
+    "modelo": "iPhone 18 Pro Max",
+    "cor": "Bordô",
+    "corHex": "#5A2B36",
+    "imagem": "/iphones/18/bordoProMax.png",
+    "destaque": true,
+    "opcoes": [
+      {
+        "armazenamento": "256GB",
+        "preco": 14999,
+        "disponivel": true
+      },
+      {
+        "armazenamento": "512GB",
+        "preco": 16499,
+        "disponivel": true
+      },
+      {
+        "armazenamento": "1TB",
+        "preco": 18999,
+        "disponivel": true
+      },
+      {
+        "armazenamento": "2TB",
+        "preco": 21999,
+        "disponivel": true
+      }
+    ]
+  },
+  {
+    "id": "18promax-glacial",
+    "modelo": "iPhone 18 Pro Max",
+    "cor": "Azul Glacial",
+    "corHex": "#A9B8CC",
+    "imagem": "/iphones/18/glacialProMax.png",
+    "destaque": false,
+    "opcoes": [
+      {
+        "armazenamento": "256GB",
+        "preco": 14999,
+        "disponivel": true
+      },
+      {
+        "armazenamento": "512GB",
+        "preco": 16499,
+        "disponivel": true
+      },
+      {
+        "armazenamento": "1TB",
+        "preco": 18999,
+        "disponivel": true
+      },
+      {
+        "armazenamento": "2TB",
+        "preco": 21999,
+        "disponivel": true
+      }
+    ]
+  },
+  {
+    "id": "18promax-silver",
+    "modelo": "iPhone 18 Pro Max",
+    "cor": "Prata",
+    "corHex": "#C8C8CA",
+    "imagem": "/iphones/18/SilverProMax.png",
+    "destaque": false,
+    "opcoes": [
+      {
+        "armazenamento": "256GB",
+        "preco": 14999,
+        "disponivel": true
+      },
+      {
+        "armazenamento": "512GB",
+        "preco": 16499,
+        "disponivel": true
+      },
+      {
+        "armazenamento": "1TB",
+        "preco": 18999,
+        "disponivel": true
+      },
+      {
+        "armazenamento": "2TB",
+        "preco": 21999,
+        "disponivel": true
+      }
+    ]
+  },
+  {
+    "id": "18promax-black",
+    "modelo": "iPhone 18 Pro Max",
+    "cor": "Preto",
+    "corHex": "#2E2E30",
+    "imagem": "/iphones/18/blackProMax.png",
+    "destaque": false,
+    "opcoes": [
+      {
+        "armazenamento": "256GB",
+        "preco": 14999,
+        "disponivel": true
+      },
+      {
+        "armazenamento": "512GB",
+        "preco": 16499,
+        "disponivel": true
+      },
+      {
+        "armazenamento": "1TB",
+        "preco": 18999,
+        "disponivel": true
+      },
+      {
+        "armazenamento": "2TB",
+        "preco": 21999,
+        "disponivel": true
+      }
+    ]
+  },
+  {
+    "id": "18pro-bordo",
+    "modelo": "iPhone 18 Pro",
+    "cor": "Bordô",
+    "corHex": "#5A2B36",
+    "imagem": "/iphones/18/bordoPro.png",
+    "destaque": true,
+    "opcoes": [
+      {
+        "armazenamento": "256GB",
+        "preco": 12499,
+        "disponivel": true
+      },
+      {
+        "armazenamento": "512GB",
+        "preco": 13999,
+        "disponivel": true
+      },
+      {
+        "armazenamento": "1TB",
+        "preco": 15999,
+        "disponivel": true
+      }
+    ]
+  },
+  {
+    "id": "18pro-glacial",
+    "modelo": "iPhone 18 Pro",
+    "cor": "Azul Glacial",
+    "corHex": "#A9B8CC",
+    "imagem": "/iphones/18/glacialPro.png",
+    "destaque": false,
+    "opcoes": [
+      {
+        "armazenamento": "256GB",
+        "preco": 12499,
+        "disponivel": true
+      },
+      {
+        "armazenamento": "512GB",
+        "preco": 13999,
+        "disponivel": true
+      },
+      {
+        "armazenamento": "1TB",
+        "preco": 15999,
+        "disponivel": true
+      }
+    ]
+  },
+  {
+    "id": "18pro-silver",
+    "modelo": "iPhone 18 Pro",
+    "cor": "Prata",
+    "corHex": "#C8C8CA",
+    "imagem": "/iphones/18/silverPro.png",
+    "destaque": false,
+    "opcoes": [
+      {
+        "armazenamento": "256GB",
+        "preco": 12499,
+        "disponivel": true
+      },
+      {
+        "armazenamento": "512GB",
+        "preco": 13999,
+        "disponivel": true
+      },
+      {
+        "armazenamento": "1TB",
+        "preco": 15999,
+        "disponivel": true
+      }
+    ]
+  },
+  {
+    "id": "18pro-black",
+    "modelo": "iPhone 18 Pro",
+    "cor": "Preto",
+    "corHex": "#2E2E30",
+    "imagem": "/iphones/18/blackPro.png",
+    "destaque": false,
+    "opcoes": [
+      {
+        "armazenamento": "256GB",
+        "preco": 12499,
+        "disponivel": true
+      },
+      {
+        "armazenamento": "512GB",
+        "preco": 13999,
+        "disponivel": true
+      },
+      {
+        "armazenamento": "1TB",
+        "preco": 15999,
+        "disponivel": true
+      }
+    ]
+  },
+  {
     "id": "17promax-silver",
     "modelo": "iPhone 17 Pro Max",
     "cor": "Prata",
     "corHex": "#C8C8CA",
-    "imagem": "/iphones/17promax-silver.png",
+    "imagem": "/iphones/17/17promax-silver.png",
     "destaque": true,
     "opcoes": [
       {
@@ -34,7 +254,7 @@
     "modelo": "iPhone 17 Pro Max",
     "cor": "Azul Profundo",
     "corHex": "#1B3A5C",
-    "imagem": "/iphones/17promax-deepblue.png",
+    "imagem": "/iphones/17/17promax-deepblue.png",
     "destaque": true,
     "opcoes": [
       {
@@ -64,7 +284,7 @@
     "modelo": "iPhone 17 Pro Max",
     "cor": "Laranja Cósmico",
     "corHex": "#D4540A",
-    "imagem": "/iphones/17promax-cosmicorange.png",
+    "imagem": "/iphones/17/17promax-cosmicorange.png",
     "destaque": false,
     "opcoes": [
       {
@@ -94,7 +314,7 @@
     "modelo": "iPhone 17 Pro",
     "cor": "Prata",
     "corHex": "#C8C8CA",
-    "imagem": "/iphones/17pro-silver.png",
+    "imagem": "/iphones/17/17pro-silver.png",
     "destaque": true,
     "opcoes": [
       {
@@ -119,7 +339,7 @@
     "modelo": "iPhone 17 Pro",
     "cor": "Azul Profundo",
     "corHex": "#1B3A5C",
-    "imagem": "/iphones/17pro-deepblue.png",
+    "imagem": "/iphones/17/17pro-deepblue.png",
     "destaque": false,
     "opcoes": [
       {
@@ -144,7 +364,7 @@
     "modelo": "iPhone 17 Pro",
     "cor": "Laranja Cósmico",
     "corHex": "#D4540A",
-    "imagem": "/iphones/17pro-cosmicorange.png",
+    "imagem": "/iphones/17/17pro-cosmicorange.png",
     "destaque": false,
     "opcoes": [
       {
@@ -169,7 +389,7 @@
     "modelo": "iPhone 17",
     "cor": "Preto",
     "corHex": "#1C1C1E",
-    "imagem": "/iphones/17-black.png",
+    "imagem": "/iphones/17/17-black.png",
     "destaque": false,
     "opcoes": [
       {
@@ -189,7 +409,7 @@
     "modelo": "iPhone 17",
     "cor": "Branco",
     "corHex": "#F5F5F5",
-    "imagem": "/iphones/17-white.png",
+    "imagem": "/iphones/17/17-white.png",
     "destaque": false,
     "opcoes": [
       {
@@ -209,7 +429,7 @@
     "modelo": "iPhone 17",
     "cor": "Lavanda",
     "corHex": "#D4BFFF",
-    "imagem": "/iphones/17-lavender.png",
+    "imagem": "/iphones/17/17-lavender.png",
     "destaque": false,
     "opcoes": [
       {
@@ -229,7 +449,7 @@
     "modelo": "iPhone 17",
     "cor": "Sálvia",
     "corHex": "#A8B89A",
-    "imagem": "/iphones/17-sage.png",
+    "imagem": "/iphones/17/17-sage.png",
     "destaque": false,
     "opcoes": [
       {
@@ -249,7 +469,7 @@
     "modelo": "iPhone 17",
     "cor": "Azul Névoa",
     "corHex": "#8BAFC5",
-    "imagem": "/iphones/17-mistblue.png",
+    "imagem": "/iphones/17/17-mistblue.png",
     "destaque": false,
     "opcoes": [
       {
@@ -269,7 +489,7 @@
     "modelo": "iPhone 16 Pro Max",
     "cor": "Titânio Deserto",
     "corHex": "#C4A882",
-    "imagem": "/iphones/16promax-desert.png",
+    "imagem": "/iphones/16/16promax-desert.png",
     "destaque": true,
     "opcoes": [
       {
@@ -294,7 +514,7 @@
     "modelo": "iPhone 16 Pro Max",
     "cor": "Titânio Preto",
     "corHex": "#2C2C2E",
-    "imagem": "/iphones/16promax-black.png",
+    "imagem": "/iphones/16/16promax-black.png",
     "destaque": false,
     "opcoes": [
       {
@@ -319,7 +539,7 @@
     "modelo": "iPhone 16 Pro Max",
     "cor": "Titânio Branco",
     "corHex": "#E8E3DC",
-    "imagem": "/iphones/16promax-white.png",
+    "imagem": "/iphones/16/16promax-white.png",
     "destaque": false,
     "opcoes": [
       {
@@ -344,7 +564,7 @@
     "modelo": "iPhone 16 Pro Max",
     "cor": "Titânio Natural",
     "corHex": "#9E8E7E",
-    "imagem": "/iphones/16promax-natural.png",
+    "imagem": "/iphones/16/16promax-natural.png",
     "destaque": false,
     "opcoes": [
       {
@@ -369,7 +589,7 @@
     "modelo": "iPhone 16 Pro",
     "cor": "Titânio Deserto",
     "corHex": "#C4A882",
-    "imagem": "/iphones/16pro-desert.png",
+    "imagem": "/iphones/16/16pro-desert.png",
     "destaque": false,
     "opcoes": [
       {
@@ -399,7 +619,7 @@
     "modelo": "iPhone 16 Pro",
     "cor": "Titânio Preto",
     "corHex": "#2C2C2E",
-    "imagem": "/iphones/16pro-black.png",
+    "imagem": "/iphones/16/16pro-black.png",
     "destaque": false,
     "opcoes": [
       {
@@ -429,7 +649,7 @@
     "modelo": "iPhone 16 Pro",
     "cor": "Titânio Branco",
     "corHex": "#E8E3DC",
-    "imagem": "/iphones/16pro-white.png",
+    "imagem": "/iphones/16/16pro-white.png",
     "destaque": false,
     "opcoes": [
       {
@@ -459,7 +679,7 @@
     "modelo": "iPhone 16 Pro",
     "cor": "Titânio Natural",
     "corHex": "#9E8E7E",
-    "imagem": "/iphones/16pro-natural.png",
+    "imagem": "/iphones/16/16pro-natural.png",
     "destaque": false,
     "opcoes": [
       {
@@ -489,7 +709,7 @@
     "modelo": "iPhone 16 Plus",
     "cor": "Preto",
     "corHex": "#1C1C1E",
-    "imagem": "/iphones/16plus-black.png",
+    "imagem": "/iphones/16/16plus-black.png",
     "destaque": false,
     "opcoes": [
       {
@@ -514,7 +734,7 @@
     "modelo": "iPhone 16 Plus",
     "cor": "Ultramarino",
     "corHex": "#3A4E8C",
-    "imagem": "/iphones/16plus-ultramarine.png",
+    "imagem": "/iphones/16/16plus-ultramarine.png",
     "destaque": false,
     "opcoes": [
       {
@@ -539,7 +759,7 @@
     "modelo": "iPhone 16 Plus",
     "cor": "Azul-petróleo",
     "corHex": "#3D7A6E",
-    "imagem": "/iphones/16plus-teal.png",
+    "imagem": "/iphones/16/16plus-teal.png",
     "destaque": false,
     "opcoes": [
       {
@@ -564,7 +784,7 @@
     "modelo": "iPhone 16 Plus",
     "cor": "Rosa",
     "corHex": "#F2A8B8",
-    "imagem": "/iphones/16plus-pink.png",
+    "imagem": "/iphones/16/16plus-pink.png",
     "destaque": false,
     "opcoes": [
       {
@@ -589,7 +809,7 @@
     "modelo": "iPhone 16 Plus",
     "cor": "Branco",
     "corHex": "#F5F5F5",
-    "imagem": "/iphones/16plus-white.png",
+    "imagem": "/iphones/16/16plus-white.png",
     "destaque": false,
     "opcoes": [
       {
@@ -614,7 +834,7 @@
     "modelo": "iPhone 16",
     "cor": "Preto",
     "corHex": "#1C1C1E",
-    "imagem": "/iphones/16-black.png",
+    "imagem": "/iphones/16/16-black.png",
     "destaque": false,
     "opcoes": [
       {
@@ -639,7 +859,7 @@
     "modelo": "iPhone 16",
     "cor": "Ultramarino",
     "corHex": "#3A4E8C",
-    "imagem": "/iphones/16-ultramarine.png",
+    "imagem": "/iphones/16/16-ultramarine.png",
     "destaque": false,
     "opcoes": [
       {
@@ -664,7 +884,7 @@
     "modelo": "iPhone 16",
     "cor": "Azul-petróleo",
     "corHex": "#3D7A6E",
-    "imagem": "/iphones/16-teal.png",
+    "imagem": "/iphones/16/16-teal.png",
     "destaque": false,
     "opcoes": [
       {
@@ -689,7 +909,7 @@
     "modelo": "iPhone 16",
     "cor": "Rosa",
     "corHex": "#F2A8B8",
-    "imagem": "/iphones/16-pink.png",
+    "imagem": "/iphones/16/16-pink.png",
     "destaque": false,
     "opcoes": [
       {
@@ -714,7 +934,7 @@
     "modelo": "iPhone 16",
     "cor": "Branco",
     "corHex": "#F5F5F5",
-    "imagem": "/iphones/16-white.png",
+    "imagem": "/iphones/16/16-white.png",
     "destaque": false,
     "opcoes": [
       {
@@ -739,7 +959,7 @@
     "modelo": "iPhone 15 Pro Max",
     "cor": "Titânio Preto",
     "corHex": "#3D3D3D",
-    "imagem": "/iphones/15promax-blacktitanium.png",
+    "imagem": "/iphones/15/15promax-blacktitanium.png",
     "destaque": false,
     "opcoes": [
       {
@@ -764,7 +984,7 @@
     "modelo": "iPhone 15 Pro Max",
     "cor": "Titânio Branco",
     "corHex": "#E8E3DC",
-    "imagem": "/iphones/15promax-whitetitanium.png",
+    "imagem": "/iphones/15/15promax-whitetitanium.png",
     "destaque": false,
     "opcoes": [
       {
@@ -789,7 +1009,7 @@
     "modelo": "iPhone 15 Pro Max",
     "cor": "Titânio Azul",
     "corHex": "#4A6F8A",
-    "imagem": "/iphones/15promax-bluetitanium.png",
+    "imagem": "/iphones/15/15promax-bluetitanium.png",
     "destaque": false,
     "opcoes": [
       {
@@ -814,7 +1034,7 @@
     "modelo": "iPhone 15 Pro Max",
     "cor": "Titânio Natural",
     "corHex": "#B5A898",
-    "imagem": "/iphones/15promax-naturaltitanium.png",
+    "imagem": "/iphones/15/15promax-naturaltitanium.png",
     "destaque": false,
     "opcoes": [
       {
@@ -839,7 +1059,7 @@
     "modelo": "iPhone 15 Pro",
     "cor": "Titânio Preto",
     "corHex": "#3D3D3D",
-    "imagem": "/iphones/15pro-blacktitanium.png",
+    "imagem": "/iphones/15/15pro-blacktitanium.png",
     "destaque": false,
     "opcoes": [
       {
@@ -869,7 +1089,7 @@
     "modelo": "iPhone 15 Pro",
     "cor": "Titânio Branco",
     "corHex": "#E8E3DC",
-    "imagem": "/iphones/15pro-whitetitanium.png",
+    "imagem": "/iphones/15/15pro-whitetitanium.png",
     "destaque": false,
     "opcoes": [
       {
@@ -899,7 +1119,7 @@
     "modelo": "iPhone 15 Pro",
     "cor": "Titânio Azul",
     "corHex": "#4A6F8A",
-    "imagem": "/iphones/15pro-bluetitanium.png",
+    "imagem": "/iphones/15/15pro-bluetitanium.png",
     "destaque": false,
     "opcoes": [
       {
@@ -929,7 +1149,7 @@
     "modelo": "iPhone 15 Pro",
     "cor": "Titânio Natural",
     "corHex": "#B5A898",
-    "imagem": "/iphones/15pro-naturaltitanium.png",
+    "imagem": "/iphones/15/15pro-naturaltitanium.png",
     "destaque": false,
     "opcoes": [
       {
@@ -959,7 +1179,7 @@
     "modelo": "iPhone 15",
     "cor": "Preto",
     "corHex": "#1C1C1E",
-    "imagem": "/iphones/15-black.png",
+    "imagem": "/iphones/15/15-black.png",
     "destaque": false,
     "opcoes": [
       {
@@ -984,7 +1204,7 @@
     "modelo": "iPhone 15",
     "cor": "Azul",
     "corHex": "#7BB3D4",
-    "imagem": "/iphones/15-blue.png",
+    "imagem": "/iphones/15/15-blue.png",
     "destaque": false,
     "opcoes": [
       {
@@ -1009,7 +1229,7 @@
     "modelo": "iPhone 15",
     "cor": "Verde",
     "corHex": "#A8C9A8",
-    "imagem": "/iphones/15-green.png",
+    "imagem": "/iphones/15/15-green.png",
     "destaque": false,
     "opcoes": [
       {
@@ -1034,7 +1254,7 @@
     "modelo": "iPhone 15",
     "cor": "Amarelo",
     "corHex": "#F0D060",
-    "imagem": "/iphones/15-yellow.png",
+    "imagem": "/iphones/15/15-yellow.png",
     "destaque": false,
     "opcoes": [
       {
@@ -1059,7 +1279,7 @@
     "modelo": "iPhone 15",
     "cor": "Rosa",
     "corHex": "#F4C2C2",
-    "imagem": "/iphones/15-pink.png",
+    "imagem": "/iphones/15/15-pink.png",
     "destaque": false,
     "opcoes": [
       {
@@ -1084,7 +1304,7 @@
     "modelo": "iPhone 14 Pro Max",
     "cor": "Roxo Profundo",
     "corHex": "#4E3C6C",
-    "imagem": "/iphones/14promax-deeppurple.png",
+    "imagem": "/iphones/14/14promax-deeppurple.png",
     "destaque": false,
     "opcoes": [
       {
@@ -1114,7 +1334,7 @@
     "modelo": "iPhone 14 Pro Max",
     "cor": "Dourado",
     "corHex": "#D4AF7A",
-    "imagem": "/iphones/14promax-gold.png",
+    "imagem": "/iphones/14/14promax-gold.png",
     "destaque": false,
     "opcoes": [
       {
@@ -1144,7 +1364,7 @@
     "modelo": "iPhone 14 Pro Max",
     "cor": "Prata",
     "corHex": "#C8C8CA",
-    "imagem": "/iphones/14promax-silver.png",
+    "imagem": "/iphones/14/14promax-silver.png",
     "destaque": false,
     "opcoes": [
       {
@@ -1174,7 +1394,7 @@
     "modelo": "iPhone 14 Pro Max",
     "cor": "Preto Espacial",
     "corHex": "#2D2B2B",
-    "imagem": "/iphones/14promax-spaceblack.png",
+    "imagem": "/iphones/14/14promax-spaceblack.png",
     "destaque": false,
     "opcoes": [
       {
@@ -1204,7 +1424,7 @@
     "modelo": "iPhone 14 Pro",
     "cor": "Roxo Profundo",
     "corHex": "#4E3C6C",
-    "imagem": "/iphones/14pro-deeppurple.png",
+    "imagem": "/iphones/14/14pro-deeppurple.png",
     "destaque": false,
     "opcoes": [
       {
@@ -1234,7 +1454,7 @@
     "modelo": "iPhone 14 Pro",
     "cor": "Dourado",
     "corHex": "#D4AF7A",
-    "imagem": "/iphones/14pro-gold.png",
+    "imagem": "/iphones/14/14pro-gold.png",
     "destaque": false,
     "opcoes": [
       {
@@ -1264,7 +1484,7 @@
     "modelo": "iPhone 14 Pro",
     "cor": "Prata",
     "corHex": "#C8C8CA",
-    "imagem": "/iphones/14pro-silver.png",
+    "imagem": "/iphones/14/14pro-silver.png",
     "destaque": false,
     "opcoes": [
       {
@@ -1294,7 +1514,7 @@
     "modelo": "iPhone 14 Pro",
     "cor": "Preto Espacial",
     "corHex": "#2D2B2B",
-    "imagem": "/iphones/14pro-spaceblack.png",
+    "imagem": "/iphones/14/14pro-spaceblack.png",
     "destaque": false,
     "opcoes": [
       {
@@ -1324,7 +1544,7 @@
     "modelo": "iPhone 14",
     "cor": "Meia-noite",
     "corHex": "#1C1C1E",
-    "imagem": "/iphones/14-midnight.png",
+    "imagem": "/iphones/14/14-midnight.png",
     "destaque": false,
     "opcoes": [
       {
@@ -1349,7 +1569,7 @@
     "modelo": "iPhone 14",
     "cor": "Luz das Estrelas",
     "corHex": "#F5F0E8",
-    "imagem": "/iphones/14-starlight.png",
+    "imagem": "/iphones/14/14-starlight.png",
     "destaque": false,
     "opcoes": [
       {
@@ -1374,7 +1594,7 @@
     "modelo": "iPhone 14",
     "cor": "Azul",
     "corHex": "#7BB3D4",
-    "imagem": "/iphones/14-blue.png",
+    "imagem": "/iphones/14/14-blue.png",
     "destaque": false,
     "opcoes": [
       {
@@ -1399,7 +1619,7 @@
     "modelo": "iPhone 14",
     "cor": "Roxo",
     "corHex": "#9B8FB5",
-    "imagem": "/iphones/14-purple.png",
+    "imagem": "/iphones/14/14-purple.png",
     "destaque": false,
     "opcoes": [
       {
@@ -1424,7 +1644,7 @@
     "modelo": "iPhone 14",
     "cor": "Amarelo",
     "corHex": "#F0D060",
-    "imagem": "/iphones/14-yellow.png",
+    "imagem": "/iphones/14/14-yellow.png",
     "destaque": false,
     "opcoes": [
       {
@@ -1449,7 +1669,7 @@
     "modelo": "iPhone 13",
     "cor": "Meia-noite",
     "corHex": "#1C1C1E",
-    "imagem": "/iphones/13-midnight.png",
+    "imagem": "/iphones/13/13-midnight.png",
     "destaque": false,
     "opcoes": [
       {
@@ -1474,7 +1694,7 @@
     "modelo": "iPhone 13",
     "cor": "Luz das Estrelas",
     "corHex": "#F5F0E8",
-    "imagem": "/iphones/13-starlight.png",
+    "imagem": "/iphones/13/13-starlight.png",
     "destaque": false,
     "opcoes": [
       {
@@ -1499,7 +1719,7 @@
     "modelo": "iPhone 13",
     "cor": "Azul",
     "corHex": "#7BB3D4",
-    "imagem": "/iphones/13-blue.png",
+    "imagem": "/iphones/13/13-blue.png",
     "destaque": false,
     "opcoes": [
       {
@@ -1524,7 +1744,7 @@
     "modelo": "iPhone 13",
     "cor": "Rosa",
     "corHex": "#F4C2C2",
-    "imagem": "/iphones/13-pink.png",
+    "imagem": "/iphones/13/13-pink.png",
     "destaque": false,
     "opcoes": [
       {
@@ -1549,7 +1769,7 @@
     "modelo": "iPhone 13",
     "cor": "Verde",
     "corHex": "#A8C9A8",
-    "imagem": "/iphones/13-green.png",
+    "imagem": "/iphones/13/13-green.png",
     "destaque": false,
     "opcoes": [
       {

@@ -31,7 +31,7 @@ export default function Header({ carrinhoCount = 0, carrinhoAnimKey = 0, onAbrir
             target="_blank"
             rel="noreferrer"
             style={{
-              background: 'var(--whatsapp)',
+              background: 'var(--vidro-verde)',
               color: '#fff',
               padding: '8px 18px',
               borderRadius: 50,
