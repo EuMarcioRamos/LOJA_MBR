@@ -26,6 +26,11 @@
   --vidro-branco: rgba(255, 255, 255, 0.9);
   --vidro-verde: rgba(37, 211, 102, 0.85);
   --vidro-verde-hover: rgba(37, 211, 102, 0.95);
+
+  /* Troca de cor nos cards de produto: a foto sempre dissolve de uma cor pra
+     outra; esta é a força da luz no tom da cor atrás da foto.
+     1 = com a luz (opção B) · 0 = só o dissolver (opção A) · entre os dois, mais suave */
+  --luz-da-cor: 1;
 }
 
 body {
@@ -114,6 +119,58 @@ body {
   }
 }
 
+/* ── Foto do card: troca de cor (dissolver + luz da cor, ver ModeloCard.jsx) ── */
+@property --luz-cor {
+  syntax: '<color>';
+  inherits: false;
+  initial-value: transparent;
+}
+
+.modelo-card-luz {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse 90% 75% at 50% 55%, var(--luz-cor) 0%, var(--luz-cor) 30%, transparent 85%);
+  opacity: var(--luz-da-cor);
+  transition: --luz-cor 0.7s ease;
+  pointer-events: none;
+}
+
+/* Uma pequena margem em volta da foto deixa a luz da cor aparecer ao redor do aparelho */
+.modelo-card-foto {
+  position: absolute;
+  top: 6%;
+  left: 7%;
+  width: 86%;
+  height: 88%;
+  object-fit: contain;
+  filter: drop-shadow(0 0 18px rgba(255, 255, 255, 0.07)) drop-shadow(0 6px 20px rgba(0, 0, 0, 0.5));
+}
+
+.modelo-card-foto--entrando {
+  animation: fotoEntra 0.45s ease both;
+}
+
+.modelo-card-foto--saindo {
+  animation: fotoSai 0.45s ease both;
+}
+
+@keyframes fotoEntra {
+  from { opacity: 0; transform: scale(0.985); }
+  to   { opacity: 1; transform: none; }
+}
+
+@keyframes fotoSai {
+  from { opacity: 1; }
+  to   { opacity: 0; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .modelo-card-luz { transition: none; }
+  .modelo-card-foto--entrando { animation: none; }
+  /* sem animação o onAnimationEnd não dispara; a foto que sai some na hora */
+  .modelo-card-foto--saindo { display: none; }
+}
+
 /* ── Revelar ao rolar (ver src/revelar.js) ── */
 .revelar {
   opacity: 0;
@@ -191,12 +248,6 @@ body {
 }
 
 /* ── Pílula "Buscar produto": fechada é um botão; aberta vira o campo de busca ── */
-@property --busca-angulo {
-  syntax: '<angle>';
-  inherits: false;
-  initial-value: 0deg;
-}
-
 .busca-pilula {
   position: relative;
   flex: none;
@@ -211,25 +262,38 @@ body {
   transition: width 0.45s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.2s ease;
 }
 
-/* Anel com um brilho verde e branco girando em volta. É um degradê recortado
-   por máscara (só a borda aparece), pra o miolo poder ser transparente */
-.busca-pilula::before {
-  content: '';
+/* Anel com um brilho verde e branco girando em volta. O anel é recortado por
+   máscara (só a borda aparece, o miolo continua transparente) e, dentro dele,
+   um quadrado com o degradê gira via transform. Girar com transform roda na
+   placa de vídeo; antes o ângulo do degradê era animado e a borda inteira era
+   redesenhada a cada quadro, gastando processador o tempo todo */
+.busca-pilula-anel {
   position: absolute;
   inset: 0;
   padding: 1.5px;
   border-radius: inherit;
-  background: conic-gradient(from var(--busca-angulo), #3a3a3a 0deg, #3a3a3a 210deg, var(--whatsapp) 290deg, #fff 325deg, #3a3a3a 360deg);
+  overflow: hidden;
   -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
   -webkit-mask-composite: xor;
   mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
   mask-composite: exclude;
-  animation: buscaBrilho 4s linear infinite;
   pointer-events: none;
 }
 
+/* quadrado um pouco maior que a largura da pílula, pra cobrir a borda inteira ao girar */
+.busca-pilula-anel-luz {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 120%;
+  aspect-ratio: 1;
+  background: conic-gradient(#3a3a3a 0deg, #3a3a3a 210deg, var(--whatsapp) 290deg, #fff 325deg, #3a3a3a 360deg);
+  animation: buscaBrilho 4s linear infinite;
+}
+
 @keyframes buscaBrilho {
-  to { --busca-angulo: 360deg; }
+  from { transform: translate(-50%, -50%) rotate(0deg); }
+  to   { transform: translate(-50%, -50%) rotate(360deg); }
 }
 
 .busca-pilula:hover {
@@ -483,10 +547,13 @@ body {
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .busca-pilula::before,
+  .busca-pilula-anel-luz,
   .busca-pilula-acao,
   .filtros-ativo {
     animation: none;
+  }
+  .busca-pilula-anel-luz {
+    transform: translate(-50%, -50%);
   }
   .busca-pilula,
   .busca-pilula-input,

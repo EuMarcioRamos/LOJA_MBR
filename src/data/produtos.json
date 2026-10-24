@@ -4,7 +4,7 @@
     "modelo": "iPhone 18 Pro Max",
     "cor": "Bordô",
     "corHex": "#5A2B36",
-    "imagem": "/iphones/18/bordoProMax.png",
+    "imagem": "/iphones/18/bordoProMax.webp",
     "destaque": true,
     "opcoes": [
       {
@@ -34,7 +34,7 @@
     "modelo": "iPhone 18 Pro Max",
     "cor": "Azul Glacial",
     "corHex": "#A9B8CC",
-    "imagem": "/iphones/18/glacialProMax.png",
+    "imagem": "/iphones/18/glacialProMax.webp",
     "destaque": false,
     "opcoes": [
       {
@@ -64,7 +64,7 @@
     "modelo": "iPhone 18 Pro Max",
     "cor": "Prata",
     "corHex": "#C8C8CA",
-    "imagem": "/iphones/18/SilverProMax.png",
+    "imagem": "/iphones/18/SilverProMax.webp",
     "destaque": false,
     "opcoes": [
       {
@@ -94,7 +94,7 @@
     "modelo": "iPhone 18 Pro Max",
     "cor": "Preto",
     "corHex": "#2E2E30",
-    "imagem": "/iphones/18/blackProMax.png",
+    "imagem": "/iphones/18/blackProMax.webp",
     "destaque": false,
     "opcoes": [
       {
@@ -124,7 +124,7 @@
     "modelo": "iPhone 18 Pro",
     "cor": "Bordô",
     "corHex": "#5A2B36",
-    "imagem": "/iphones/18/bordoPro.png",
+    "imagem": "/iphones/18/bordoPro.webp",
     "destaque": true,
     "opcoes": [
       {
@@ -149,7 +149,7 @@
     "modelo": "iPhone 18 Pro",
     "cor": "Azul Glacial",
     "corHex": "#A9B8CC",
-    "imagem": "/iphones/18/glacialPro.png",
+    "imagem": "/iphones/18/glacialPro.webp",
     "destaque": false,
     "opcoes": [
       {
@@ -174,7 +174,7 @@
     "modelo": "iPhone 18 Pro",
     "cor": "Prata",
     "corHex": "#C8C8CA",
-    "imagem": "/iphones/18/silverPro.png",
+    "imagem": "/iphones/18/silverPro.webp",
     "destaque": false,
     "opcoes": [
       {
@@ -199,7 +199,7 @@
     "modelo": "iPhone 18 Pro",
     "cor": "Preto",
     "corHex": "#2E2E30",
-    "imagem": "/iphones/18/blackPro.png",
+    "imagem": "/iphones/18/blackPro.webp",
     "destaque": false,
     "opcoes": [
       {

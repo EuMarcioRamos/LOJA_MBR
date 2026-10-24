@@ -9,7 +9,8 @@ export default function Header({ carrinhoCount = 0, carrinhoAnimKey = 0, onAbrir
       position: 'sticky',
       top: 0,
       zIndex: 100,
-      backdropFilter: 'blur(20px)',
+      // sem backdrop-filter: com o fundo opaco o desfoque nunca aparecia, mas
+      // era recalculado a cada quadro de rolagem
     }}>
       <div style={{
         maxWidth: 1200,

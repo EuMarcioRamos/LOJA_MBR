@@ -1,5 +1,31 @@
-import { useState } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { WHATSAPP_NUMERO } from '../config'
+
+// Luz atrás da foto, no tom da cor escolhida. Cores escuras ficam mais claras e
+// um pouco mais vivas, senão a luz some no fundo escuro do card; cores neutras
+// (preto, prata, branco) viram uma luz fraca e sem tom.
+function corDaLuz(hex) {
+  const n = parseInt((hex || '#888888').slice(1), 16)
+  const r = ((n >> 16) & 255) / 255
+  const g = ((n >> 8) & 255) / 255
+  const b = (n & 255) / 255
+  const max = Math.max(r, g, b)
+  const min = Math.min(r, g, b)
+  const d = max - min
+  const l = (max + min) / 2
+  const s = d === 0 ? 0 : d / (1 - Math.abs(2 * l - 1))
+  let h = 0
+  if (d) {
+    if (max === r) h = ((g - b) / d) % 6
+    else if (max === g) h = (b - r) / d + 2
+    else h = (r - g) / d + 4
+    h = (h * 60 + 360) % 360
+  }
+  const neutra = s < 0.12
+  const sat = neutra ? s : Math.min(1, s * 1.25 + 0.1)
+  const alfa = neutra ? 0.2 : 0.38
+  return `hsla(${Math.round(h)}, ${Math.round(sat * 100)}%, ${Math.round(Math.max(l, 0.45) * 100)}%, ${alfa})`
+}
 
 export default function ModeloCard({ modelo, variantes, precosProntos = true, carrinhoIds = [], onAlternarCarrinho }) {
   const chips = [...new Set(variantes.map(v => v.chip).filter(Boolean))]
@@ -27,6 +53,37 @@ export default function ModeloCard({ modelo, variantes, precosProntos = true, ca
   const atual = varsFiltradas[safeIdx] ?? varsPorChip[0] ?? variantes[0]
   const safeOpcaoIdx = Math.max(0, Math.min(opcaoIdx, atual.opcoes.length - 1))
   const opcaoAtual = atual.opcoes[safeOpcaoIdx]
+
+  // Troca de cor da foto: a nova só entra depois de carregada e dissolve por
+  // cima da anterior (que sai ao mesmo tempo), sem ficar um instante sem foto
+  const [fotoAtual, setFotoAtual] = useState(atual.imagem)
+  const [fotoAnterior, setFotoAnterior] = useState(null)
+  const fotoAtualRef = useRef(atual.imagem)
+  useEffect(() => {
+    const nova = atual.imagem
+    if (!nova || nova === fotoAtualRef.current) return
+    let cancelado = false
+    const img = new Image()
+    img.src = nova
+    const trocar = () => {
+      if (cancelado) return
+      setFotoAnterior(fotoAtualRef.current)
+      fotoAtualRef.current = nova
+      setFotoAtual(nova)
+    }
+    ;(img.decode ? img.decode() : Promise.resolve()).then(trocar, trocar)
+    return () => { cancelado = true }
+  }, [atual.imagem])
+
+  // Baixa as fotos das outras cores quando a pessoa mostra que vai trocar
+  // (mouse no card, toque ou foco nas cores), pra a troca não esperar a rede.
+  // Não baixa tudo de cara: no celular pesaria (as fotos do iPhone 18 têm ~300KB)
+  const coresPreCarregadas = useRef(false)
+  const preCarregarCores = () => {
+    if (coresPreCarregadas.current) return
+    coresPreCarregadas.current = true
+    variantes.forEach(v => { if (v.imagem) new Image().src = v.imagem })
+  }
 
   const irPara = (novoIdx) => {
     setIndice(novoIdx)
@@ -85,7 +142,7 @@ export default function ModeloCard({ modelo, variantes, precosProntos = true, ca
   return (
     <div
       className="modelo-card"
-      onMouseEnter={() => setHover(true)}
+      onMouseEnter={() => { setHover(true); preCarregarCores() }}
       onMouseLeave={() => setHover(false)}
       style={{
         background: hover ? '#1e1e1e' : '#161616',
@@ -101,22 +158,29 @@ export default function ModeloCard({ modelo, variantes, precosProntos = true, ca
         position: 'relative',
         background: 'radial-gradient(ellipse at 50% 65%, #2e2e32 0%, #131313 100%)',
       }}>
+        {/* Luz no tom da cor escolhida (intensidade em --luz-da-cor, no index.css) */}
+        <div className="modelo-card-luz" style={{ '--luz-cor': corDaLuz(atual.corHex) }} />
         {atual.imagem ? (
-          <img
-            key={atual.id}
-            src={atual.imagem}
-            alt={`${atual.modelo} ${atual.cor}`}
-            loading="lazy"
-            decoding="async"
-            style={{
-              width: '100%', height: '100%',
-              objectFit: 'contain',
-              objectPosition: 'center center',
-              animation: 'fadeIn 0.25s ease',
-              display: 'block',
-              filter: 'drop-shadow(0 0 18px rgba(255,255,255,0.07)) drop-shadow(0 6px 20px rgba(0,0,0,0.5))',
-            }}
-          />
+          <>
+            {fotoAnterior && (
+              <img
+                key={fotoAnterior}
+                className="modelo-card-foto modelo-card-foto--saindo"
+                src={fotoAnterior}
+                alt=""
+                aria-hidden="true"
+                onAnimationEnd={() => setFotoAnterior(null)}
+              />
+            )}
+            <img
+              key={fotoAtual}
+              className="modelo-card-foto modelo-card-foto--entrando"
+              src={fotoAtual}
+              alt={`${atual.modelo} ${atual.cor}`}
+              loading="lazy"
+              decoding="async"
+            />
+          </>
         ) : modelo.startsWith('iPad') ? (
           <svg
             key={atual.id}
@@ -159,7 +223,11 @@ export default function ModeloCard({ modelo, variantes, precosProntos = true, ca
 
       {/* Pontos de cor */}
       {varsFiltradas.length > 1 && (
-        <div style={{ display: 'flex', gap: 2, justifyContent: 'center', alignItems: 'center', flexWrap: 'wrap' }}>
+        <div
+          style={{ display: 'flex', gap: 2, justifyContent: 'center', alignItems: 'center', flexWrap: 'wrap' }}
+          onTouchStart={preCarregarCores}
+          onFocus={preCarregarCores}
+        >
           {varsFiltradas.map((v, i) => (
             <button
               key={v.id}

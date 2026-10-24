@@ -16,6 +16,11 @@ import { WHATSAPP_NUMERO } from '../config'
 const FRAMES_DESKTOP = 90
 const FRAMES_CELULAR = 45
 const BREAKPOINT_CELULAR = 899
+// O canvas usa exatamente o tamanho dos frames de cada versão. Antes era sempre
+// 1000×1250, e no celular (frames de 560×700) cada quadro era ampliado ~3x a
+// cada passo da rolagem sem ganhar qualidade nenhuma — era o que travava
+const TAMANHO_DESKTOP = [1000, 1250]
+const TAMANHO_CELULAR = [560, 700]
 
 // Trechos da rolagem (0 a 1) em que cada texto aparece
 const TRECHOS = [
@@ -48,6 +53,7 @@ export default function GiroIphone({ onVerProdutos, onEscolherCategoria }) {
     const urlDoFrame = (i) => `${pasta}/${String(i).padStart(4, '0')}.webp`
 
     const canvas = canvasRef.current
+    ;[canvas.width, canvas.height] = celular ? TAMANHO_CELULAR : TAMANHO_DESKTOP
     const ctx = canvas.getContext('2d')
     const imagens = new Array(total)
     // naturalWidth fica disponível antes da imagem estar de fato decodificada —
@@ -88,11 +94,23 @@ export default function GiroIphone({ onVerProdutos, onEscolherCategoria }) {
       return Math.round(((p - meio) / (1 - meio)) * (total - 1))
     }
 
-    const progresso = () => {
+    // Posição da seção medida uma vez (e de novo ao redimensionar), em vez de
+    // medir a página a cada quadro da rolagem
+    let topoSecao = 0
+    let percurso = 1
+    const medirSecao = () => {
       const secao = secaoRef.current
-      const percurso = secao.offsetHeight - window.innerHeight
-      return Math.min(1, Math.max(0, -secao.getBoundingClientRect().top / percurso))
+      topoSecao = secao.getBoundingClientRect().top + window.scrollY
+      percurso = Math.max(1, secao.offsetHeight - window.innerHeight)
     }
+    medirSecao()
+
+    const progresso = () => Math.min(1, Math.max(0, (window.scrollY - topoSecao) / percurso))
+
+    // Os textos só são reescritos quando a opacidade muda; com a página rolada
+    // além do giro (p parado em 1) nada é refeito a cada rolagem
+    let ultimoP = -1
+    const ultimaOpacidade = []
 
     const atualizar = () => {
       agendado = false
@@ -103,9 +121,13 @@ export default function GiroIphone({ onVerProdutos, onEscolherCategoria }) {
       }
       const p = progresso()
       desenhar(quadroNoProgresso(p))
+      if (p === ultimoP) return
+      ultimoP = p
       textosRef.current.forEach((el, i) => {
         if (!el) return
         const o = opacidadeNoTrecho(p, TRECHOS[i])
+        if (o === ultimaOpacidade[i]) return
+        ultimaOpacidade[i] = o
         el.style.opacity = o
         el.style.transform = `translateY(${(1 - o) * 16}px)`
         el.style.pointerEvents = o > 0.5 ? 'auto' : 'none'
@@ -120,14 +142,27 @@ export default function GiroIphone({ onVerProdutos, onEscolherCategoria }) {
       imagens[pos] = img
       const marcarPronto = () => {
         prontos[pos] = true
-        atualizar()
+        // agrupa num desenho por quadro de tela (os frames terminam em rajada)
+        aoRolar()
+      }
+      // No celular o frame é guardado já decodificado (ImageBitmap): o navegador
+      // pode jogar fora a decodificação de imagens que não estão na página e
+      // refazê-la na hora do drawImage, travando a rolagem. No computador seriam
+      // ~450MB (90 frames de 1000×1250), então lá fica a imagem comum
+      const pronto = () => {
+        if (!celular || !window.createImageBitmap) return marcarPronto()
+        createImageBitmap(img).then((bitmap) => {
+          if (desmontado) return bitmap.close()
+          imagens[pos] = bitmap
+          marcarPronto()
+        }, marcarPronto)
       }
       // decode() só resolve com o frame já decodificado e pronto pra desenhar
       // sem travar a thread principal na hora do drawImage. Se falhar, só marca
       // pronto se a imagem chegou mesmo: desenhar um frame quebrado lança erro e
       // congelava os textos do banner (o desenho usa o vizinho que carregou)
-      if (img.decode) img.decode().then(marcarPronto).catch(() => { if (img.naturalWidth > 0) marcarPronto() })
-      else img.onload = marcarPronto
+      if (img.decode) img.decode().then(pronto).catch(() => { if (img.naturalWidth > 0) pronto() })
+      else img.onload = pronto
     }
 
     // Primeiro frame (costas, é o que aparece em p=0) na hora; o resto só
@@ -153,23 +188,29 @@ export default function GiroIphone({ onVerProdutos, onEscolherCategoria }) {
       window.addEventListener('load', agendarResto, { once: true })
     }
 
-    const aoRolar = () => {
+    function aoRolar() {
       if (!agendado) {
         agendado = true
         requestAnimationFrame(atualizar)
       }
     }
+    const aoRedimensionar = () => {
+      medirSecao()
+      aoRolar()
+    }
     window.addEventListener('scroll', aoRolar, { passive: true })
-    window.addEventListener('resize', aoRolar)
+    window.addEventListener('resize', aoRedimensionar)
     atualizar()
 
     return () => {
       desmontado = true
       window.removeEventListener('scroll', aoRolar)
-      window.removeEventListener('resize', aoRolar)
+      window.removeEventListener('resize', aoRedimensionar)
       window.removeEventListener('load', agendarResto)
       if (idleId !== null) cancelIdleCallback(idleId)
       if (timeoutId !== null) clearTimeout(timeoutId)
+      // libera a memória dos frames guardados como ImageBitmap (celular)
+      imagens.forEach((frame) => frame?.close?.())
     }
   }, [])
 

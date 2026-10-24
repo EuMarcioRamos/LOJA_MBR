@@ -182,6 +182,10 @@ export default function Filtros({ modelos, filtroCategoria, setFiltroCategoria, 
       <div className="filtros-barra">
         <div className="filtros-barra-conteudo">
           <div className={`busca-pilula${pilulaAberta ? ' busca-pilula--aberta' : ''}`} onKeyDown={aoTeclarNoMenu}>
+            {/* Brilho girando na borda (a camada interna gira pela placa de vídeo) */}
+            <span className="busca-pilula-anel" aria-hidden="true">
+              <span className="busca-pilula-anel-luz" />
+            </span>
             <span className="busca-pilula-lupa">{IconeLupa}</span>
             <input
               ref={buscaInputRef}
