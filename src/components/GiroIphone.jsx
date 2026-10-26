@@ -60,38 +60,61 @@ export default function GiroIphone({ onVerProdutos, onEscolherCategoria }) {
     // desenhar nesse momento força uma decodificação síncrona (trava visível).
     // Por isso só marcamos como "pronto" depois que img.decode() resolve.
     const prontos = new Array(total).fill(false)
-    let ultimoDesenhado = -1
-    let agendado = false
+    const pedidos = new Array(total).fill(false)
     let desmontado = false
 
-    const desenhar = (pos) => {
-      // Se o frame ainda não chegou, usa o já carregado mais próximo dele
-      // (procurando pros dois lados, não só pra trás) pra reduzir saltos
-      let alvo = pos
-      if (!prontos[alvo]) {
-        let abaixo = pos - 1
-        let acima = pos + 1
-        while (abaixo >= 0 || acima < total) {
-          if (abaixo >= 0 && prontos[abaixo]) { alvo = abaixo; break }
-          if (acima < total && prontos[acima]) { alvo = acima; break }
-          abaixo--
-          acima++
-        }
+    // ── Desenho ──
+    // A posição no giro é contínua (ex.: 20.4 = entre os frames 20 e 21). Em
+    // movimento, os dois frames vizinhos são misturados e a rotação fica
+    // contínua, em vez de pular de frame em frame; parado, mostra só um frame,
+    // nítido. Em aparelho lento (modoLeve) mostra sempre um frame só.
+    let ultimoDesenho = ''
+    let modoLeve = false
+
+    // Se o frame ainda não chegou, usa o já carregado mais próximo dele
+    // (procurando pros dois lados) pra reduzir saltos
+    const prontoMaisProximo = (pos) => {
+      if (prontos[pos]) return pos
+      for (let d = 1; d < total; d++) {
+        if (pos - d >= 0 && prontos[pos - d]) return pos - d
+        if (pos + d < total && prontos[pos + d]) return pos + d
       }
-      const img = imagens[alvo]
-      if (!prontos[alvo] || alvo === ultimoDesenhado) return
-      ctx.clearRect(0, 0, canvas.width, canvas.height)
-      ctx.drawImage(img, 0, 0, canvas.width, canvas.height)
-      ultimoDesenhado = alvo
+      return -1
+    }
+
+    const desenhar = (pos, mistura) => {
+      const a = Math.floor(pos)
+      const b = Math.min(total - 1, a + 1)
+      const { width: w, height: h } = canvas
+      if (!modoLeve && mistura > 0.02 && mistura < 0.98 && prontos[a] && prontos[b]) {
+        const chave = `${a}:${Math.round(mistura * 32)}`
+        if (chave === ultimoDesenho) return
+        ctx.clearRect(0, 0, w, h)
+        ctx.globalAlpha = 1 - mistura
+        ctx.drawImage(imagens[a], 0, 0, w, h)
+        // 'lighter' soma os dois: a·(1-m) + b·m, a mistura certa pra frames com fundo transparente
+        ctx.globalCompositeOperation = 'lighter'
+        ctx.globalAlpha = mistura
+        ctx.drawImage(imagens[b], 0, 0, w, h)
+        ctx.globalCompositeOperation = 'source-over'
+        ctx.globalAlpha = 1
+        ultimoDesenho = chave
+        return
+      }
+      const alvo = prontoMaisProximo(mistura < 0.5 ? a : b)
+      if (alvo < 0 || String(alvo) === ultimoDesenho) return
+      ctx.clearRect(0, 0, w, h)
+      ctx.drawImage(imagens[alvo], 0, 0, w, h)
+      ultimoDesenho = String(alvo)
     }
 
     // p=0: costas · p=0.5: frente · p=1: costas de novo — a segunda metade
     // percorre os mesmos frames ao contrário (sem espelhar), então o giro
     // "volta" no meio em vez de continuar sempre pro mesmo lado
-    const quadroNoProgresso = (p) => {
+    const posicaoNoProgresso = (p) => {
       const meio = 0.5
-      if (p <= meio) return Math.round(total - 1 - (p / meio) * (total - 1))
-      return Math.round(((p - meio) / (1 - meio)) * (total - 1))
+      if (p <= meio) return (total - 1) * (1 - p / meio)
+      return (total - 1) * ((p - meio) / (1 - meio))
     }
 
     // Posição da seção medida uma vez (e de novo ao redimensionar), em vez de
@@ -108,19 +131,10 @@ export default function GiroIphone({ onVerProdutos, onEscolherCategoria }) {
     const progresso = () => Math.min(1, Math.max(0, (window.scrollY - topoSecao) / percurso))
 
     // Os textos só são reescritos quando a opacidade muda; com a página rolada
-    // além do giro (p parado em 1) nada é refeito a cada rolagem
+    // além do giro (p parado em 1) nada é refeito
     let ultimoP = -1
     const ultimaOpacidade = []
-
-    const atualizar = () => {
-      agendado = false
-      if (desmontado) return
-      if (semAnimacao) {
-        desenhar(total - 1)
-        return
-      }
-      const p = progresso()
-      desenhar(quadroNoProgresso(p))
+    const atualizarTextos = (p) => {
       if (p === ultimoP) return
       ultimoP = p
       textosRef.current.forEach((el, i) => {
@@ -135,15 +149,85 @@ export default function GiroIphone({ onVerProdutos, onEscolherCategoria }) {
       if (dicaRef.current) dicaRef.current.style.opacity = p > 0.04 ? 0 : 1
     }
 
+    // ── Rolagem suavizada ──
+    // A rotação "persegue" a posição da rolagem a cada quadro de tela (como o
+    // Lenis/GSAP fazem nos sites 3D), em vez de pular junto com os eventos de
+    // rolagem: no celular eles chegam em rajadas irregulares, o que parecia
+    // travamento. O loop só roda enquanto há movimento.
+    const SUAVIZACAO = 0.2 // fração do caminho que falta, percorrida por quadro (a 60fps)
+    // passo de um frame em unidades de progresso; bem abaixo disso de velocidade
+    // (quase parando), a mistura vai se acomodando no frame inteiro mais próximo
+    const PASSO_FRAME = 0.5 / (total - 1)
+    let alvoP = progresso()
+    let atualP = alvoP
+    let rodando = false
+    let ultimoTempo = 0
+    let mediaQuadro = 16.7
+
+    const renderizar = (velocidade) => {
+      if (semAnimacao) {
+        desenhar(total - 1, 0)
+        return
+      }
+      const pos = posicaoNoProgresso(atualP)
+      const fracao = pos - Math.floor(pos)
+      const inteiro = Math.round(fracao)
+      const k = Math.min(1, velocidade / (PASSO_FRAME * 0.1))
+      desenhar(pos, inteiro + (fracao - inteiro) * k)
+      atualizarTextos(atualP)
+    }
+
+    const passo = (agora) => {
+      if (desmontado) return
+      const dt = ultimoTempo ? Math.min(100, agora - ultimoTempo) : 16.7
+      ultimoTempo = agora
+      // aparelho lento: se os quadros passam de ~28ms em média, desliga a mistura
+      mediaQuadro += (dt - mediaQuadro) * 0.1
+      if (mediaQuadro > 28) modoLeve = true
+      const anterior = atualP
+      atualP += (alvoP - atualP) * (1 - Math.pow(1 - SUAVIZACAO, dt / 16.7))
+      const chegou = Math.abs(alvoP - atualP) < 0.0002
+      if (chegou) atualP = alvoP
+      // ao chegar, velocidade 0: termina sempre num frame nítido
+      renderizar(chegou ? 0 : Math.abs(atualP - anterior) * (16.7 / dt))
+      if (!chegou) {
+        requestAnimationFrame(passo)
+      } else {
+        rodando = false
+        ultimoTempo = 0
+      }
+    }
+
+    function aoRolar() {
+      if (semAnimacao) return
+      alvoP = progresso()
+      if (rodando || desmontado) return
+      rodando = true
+      requestAnimationFrame(passo)
+    }
+
+    // Quando um frame termina de carregar fora de um movimento, redesenha
+    // (agrupando os que terminam em rajada num desenho por quadro de tela)
+    let redesenhoAgendado = false
+    const redesenhar = () => {
+      if (rodando || redesenhoAgendado) return
+      redesenhoAgendado = true
+      requestAnimationFrame(() => {
+        redesenhoAgendado = false
+        if (!desmontado) renderizar(0)
+      })
+    }
+
     const carregar = (pos) => {
+      if (pedidos[pos]) return
+      pedidos[pos] = true
       const img = new Image()
       img.decoding = 'async'
       img.src = urlDoFrame(pos)
       imagens[pos] = img
       const marcarPronto = () => {
         prontos[pos] = true
-        // agrupa num desenho por quadro de tela (os frames terminam em rajada)
-        aoRolar()
+        redesenhar()
       }
       // No celular o frame é guardado já decodificado (ImageBitmap): o navegador
       // pode jogar fora a decodificação de imagens que não estão na página e
@@ -165,42 +249,39 @@ export default function GiroIphone({ onVerProdutos, onEscolherCategoria }) {
       else img.onload = pronto
     }
 
-    // Primeiro frame (costas, é o que aparece em p=0) na hora; o resto só
-    // depois que a página terminou de abrir, para não disputar banda com
-    // o catálogo e os preços. Carrega de trás pra frente (total-2, total-3, ...)
-    // porque é a ordem que a rolagem percorre primeiro a partir do frame
-    // inicial — senão os frames vizinhos ainda não chegaram e o giro trava.
+    // Carregamento progressivo: o frame inicial (costas, p=0) na hora e, logo
+    // em seguida, um a cada 8 — a volta inteira fica coberta cedo, com poucos
+    // KB. O resto vem depois que a página terminou de abrir (pra não disputar
+    // banda com o catálogo e os preços), de 4 em 4, 2 em 2 e por fim todos.
+    // Sempre de trás pra frente, que é a ordem que a rolagem percorre primeiro.
+    const carregarDeTantoEmTanto = (saltos) => {
+      for (const salto of saltos) {
+        for (let p = total - 1; p >= 0; p -= salto) carregar(p)
+      }
+    }
     carregar(total - 1)
     let idleId = null
     let timeoutId = null
-    const carregarResto = () => {
-      for (let p = total - 2; p >= 0; p--) carregar(p)
-    }
+    const carregarResto = () => carregarDeTantoEmTanto([4, 2, 1])
     const agendarResto = () => {
       if ('requestIdleCallback' in window) idleId = requestIdleCallback(carregarResto)
       else timeoutId = setTimeout(carregarResto, 200)
     }
     if (semAnimacao) {
-      // já carregado pela linha acima (mesmo frame de descanso)
-    } else if (document.readyState === 'complete') {
-      agendarResto()
+      // só o frame de descanso, já pedido acima
     } else {
-      window.addEventListener('load', agendarResto, { once: true })
+      carregarDeTantoEmTanto([8])
+      if (document.readyState === 'complete') agendarResto()
+      else window.addEventListener('load', agendarResto, { once: true })
     }
 
-    function aoRolar() {
-      if (!agendado) {
-        agendado = true
-        requestAnimationFrame(atualizar)
-      }
-    }
     const aoRedimensionar = () => {
       medirSecao()
       aoRolar()
     }
     window.addEventListener('scroll', aoRolar, { passive: true })
     window.addEventListener('resize', aoRedimensionar)
-    atualizar()
+    renderizar(0)
 
     return () => {
       desmontado = true
