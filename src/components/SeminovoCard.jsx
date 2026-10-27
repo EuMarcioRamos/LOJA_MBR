@@ -9,7 +9,39 @@ import { corDaLuz } from '../corDaLuz'
 // Bateria a partir de 90% em verde; abaixo, em branco (sem alarde, ainda é boa)
 const corDaBateria = (pct) => (pct >= 90 ? 'var(--whatsapp)' : '#e0e0e0')
 
-const rotulo = { fontSize: 10, color: 'var(--rotulo-card)', textTransform: 'uppercase', letterSpacing: '1px' }
+const icone = { width: 16, height: 16, viewBox: '0 0 24 24', fill: 'none', stroke: 'currentColor', strokeWidth: 1.8, strokeLinecap: 'round', strokeLinejoin: 'round', 'aria-hidden': true }
+
+const IconeBateria = (
+  <svg {...icone}>
+    <rect x="2" y="7" width="17" height="10" rx="2.5" />
+    <path d="M22 11v2" />
+    <path d="M6 10.5v3M9.5 10.5v3" />
+  </svg>
+)
+
+const IconeEstado = (
+  <svg {...icone}>
+    <path d="M12 3l2.4 4.9 5.4.8-3.9 3.8.9 5.4-4.8-2.6-4.8 2.6.9-5.4-3.9-3.8 5.4-.8z" />
+  </svg>
+)
+
+const IconeGarantia = (
+  <svg {...icone}>
+    <path d="M12 3l7 3v5c0 4.5-3 8.3-7 10-4-1.7-7-5.5-7-10V6l7-3z" />
+    <path d="M9 12l2 2 4-4" />
+  </svg>
+)
+
+// Uma linha da ficha: ícone, rótulo à esquerda e valor à direita
+function LinhaEstado({ icone: Icone, rotulo, children }) {
+  return (
+    <div className="seminovo-estado-linha">
+      <span className="seminovo-estado-icone">{Icone}</span>
+      <span className="seminovo-estado-rotulo">{rotulo}</span>
+      <span className="seminovo-estado-valor">{children}</span>
+    </div>
+  )
+}
 
 export default function SeminovoCard({ aparelho, carrinhoIds = [], onAlternarCarrinho }) {
   const [hover, setHover] = useState(false)
@@ -83,25 +115,16 @@ export default function SeminovoCard({ aparelho, carrinhoIds = [], onAlternarCar
           </div>
         </div>
 
-        {/* Estado do aparelho, um item por linha (rótulo à esquerda, valor à direita) */}
+        {/* Ficha do aparelho: um item por linha, separados por filetes */}
         <div className="seminovo-estado">
-          <div>
-            <div className="seminovo-estado-linha">
-              <span style={rotulo}>Bateria</span>
-              <span className="seminovo-estado-valor" style={{ color: corDaBateria(bateria) }}>{bateria}%</span>
-            </div>
-            <div className="seminovo-bateria" aria-hidden="true">
-              <span style={{ width: `${bateria}%`, background: corDaBateria(bateria) }} />
-            </div>
-          </div>
-          <div className="seminovo-estado-linha">
-            <span style={rotulo}>Estado</span>
-            <span className="seminovo-estado-valor">{estado}</span>
-          </div>
-          <div className="seminovo-estado-linha">
-            <span style={rotulo}>Garantia</span>
-            <span className="seminovo-estado-valor">{garantia}</span>
-          </div>
+          <LinhaEstado icone={IconeBateria} rotulo="Saúde da bateria">
+            <span className="seminovo-pilha" style={{ color: corDaBateria(bateria) }} aria-hidden="true">
+              <span style={{ width: `${bateria}%` }} />
+            </span>
+            <span style={{ color: corDaBateria(bateria) }}>{bateria}%</span>
+          </LinhaEstado>
+          <LinhaEstado icone={IconeEstado} rotulo="Estado">{estado}</LinhaEstado>
+          <LinhaEstado icone={IconeGarantia} rotulo="Garantia">{garantia}</LinhaEstado>
         </div>
       </div>
 

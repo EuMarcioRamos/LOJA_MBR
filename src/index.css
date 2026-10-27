@@ -33,9 +33,9 @@
   --luz-da-cor: 1;
 
   /* Rótulos dos cards (Armazenamento, Preço, Bateria...): o #555 de antes quase
-     sumia no fundo do card (#161616); este cinza dá ~4,5:1 de contraste, legível
-     sem competir com os valores em branco */
-  --rotulo-card: #808080;
+     sumia no fundo do card (#161616); este cinza dá ~6,4:1 de contraste, bem
+     legível e ainda abaixo do branco dos valores */
+  --rotulo-card: #9a9a9a;
 }
 
 body {
@@ -485,41 +485,76 @@ body {
   text-transform: uppercase;
 }
 
+/* Ficha do seminovo: lista com filetes entre as linhas, como numa ficha técnica */
 .seminovo-estado {
   display: flex;
   flex-direction: column;
-  gap: 9px;
-  padding: 12px 14px;
-  border-radius: 10px;
-  background: #1c1c1c;
+  padding: 0 14px;
+  border-radius: 12px;
+  background: #1b1b1b;
+  border: 1px solid #262626;
 }
 
 .seminovo-estado-linha {
   display: flex;
-  justify-content: space-between;
-  align-items: baseline;
-  gap: 12px;
+  align-items: center;
+  gap: 10px;
+  min-height: 40px;
+}
+
+.seminovo-estado-linha + .seminovo-estado-linha {
+  border-top: 1px solid #262626;
+}
+
+.seminovo-estado-icone {
+  display: flex;
+  color: var(--rotulo-card);
+}
+
+.seminovo-estado-rotulo {
+  font-size: 13px;
+  color: var(--rotulo-card);
 }
 
 .seminovo-estado-valor {
-  font-size: 14px;
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13.5px;
   font-weight: 600;
-  color: #e0e0e0;
+  color: #f2f2f2;
   white-space: nowrap;
 }
 
-.seminovo-bateria {
-  margin-top: 6px;
-  height: 3px;
-  border-radius: 2px;
-  background: #2e2e2e;
-  overflow: hidden;
+/* Pilha pequena preenchida até a porcentagem da bateria (a cor vem do currentColor) */
+.seminovo-pilha {
+  position: relative;
+  width: 22px;
+  height: 11px;
+  padding: 1.5px;
+  border: 1.5px solid currentColor;
+  border-radius: 3px;
+  opacity: 0.9;
 }
 
-.seminovo-bateria span {
+.seminovo-pilha::after {
+  content: '';
+  position: absolute;
+  right: -4px;
+  top: 50%;
+  width: 2px;
+  height: 4px;
+  border-radius: 0 1px 1px 0;
+  background: currentColor;
+  transform: translateY(-50%);
+}
+
+.seminovo-pilha span {
   display: block;
   height: 100%;
-  border-radius: inherit;
+  border-radius: 1px;
+  background: currentColor;
 }
 
 /* Aviso do protótipo, acima da grade de seminovos */
