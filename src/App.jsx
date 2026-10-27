@@ -2,11 +2,15 @@ import { useState, useMemo, useEffect, useRef } from 'react'
 import Header from './components/Header'
 import Filtros from './components/Filtros'
 import ModeloCard from './components/ModeloCard'
+import SeminovoCard from './components/SeminovoCard'
 import GiroIphone from './components/GiroIphone'
 import FaixaBeneficios from './components/FaixaBeneficios'
 import ProvaSocial from './components/ProvaSocial'
 import CarrinhoFlutuante from './components/CarrinhoFlutuante'
 import produtosBase from './data/produtos.json'
+// Protótipo: aparelhos de exemplo. A tabela de verdade (provavelmente uma aba
+// "Seminovos" na planilha, uma linha por aparelho) ainda vai ser definida
+import seminovosBase from './data/seminovos.json'
 import { PLANILHA_PRECOS_URL } from './config'
 import { buscarPrecosRemotos, aplicarPrecos, lerPrecosCache, salvarPrecosCache } from './data/precosRemotos'
 import { revelar } from './revelar'
@@ -80,6 +84,18 @@ const LINHAS_POR_CATEGORIA = {
   ],
 }
 
+// Categoria do menu a que um modelo pertence (ex.: "iPhone 15 Pro" -> "iPhone")
+function categoriaDoModelo(modelo) {
+  return Object.keys(ORDEM_MODELOS).find(cat => ORDEM_MODELOS[cat].includes(modelo)) ?? null
+}
+
+// Posição do modelo na ordem do menu, pra os seminovos seguirem a mesma ordem dos lacrados
+function ordemDoModelo(modelo) {
+  const cat = categoriaDoModelo(modelo)
+  const categorias = Object.keys(ORDEM_MODELOS)
+  return cat ? categorias.indexOf(cat) * 100 + ORDEM_MODELOS[cat].indexOf(modelo) : 9999
+}
+
 const LIMITE_INICIAL = 3
 const BREAKPOINT_DESKTOP = 767
 
@@ -102,6 +118,7 @@ export default function App() {
   const [filtroCategoria, setFiltroCategoria] = useState('Destaque')
   const [filtroModelo, setFiltroModelo] = useState('Todos')
   const [busca, setBusca] = useState('')
+  const [condicao, setCondicao] = useState('lacrado')
   const [mostrarTodos, setMostrarTodos] = useState(false)
   const [carrinho, setCarrinho] = useState(lerCarrinhoSalvo)
   const [carrinhoAberto, setCarrinhoAberto] = useState(false)
@@ -159,7 +176,7 @@ export default function App() {
 
   useEffect(() => {
     setMostrarTodos(false)
-  }, [filtroCategoria, filtroModelo, busca])
+  }, [filtroCategoria, filtroModelo, busca, condicao])
 
   // Rola até a lista, deixando o começo dela logo abaixo do Header (70px).
   // scrollTo com a posição calculada: o scrollIntoView parava antes no celular.
@@ -194,14 +211,16 @@ export default function App() {
   const ordemAtual = ORDEM_MODELOS[filtroCategoria] || []
   const linhasAtual = LINHAS_POR_CATEGORIA[filtroCategoria]
 
+  // Na linha de modelos do menu, só entram os que existem na condição escolhida
   const modelos = useMemo(() => {
+    const fonte = condicao === 'seminovo' ? seminovosBase : produtos
     if (linhasAtual) {
       return linhasAtual
-        .filter(l => l.modelos.some(m => produtos.some(p => p.modelo === m)))
+        .filter(l => l.modelos.some(m => fonte.some(p => p.modelo === m)))
         .map(l => l.linha)
     }
-    return ordemAtual.filter(m => produtos.some(p => p.modelo === m))
-  }, [filtroCategoria, produtos])
+    return ordemAtual.filter(m => fonte.some(p => p.modelo === m))
+  }, [filtroCategoria, produtos, condicao])
 
   const termoBusca = busca.trim().toLowerCase()
 
@@ -237,10 +256,49 @@ export default function App() {
     return ordemAtual.filter(m => map[m]).map(m => ({ modelo: m, variantes: map[m] }))
   }, [filtroCategoria, filtroModelo, produtos, termoBusca])
 
+  // Seminovos com os mesmos filtros da lista de lacrados (busca, categoria e
+  // linha/modelo); no Destaque aparecem todos
+  const seminovos = useMemo(() => {
+    return seminovosBase
+      .filter(s => {
+        if (termoBusca) return s.modelo.toLowerCase().includes(termoBusca)
+        if (filtroCategoria === 'Destaque') return true
+        if (categoriaDoModelo(s.modelo) !== filtroCategoria) return false
+        if (filtroModelo === 'Todos') return true
+        const linhaSel = linhasAtual?.find(l => l.linha === filtroModelo)
+        return linhaSel ? linhaSel.modelos.includes(s.modelo) : s.modelo === filtroModelo
+      })
+      .sort((a, b) => ordemDoModelo(a.modelo) - ordemDoModelo(b.modelo) || b.preco - a.preco)
+  }, [filtroCategoria, filtroModelo, termoBusca, linhasAtual])
+
+  // Menor preço de seminovo disponível de cada modelo, pro atalho no card do lacrado
+  const seminovoAPartirDe = useMemo(() => {
+    const menores = {}
+    seminovosBase.filter(s => s.disponivel).forEach(s => {
+      if (!menores[s.modelo] || s.preco < menores[s.modelo]) menores[s.modelo] = s.preco
+    })
+    return menores
+  }, [])
+
+  // Atalho do card do lacrado: muda pra seminovos já filtrado naquele modelo
+  // (no iPhone, na linha dele, que é como o menu filtra)
+  const verSeminovosDoModelo = (modelo) => {
+    const categoria = categoriaDoModelo(modelo)
+    const linha = LINHAS_POR_CATEGORIA[categoria]?.find(l => l.modelos.includes(modelo))
+    setCondicao('seminovo')
+    setFiltroCategoria(categoria ?? 'Destaque')
+    setFiltroModelo(linha ? linha.linha : modelo)
+    setBusca('')
+    irParaProdutos()
+  }
+
+  const emSeminovos = condicao === 'seminovo'
+  const itensDaLista = emSeminovos ? seminovos : grupos
   const categoriaIndisponivel = !termoBusca && filtroCategoria !== 'Destaque' && !ORDEM_MODELOS[filtroCategoria]
   // No computador a grade mostra todos os modelos; no celular começa com poucos e um "Ver mais".
-  const limitarLista = !isDesktop && (termoBusca || filtroModelo === 'Todos') && grupos.length > LIMITE_INICIAL && !mostrarTodos
+  const limitarLista = !isDesktop && (termoBusca || filtroModelo === 'Todos') && itensDaLista.length > LIMITE_INICIAL && !mostrarTodos
   const gruposExibidos = limitarLista ? grupos.slice(0, LIMITE_INICIAL) : grupos
+  const seminovosExibidos = limitarLista ? seminovos.slice(0, LIMITE_INICIAL) : seminovos
 
   return (
     <div style={{ minHeight: '100vh', background: '#0a0a0a' }}>
@@ -266,6 +324,8 @@ export default function App() {
           setFiltroModelo={setFiltroModelo}
           busca={busca}
           setBusca={setBusca}
+          condicao={condicao}
+          setCondicao={setCondicao}
           onIrParaLista={irParaProdutos}
         />
 
@@ -276,6 +336,35 @@ export default function App() {
               <p style={{ fontSize: 22, fontWeight: 600, color: '#fff', marginBottom: 8 }}>{filtroCategoria}</p>
               <p style={{ fontSize: 15, color: '#606060' }}>Em breve disponível na MasterBR.</p>
             </div>
+          ) : emSeminovos ? (
+            <>
+              <p className="aviso-prototipo">Protótipo · aparelhos, preços e estados de exemplo</p>
+              {seminovos.length === 0 ? (
+                <div style={{ textAlign: 'center', padding: '60px 0', color: '#8a8a8a' }}>
+                  <p style={{ fontSize: 16, marginBottom: 16 }}>Nenhum seminovo disponível nesse filtro agora.</p>
+                  <button className="btn-ver-mais" style={{ marginTop: 0 }} onClick={() => setCondicao('lacrado')}>
+                    Ver lacrados
+                  </button>
+                </div>
+              ) : (
+                <div className="produtos-grid">
+                  {seminovosExibidos.map(aparelho => (
+                    <div className="revelar" ref={revelar} key={aparelho.id}>
+                      <SeminovoCard
+                        aparelho={aparelho}
+                        carrinhoIds={carrinhoIds}
+                        onAlternarCarrinho={alternarCarrinho}
+                      />
+                    </div>
+                  ))}
+                </div>
+              )}
+              {limitarLista && (
+                <button className="btn-ver-mais" onClick={() => setMostrarTodos(true)}>
+                  Ver mais seminovos ({seminovos.length - LIMITE_INICIAL})
+                </button>
+              )}
+            </>
           ) : grupos.length === 0 ? (
             <div style={{ textAlign: 'center', padding: '80px 0', color: '#606060' }}>
               <p style={{ fontSize: 16 }}>Nenhum produto encontrado.</p>
@@ -293,6 +382,8 @@ export default function App() {
                       precosProntos={precosProntos}
                       carrinhoIds={carrinhoIds}
                       onAlternarCarrinho={alternarCarrinho}
+                      seminovoAPartirDe={seminovoAPartirDe[modelo] ?? null}
+                      onVerSeminovos={() => verSeminovosDoModelo(modelo)}
                     />
                   </div>
                 ))}

@@ -110,7 +110,13 @@ const IconeSeta = (
   </svg>
 )
 
-export default function Filtros({ modelos, filtroCategoria, setFiltroCategoria, filtroModelo, setFiltroModelo, busca, setBusca, onIrParaLista }) {
+// Lacrados (catálogo) ou seminovos (aparelhos avulsos, cada um com seu estado)
+const CONDICOES = [
+  { id: 'lacrado', label: 'Lacrados' },
+  { id: 'seminovo', label: 'Seminovos' },
+]
+
+export default function Filtros({ modelos, filtroCategoria, setFiltroCategoria, filtroModelo, setFiltroModelo, busca, setBusca, condicao, setCondicao, onIrParaLista }) {
   const [modelosVisiveis, setModelosVisiveis] = useState(modelos)
   const [categoriaVisivel, setCategoriaVisivel] = useState(filtroCategoria)
   const [aberto, setAberto] = useState(false)
@@ -260,6 +266,23 @@ export default function Filtros({ modelos, filtroCategoria, setFiltroCategoria, 
               <span className="busca-pilula-rotulo">Buscar produto</span>
               <span className="busca-pilula-seta">{IconeSeta}</span>
             </button>
+          </div>
+
+          {/* Chave Lacrados | Seminovos: fica na barra presa, sempre à mão.
+              No celular desce pra uma linha própria, abaixo da pílula */}
+          <div className="condicao-chave" role="radiogroup" aria-label="Condição do aparelho">
+            {CONDICOES.map(c => (
+              <button
+                key={c.id}
+                type="button"
+                role="radio"
+                aria-checked={condicao === c.id}
+                className={`condicao-opcao${condicao === c.id ? ' condicao-opcao--ativa' : ''}`}
+                onClick={() => setCondicao(c.id)}
+              >
+                {c.label}
+              </button>
+            ))}
           </div>
 
           {!pilulaAberta && filtroAtivo && (

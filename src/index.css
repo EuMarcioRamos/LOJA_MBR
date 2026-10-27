@@ -461,6 +461,124 @@ body {
   white-space: nowrap;
 }
 
+/* ── Card do seminovo (SeminovoCard.jsx) ── */
+.selo-seminovo {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  z-index: 2;
+  padding: 5px 10px;
+  border-radius: 50px;
+  background: rgba(10, 10, 10, 0.7);
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(8px);
+  color: #fff;
+  font-size: 10.5px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+
+.seminovo-estado {
+  display: grid;
+  /* colunas do tamanho do conteúdo: com 3 colunas iguais, "Muito bom" quebrava em duas linhas */
+  grid-template-columns: repeat(3, auto);
+  justify-content: space-between;
+  gap: 8px;
+  padding: 12px;
+  border-radius: 10px;
+  background: #1c1c1c;
+}
+
+.seminovo-estado-valor {
+  font-size: 14px;
+  font-weight: 600;
+  color: #e0e0e0;
+  white-space: nowrap;
+}
+
+.seminovo-bateria {
+  margin-top: 6px;
+  height: 3px;
+  border-radius: 2px;
+  background: #2e2e2e;
+  overflow: hidden;
+}
+
+.seminovo-bateria span {
+  display: block;
+  height: 100%;
+  border-radius: inherit;
+}
+
+/* Atalho no card do lacrado: "Também em seminovo a partir de R$ X" */
+.atalho-seminovo {
+  align-self: flex-start;
+  padding: 0;
+  border: none;
+  background: none;
+  color: #9a9a9a;
+  font-size: 12.5px;
+  font-family: inherit;
+  text-align: left;
+  cursor: pointer;
+  transition: color 0.15s ease;
+}
+
+.atalho-seminovo strong {
+  color: #e0e0e0;
+  font-weight: 600;
+}
+
+.atalho-seminovo:hover,
+.atalho-seminovo:hover strong {
+  color: #fff;
+}
+
+/* Aviso do protótipo, acima da grade de seminovos */
+.aviso-prototipo {
+  margin-bottom: 16px;
+  font-size: 12.5px;
+  color: #8a8a8a;
+}
+
+/* Chave Lacrados | Seminovos: mesma pílula escura da busca, com a opção
+   escolhida no branco dos seletores do card */
+.condicao-chave {
+  flex: none;
+  display: flex;
+  gap: 2px;
+  padding: 3px;
+  height: 44px;
+  border-radius: 50px;
+  background: rgba(21, 21, 21, 0.6);
+  border: 1px solid #2a2a2a;
+}
+
+.condicao-opcao {
+  padding: 0 16px;
+  border: none;
+  border-radius: 50px;
+  background: transparent;
+  color: #cfcfcf;
+  font-size: 14px;
+  font-weight: 600;
+  font-family: inherit;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: background 0.2s ease, color 0.2s ease;
+}
+
+.condicao-opcao:hover:not(.condicao-opcao--ativa) {
+  color: #fff;
+}
+
+.condicao-opcao--ativa {
+  background: var(--vidro-branco);
+  color: #000;
+}
+
 /* Celular: pílula um pouco menor; aberta, ocupa a largura toda */
 @media (max-width: 768px) {
   .busca-pilula {
@@ -480,6 +598,18 @@ body {
   }
   .busca-pilula-input {
     padding: 0 84px 0 44px;
+  }
+  /* a chave desce pra uma linha própria, com as duas opções dividindo a largura */
+  .filtros-barra-conteudo {
+    flex-wrap: wrap;
+  }
+  .condicao-chave {
+    order: 3;
+    width: 100%;
+    height: 40px;
+  }
+  .condicao-opcao {
+    flex: 1;
   }
 }
 
