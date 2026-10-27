@@ -9,7 +9,7 @@ import { corDaLuz } from '../corDaLuz'
 // Bateria a partir de 90% em verde; abaixo, em branco (sem alarde, ainda é boa)
 const corDaBateria = (pct) => (pct >= 90 ? 'var(--whatsapp)' : '#e0e0e0')
 
-const rotulo = { fontSize: 10, color: '#555', textTransform: 'uppercase', letterSpacing: '1px', marginBottom: 5 }
+const rotulo = { fontSize: 10, color: 'var(--rotulo-card)', textTransform: 'uppercase', letterSpacing: '1px' }
 
 export default function SeminovoCard({ aparelho, carrinhoIds = [], onAlternarCarrinho }) {
   const [hover, setHover] = useState(false)
@@ -83,22 +83,24 @@ export default function SeminovoCard({ aparelho, carrinhoIds = [], onAlternarCar
           </div>
         </div>
 
-        {/* Estado do aparelho */}
+        {/* Estado do aparelho, um item por linha (rótulo à esquerda, valor à direita) */}
         <div className="seminovo-estado">
           <div>
-            <p style={rotulo}>Bateria</p>
-            <p className="seminovo-estado-valor" style={{ color: corDaBateria(bateria) }}>{bateria}%</p>
+            <div className="seminovo-estado-linha">
+              <span style={rotulo}>Bateria</span>
+              <span className="seminovo-estado-valor" style={{ color: corDaBateria(bateria) }}>{bateria}%</span>
+            </div>
             <div className="seminovo-bateria" aria-hidden="true">
               <span style={{ width: `${bateria}%`, background: corDaBateria(bateria) }} />
             </div>
           </div>
-          <div>
-            <p style={rotulo}>Estado</p>
-            <p className="seminovo-estado-valor">{estado}</p>
+          <div className="seminovo-estado-linha">
+            <span style={rotulo}>Estado</span>
+            <span className="seminovo-estado-valor">{estado}</span>
           </div>
-          <div>
-            <p style={rotulo}>Garantia</p>
-            <p className="seminovo-estado-valor">{garantia}</p>
+          <div className="seminovo-estado-linha">
+            <span style={rotulo}>Garantia</span>
+            <span className="seminovo-estado-valor">{garantia}</span>
           </div>
         </div>
       </div>
@@ -106,7 +108,7 @@ export default function SeminovoCard({ aparelho, carrinhoIds = [], onAlternarCar
       {/* Preço + CTA */}
       <div style={{ marginTop: 'auto', display: 'flex', flexDirection: 'column', gap: 10 }}>
         <div>
-          <p style={{ fontSize: 10, color: '#555', marginBottom: 1 }}>Preço</p>
+          <p style={{ fontSize: 10, color: 'var(--rotulo-card)', marginBottom: 1 }}>Preço</p>
           <p style={{ fontSize: 24, fontWeight: 700, color: disponivel ? '#fff' : '#444', letterSpacing: '-0.5px' }}>
             {precoTexto}
           </p>

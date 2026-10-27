@@ -2,7 +2,7 @@ import { useState, useEffect, useRef } from 'react'
 import { WHATSAPP_NUMERO } from '../config'
 import { corDaLuz } from '../corDaLuz'
 
-export default function ModeloCard({ modelo, variantes, precosProntos = true, carrinhoIds = [], onAlternarCarrinho, seminovoAPartirDe = null, onVerSeminovos }) {
+export default function ModeloCard({ modelo, variantes, precosProntos = true, carrinhoIds = [], onAlternarCarrinho }) {
   const chips = [...new Set(variantes.map(v => v.chip).filter(Boolean))]
   const temChips = chips.length > 1
 
@@ -249,7 +249,7 @@ export default function ModeloCard({ modelo, variantes, precosProntos = true, ca
         {/* Seletor de chip */}
         {temChips && (
           <div>
-            <p style={{ fontSize: 10, color: '#555', textTransform: 'uppercase', letterSpacing: '1px', marginBottom: 7 }}>
+            <p style={{ fontSize: 10, color: 'var(--rotulo-card)', textTransform: 'uppercase', letterSpacing: '1px', marginBottom: 7 }}>
               Chip
             </p>
             <div className="btn-selector-row">
@@ -270,7 +270,7 @@ export default function ModeloCard({ modelo, variantes, precosProntos = true, ca
         {/* Seletor de tamanho */}
         {temTamanhos && (
           <div>
-            <p style={{ fontSize: 10, color: '#555', textTransform: 'uppercase', letterSpacing: '1px', marginBottom: 7 }}>
+            <p style={{ fontSize: 10, color: 'var(--rotulo-card)', textTransform: 'uppercase', letterSpacing: '1px', marginBottom: 7 }}>
               Tamanho
             </p>
             <div className="btn-selector-row">
@@ -290,7 +290,7 @@ export default function ModeloCard({ modelo, variantes, precosProntos = true, ca
 
         {/* Seletor de armazenamento / conectividade */}
         <div>
-          <p style={{ fontSize: 10, color: '#555', textTransform: 'uppercase', letterSpacing: '1px', marginBottom: 7 }}>
+          <p style={{ fontSize: 10, color: 'var(--rotulo-card)', textTransform: 'uppercase', letterSpacing: '1px', marginBottom: 7 }}>
             {modelo.startsWith('Apple Watch')
               ? 'Conectividade'
               : modelo.startsWith('MacBook') || modelo.startsWith('Mac mini')
@@ -320,7 +320,7 @@ export default function ModeloCard({ modelo, variantes, precosProntos = true, ca
       {/* Preço + CTA */}
       <div style={{ marginTop: 'auto', display: 'flex', flexDirection: 'column', gap: 10 }}>
         <div>
-          <p style={{ fontSize: 10, color: '#555', marginBottom: 1 }}>Preço</p>
+          <p style={{ fontSize: 10, color: 'var(--rotulo-card)', marginBottom: 1 }}>Preço</p>
           {precosProntos ? (
             <>
               <p style={{
@@ -343,14 +343,6 @@ export default function ModeloCard({ modelo, variantes, precosProntos = true, ca
             </div>
           )}
         </div>
-
-        {/* Quando o modelo também existe em seminovo, um atalho discreto pra lá */}
-        {seminovoAPartirDe && (
-          <button type="button" className="atalho-seminovo" onClick={onVerSeminovos}>
-            Também em seminovo a partir de{' '}
-            <strong>{seminovoAPartirDe.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL', maximumFractionDigits: 0 })}</strong> →
-          </button>
-        )}
 
         <div style={{ display: 'flex', gap: 8 }}>
           <a

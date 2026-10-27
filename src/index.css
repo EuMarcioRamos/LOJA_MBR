@@ -31,6 +31,11 @@
      outra; esta é a força da luz no tom da cor atrás da foto.
      1 = com a luz (opção B) · 0 = só o dissolver (opção A) · entre os dois, mais suave */
   --luz-da-cor: 1;
+
+  /* Rótulos dos cards (Armazenamento, Preço, Bateria...): o #555 de antes quase
+     sumia no fundo do card (#161616); este cinza dá ~4,5:1 de contraste, legível
+     sem competir com os valores em branco */
+  --rotulo-card: #808080;
 }
 
 body {
@@ -481,14 +486,19 @@ body {
 }
 
 .seminovo-estado {
-  display: grid;
-  /* colunas do tamanho do conteúdo: com 3 colunas iguais, "Muito bom" quebrava em duas linhas */
-  grid-template-columns: repeat(3, auto);
-  justify-content: space-between;
-  gap: 8px;
-  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 9px;
+  padding: 12px 14px;
   border-radius: 10px;
   background: #1c1c1c;
+}
+
+.seminovo-estado-linha {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 12px;
 }
 
 .seminovo-estado-valor {
@@ -510,30 +520,6 @@ body {
   display: block;
   height: 100%;
   border-radius: inherit;
-}
-
-/* Atalho no card do lacrado: "Também em seminovo a partir de R$ X" */
-.atalho-seminovo {
-  align-self: flex-start;
-  padding: 0;
-  border: none;
-  background: none;
-  color: #9a9a9a;
-  font-size: 12.5px;
-  font-family: inherit;
-  text-align: left;
-  cursor: pointer;
-  transition: color 0.15s ease;
-}
-
-.atalho-seminovo strong {
-  color: #e0e0e0;
-  font-weight: 600;
-}
-
-.atalho-seminovo:hover,
-.atalho-seminovo:hover strong {
-  color: #fff;
 }
 
 /* Aviso do protótipo, acima da grade de seminovos */

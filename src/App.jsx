@@ -271,27 +271,6 @@ export default function App() {
       .sort((a, b) => ordemDoModelo(a.modelo) - ordemDoModelo(b.modelo) || b.preco - a.preco)
   }, [filtroCategoria, filtroModelo, termoBusca, linhasAtual])
 
-  // Menor preço de seminovo disponível de cada modelo, pro atalho no card do lacrado
-  const seminovoAPartirDe = useMemo(() => {
-    const menores = {}
-    seminovosBase.filter(s => s.disponivel).forEach(s => {
-      if (!menores[s.modelo] || s.preco < menores[s.modelo]) menores[s.modelo] = s.preco
-    })
-    return menores
-  }, [])
-
-  // Atalho do card do lacrado: muda pra seminovos já filtrado naquele modelo
-  // (no iPhone, na linha dele, que é como o menu filtra)
-  const verSeminovosDoModelo = (modelo) => {
-    const categoria = categoriaDoModelo(modelo)
-    const linha = LINHAS_POR_CATEGORIA[categoria]?.find(l => l.modelos.includes(modelo))
-    setCondicao('seminovo')
-    setFiltroCategoria(categoria ?? 'Destaque')
-    setFiltroModelo(linha ? linha.linha : modelo)
-    setBusca('')
-    irParaProdutos()
-  }
-
   const emSeminovos = condicao === 'seminovo'
   const itensDaLista = emSeminovos ? seminovos : grupos
   const categoriaIndisponivel = !termoBusca && filtroCategoria !== 'Destaque' && !ORDEM_MODELOS[filtroCategoria]
@@ -382,8 +361,6 @@ export default function App() {
                       precosProntos={precosProntos}
                       carrinhoIds={carrinhoIds}
                       onAlternarCarrinho={alternarCarrinho}
-                      seminovoAPartirDe={seminovoAPartirDe[modelo] ?? null}
-                      onVerSeminovos={() => verSeminovosDoModelo(modelo)}
                     />
                   </div>
                 ))}
