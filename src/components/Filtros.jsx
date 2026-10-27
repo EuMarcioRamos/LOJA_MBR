@@ -133,13 +133,29 @@ export default function Filtros({ modelos, filtroCategoria, setFiltroCategoria, 
   }
 
   // A sentinela fica onde a barra começa: quando ela passa pra baixo do header,
-  // a barra está presa
+  // a barra está presa. Medida a cada rolagem (um cálculo por quadro de tela),
+  // e não com IntersectionObserver: numa rolagem rápida a sentinela de 1px
+  // pulava de baixo pra cima da tela sem nunca "aparecer", o observador não
+  // avisava e a barra seguia como solta mesmo presa no topo
   useEffect(() => {
-    const observador = new IntersectionObserver(([e]) => {
-      setPresa(!e.isIntersecting && e.boundingClientRect.top < ALTURA_HEADER + 1)
-    }, { rootMargin: `-${ALTURA_HEADER + 1}px 0px 0px 0px` })
-    observador.observe(sentinelaRef.current)
-    return () => observador.disconnect()
+    let agendado = false
+    const medir = () => {
+      agendado = false
+      const sentinela = sentinelaRef.current
+      if (sentinela) setPresa(sentinela.getBoundingClientRect().top < ALTURA_HEADER + 1)
+    }
+    const aoRolar = () => {
+      if (agendado) return
+      agendado = true
+      requestAnimationFrame(medir)
+    }
+    medir()
+    window.addEventListener('scroll', aoRolar, { passive: true })
+    window.addEventListener('resize', aoRolar)
+    return () => {
+      window.removeEventListener('scroll', aoRolar)
+      window.removeEventListener('resize', aoRolar)
+    }
   }, [])
 
   const limparFiltro = () => {
@@ -148,15 +164,22 @@ export default function Filtros({ modelos, filtroCategoria, setFiltroCategoria, 
     setBusca('')
   }
 
-  const abrirMenu = () => {
-    // Com a lista rolada, primeiro volta pro começo dela, onde o menu abre
-    if (presa) onIrParaLista()
+  const abrirAgora = () => {
     setAberto(true)
     // No computador o cursor já vai pra busca. No celular não, pra o teclado
     // não subir por cima das categorias — é só tocar no campo pra digitar
     if (window.matchMedia('(pointer: fine)').matches) {
       buscaInputRef.current?.focus({ preventScroll: true })
     }
+  }
+
+  const abrirMenu = () => {
+    // Com a lista rolada, primeiro volta pro começo dela, onde o menu abre, e só
+    // abre quando a rolagem termina: o menu crescendo no meio da rolagem fazia o
+    // navegador reajustar a posição da página (scroll anchoring), a rolagem
+    // parava no meio do caminho e a busca ficava cortada na tela
+    if (presa) onIrParaLista().then(abrirAgora)
+    else abrirAgora()
   }
 
   const fecharMenu = () => {

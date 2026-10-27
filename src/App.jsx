@@ -162,11 +162,27 @@ export default function App() {
   }, [filtroCategoria, filtroModelo, busca])
 
   // Rola até a lista, deixando o começo dela logo abaixo do Header (70px).
-  // scrollTo com a posição calculada: o scrollIntoView parava antes no celular
-  const irParaProdutos = () => {
+  // scrollTo com a posição calculada: o scrollIntoView parava antes no celular.
+  // Devolve uma promessa que resolve quando a rolagem termina, pra quem precisa
+  // mexer no layout só depois (ver abrirMenu em Filtros.jsx)
+  const irParaProdutos = () => new Promise((resolve) => {
     const loja = filtrosRef.current
-    if (loja) window.scrollTo({ top: loja.getBoundingClientRect().top + window.scrollY - 70, behavior: 'smooth' })
-  }
+    if (!loja) return resolve()
+    const destino = loja.getBoundingClientRect().top + window.scrollY - 70
+    if (Math.abs(destino - window.scrollY) < 2) return resolve()
+    let feito = false
+    const terminar = () => {
+      if (feito) return
+      feito = true
+      window.removeEventListener('scrollend', terminar)
+      clearTimeout(limite)
+      resolve()
+    }
+    window.addEventListener('scrollend', terminar)
+    // navegador sem o evento scrollend: espera o tempo de uma rolagem suave
+    const limite = setTimeout(terminar, 1000)
+    window.scrollTo({ top: destino, behavior: 'smooth' })
+  })
 
   const escolherCategoriaDoHero = (categoria) => {
     setFiltroCategoria(categoria)
