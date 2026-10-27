@@ -6,9 +6,6 @@ import { corDaLuz } from '../corDaLuz'
 // só (cor e armazenamento já definidos), então no lugar dos seletores entra o
 // estado do aparelho: bateria, conservação e garantia da loja.
 
-// Bateria a partir de 90% em verde; abaixo, em branco (sem alarde, ainda é boa)
-const corDaBateria = (pct) => (pct >= 90 ? 'var(--whatsapp)' : '#e0e0e0')
-
 const icone = { width: 16, height: 16, viewBox: '0 0 24 24', fill: 'none', stroke: 'currentColor', strokeWidth: 1.8, strokeLinecap: 'round', strokeLinejoin: 'round', 'aria-hidden': true }
 
 const IconeBateria = (
@@ -118,10 +115,10 @@ export default function SeminovoCard({ aparelho, carrinhoIds = [], onAlternarCar
         {/* Ficha do aparelho: um item por linha, separados por filetes */}
         <div className="seminovo-estado">
           <LinhaEstado icone={IconeBateria} rotulo="Saúde da bateria">
-            <span className="seminovo-pilha" style={{ color: corDaBateria(bateria) }} aria-hidden="true">
+            <span className="seminovo-pilha" style={{ color: 'var(--whatsapp)' }} aria-hidden="true">
               <span style={{ width: `${bateria}%` }} />
             </span>
-            <span style={{ color: corDaBateria(bateria) }}>{bateria}%</span>
+            <span style={{ color: 'var(--whatsapp)' }}>{bateria}%</span>
           </LinhaEstado>
           <LinhaEstado icone={IconeEstado} rotulo="Estado">{estado}</LinhaEstado>
           <LinhaEstado icone={IconeGarantia} rotulo="Garantia">{garantia}</LinhaEstado>
