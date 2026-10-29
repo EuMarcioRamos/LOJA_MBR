@@ -454,7 +454,7 @@ const MESES_ABREV = {
 // Maiúsculas, sem acento, hífen vira espaço: "Azul-petróleo" -> "AZUL PETROLEO"
 function normalizar(texto) {
   return String(texto == null ? '' : texto)
-    .normalize('NFD').replace(/[̀-ͯ]/g, '')
+    .normalize('NFD').replace(/[\u0300-\u036f]/g, '')
     .replace(/[ªº°]/g, '')
     .toUpperCase()
     .replace(/[-_]/g, ' ')
