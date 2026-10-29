@@ -315,7 +315,7 @@ const COLUNAS_SEMINOVOS = [
   'IMEI (final)', 'Modelo', 'Cor', 'Armazenamento', 'Bateria (%)', 'Preço',
   'Parcelas', 'Valor Parcela', 'Garantia Apple', 'Garantia MasterBR',
   'Acompanha', 'Status', 'Atualizado em', 'Observação', 'Ciclos',
-  'Avisos (aparecem no site)',
+  'Avisos',
 ]
 const CAMPOS_SEMINOVOS = [
   'imei', 'modelo', 'cor', 'armazenamento', 'bateria', 'preco',
@@ -472,8 +472,9 @@ function compacto(texto) {
 
 // Tira o "[29/10 14:32] Fulano:" que o WhatsApp põe ao copiar, os emojis
 // e os asteriscos de negrito
-// O ⚠️ vira a marca "[AVISO]" antes dos emojis saírem: essas linhas
-// (peça trocada etc.) aparecem no card
+// O ⚠️ vira a marca "[AVISO]" antes dos emojis saírem: essas linhas (peça
+// trocada etc.) e os ciclos ficam só na planilha, pra consulta da loja; o
+// site não mostra (são passados na conversa do WhatsApp)
 function limparLinha(linha) {
   return String(linha)
     .replace(/\u26A0\uFE0F?/g, ' [AVISO] ')
@@ -839,8 +840,6 @@ function lerSeminovosParaSite(planilha) {
       garantiaApple: l.garantiaApple,
       garantiaLoja: l.garantiaLoja,
       acompanha: l.acompanha,
-      ciclos: l.ciclos,
-      avisos: l.avisos ? l.avisos.split(/\s*;\s*/).filter(Boolean) : [],
       reservado: statusNormalizado(l.status) === 'RESERVADO',
     }))
 }

@@ -545,31 +545,6 @@ body {
   color: #1a1206;
 }
 
-/* Avisos do anúncio (peça trocada etc.) */
-.seminovo-avisos {
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-  margin: 0;
-  padding: 0;
-  list-style: none;
-}
-
-.seminovo-avisos li {
-  display: flex;
-  align-items: flex-start;
-  gap: 7px;
-  font-size: 12.5px;
-  line-height: 1.35;
-  color: #d8c49a;
-}
-
-.seminovo-avisos svg {
-  flex-shrink: 0;
-  margin-top: 1px;
-  color: #e0a028;
-}
-
 /* Silhueta no lugar da foto, nos modelos ainda sem foto */
 .seminovo-foto-generica {
   position: relative;

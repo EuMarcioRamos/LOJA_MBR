@@ -31,22 +31,6 @@ const IconeCaixa = (
   </svg>
 )
 
-const IconeCiclos = (
-  <svg {...icone}>
-    <path d="M20 11a8 8 0 0 0-14.6-4.5L4 8" />
-    <path d="M4 3v5h5" />
-    <path d="M4 13a8 8 0 0 0 14.6 4.5L20 16" />
-    <path d="M20 21v-5h-5" />
-  </svg>
-)
-
-const IconeAviso = (
-  <svg {...icone} width={14} height={14}>
-    <path d="M12 3.5L2.5 20h19L12 3.5z" />
-    <path d="M12 10v4.5M12 17.5v.01" />
-  </svg>
-)
-
 // Modelos sem foto cadastrada (ver seminovosExtras.js): silhueta de iPhone
 const FotoGenerica = (
   <svg className="seminovo-foto-generica" viewBox="0 0 60 120" aria-hidden="true">
@@ -79,7 +63,7 @@ export default function SeminovoCard({ aparelho, carrinhoIds = [], onAlternarCar
   const [hover, setHover] = useState(false)
   const {
     imei, modelo, cor, corHex, imagem, armazenamento, preco, parcelas, valorParcela,
-    bateria, ciclos, garantiaApple, garantiaLoja, acompanha, avisos = [], reservado,
+    bateria, garantiaApple, garantiaLoja, acompanha, reservado,
   } = aparelho
   const disponivel = !reservado
   const temBateria = bateria != null && bateria !== ''
@@ -168,20 +152,10 @@ export default function SeminovoCard({ aparelho, carrinhoIds = [], onAlternarCar
               <span style={{ color: 'var(--whatsapp)' }}>{bateria}%</span>
             </LinhaEstado>
           )}
-          {ciclos > 0 && <LinhaEstado icone={IconeCiclos} rotulo="Ciclos de carga">{ciclos}</LinhaEstado>}
           {garantiaApple && <LinhaEstado icone={IconeCalendario} rotulo="Garantia Apple">{garantiaApple}</LinhaEstado>}
           {garantiaLoja && <LinhaEstado icone={IconeGarantia} rotulo="Garantia MasterBR">{garantiaLoja}</LinhaEstado>}
           {acompanha && <LinhaEstado icone={IconeCaixa} rotulo="Acompanha" quebra>{acompanha}</LinhaEstado>}
         </div>
-
-        {/* Avisos do anúncio (peça trocada etc.), com o mesmo destaque do ⚠️ do WhatsApp */}
-        {avisos.length > 0 && (
-          <ul className="seminovo-avisos">
-            {avisos.map(aviso => (
-              <li key={aviso}>{IconeAviso}<span>{aviso}</span></li>
-            ))}
-          </ul>
-        )}
       </div>
 
       {/* Preço + CTA */}

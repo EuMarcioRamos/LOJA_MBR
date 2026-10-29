@@ -218,11 +218,12 @@ O que importa: **modelo e armazenamento na primeira linha, cor logo
 abaixo, e cada aparelho termina na linha do IMEI**. A cor pode vir em
 inglês (SILVER, DEEP BLUE, NATURAL TITANIUM…) ou em português.
 
-Também são lidos, quando aparecem:
-- `🔄 185 CICLOS` → coluna **Ciclos**, mostrada no card.
-- Linhas com `⚠️` (ex.: `⚠️ TAMPA TRASEIRA SUBSTITUÍDA`) → coluna
-  **Avisos**, mostrados no card logo abaixo da ficha.
-- Separadores (`-`) e o título da mensagem são ignorados.
+Também são lidos, mas ficam **só na planilha** (o site não mostra; essas
+informações são passadas na conversa do WhatsApp):
+- `🔄 185 CICLOS` → coluna **Ciclos**.
+- Linhas com `⚠️` (ex.: `⚠️ TAMPA TRASEIRA SUBSTITUÍDA`) → coluna **Avisos**.
+
+Separadores (`-`) e o título da mensagem são ignorados.
 
 Dois aparelhos podem ter o mesmo final de IMEI se forem de modelos
 diferentes: a identidade de cada um é **IMEI + modelo**.
