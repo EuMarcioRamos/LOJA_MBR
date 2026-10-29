@@ -10,6 +10,8 @@
 //    um preço diferente do padrão (exceção), e sempre pra controlar a
 //    disponibilidade de cada cor (isso sim varia peça a peça).
 
+import { FOTOS_SEMINOVOS, CORES_SEMINOVOS } from './seminovosExtras'
+
 export function modeloId(variante) {
   return [variante.modelo, variante.chip, variante.tamanho].filter(Boolean).join(' ')
 }
@@ -54,14 +56,20 @@ export function salvarPrecosCache(precos) {
 }
 
 // Seminovos vêm da aba "Seminovos" (uma linha por aparelho, identificado pelo
-// final do IMEI). A planilha só traz modelo e cor; a foto e o tom da cor saem
-// do catálogo, do lacrado de mesmo modelo e cor.
+// final do IMEI + modelo). A planilha só traz modelo e cor; a foto e o tom da
+// cor saem do catálogo, do lacrado de mesmo modelo e cor, ou do
+// seminovosExtras.js nos modelos que não são vendidos lacrados
 export function montarSeminovos(lista, produtosBase) {
-  return lista.flatMap(aparelho => {
-    const doModelo = produtosBase.filter(p => p.modelo === aparelho.modelo)
-    const variante = doModelo.find(p => p.cor === aparelho.cor) || doModelo[0]
-    if (!variante) return []
-    return [{ ...aparelho, id: `semi-${aparelho.imei}`, imagem: variante.imagem, corHex: variante.corHex }]
+  return lista.map(aparelho => {
+    const variante = produtosBase.find(p => p.modelo === aparelho.modelo && p.cor === aparelho.cor)
+    const mesmaCor = produtosBase.find(p => p.cor === aparelho.cor)
+    const slug = aparelho.modelo.toLowerCase().replace(/[^a-z0-9]+/g, '-')
+    return {
+      ...aparelho,
+      id: `semi-${aparelho.imei}-${slug}`,
+      imagem: variante?.imagem || FOTOS_SEMINOVOS[`${aparelho.modelo}|${aparelho.cor}`] || null,
+      corHex: variante?.corHex || CORES_SEMINOVOS[aparelho.cor] || mesmaCor?.corHex || '#8a8a8a',
+    }
   })
 }
 

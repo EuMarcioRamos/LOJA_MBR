@@ -299,8 +299,9 @@ function aplicarReajustePercentual() {
 // ────────────────────────────────────────────────────────────
 // 3. Seminovos — uma linha por aparelho, preenchida pela lista do WhatsApp
 // ────────────────────────────────────────────────────────────
-// Cada aparelho é identificado pelo final do IMEI que vem na lista. Ao
-// importar, a lista é tratada como o ESTOQUE COMPLETO:
+// Cada aparelho é identificado pelo final do IMEI que vem na lista junto
+// com o modelo (dois aparelhos de modelos diferentes podem ter o mesmo
+// final de IMEI). Ao importar, a lista é tratada como o ESTOQUE COMPLETO:
 // - IMEI novo -> entra como "Disponível";
 // - IMEI que já estava -> atualiza preço, bateria etc.;
 // - IMEI que está na planilha mas sumiu da lista -> vira "Vendido".
@@ -313,14 +314,15 @@ function aplicarReajustePercentual() {
 const COLUNAS_SEMINOVOS = [
   'IMEI (final)', 'Modelo', 'Cor', 'Armazenamento', 'Bateria (%)', 'Preço',
   'Parcelas', 'Valor Parcela', 'Garantia Apple', 'Garantia MasterBR',
-  'Acompanha', 'Status', 'Atualizado em', 'Observação',
+  'Acompanha', 'Status', 'Atualizado em', 'Observação', 'Ciclos',
+  'Avisos (aparecem no site)',
 ]
 const CAMPOS_SEMINOVOS = [
   'imei', 'modelo', 'cor', 'armazenamento', 'bateria', 'preco',
   'parcelas', 'valorParcela', 'garantiaApple', 'garantiaLoja',
-  'acompanha', 'status', 'atualizadoEm', 'observacao',
+  'acompanha', 'status', 'atualizadoEm', 'observacao', 'ciclos', 'avisos',
 ]
-const CAMPOS_NUMERICOS = ['bateria', 'preco', 'parcelas', 'valorParcela']
+const CAMPOS_NUMERICOS = ['bateria', 'preco', 'parcelas', 'valorParcela', 'ciclos']
 
 const STATUS_SEMINOVO = {
   disponivel: 'Disponível',
@@ -331,7 +333,9 @@ const STATUS_SEMINOVO = {
 
 // Modelos e cores com o nome EXATO do catálogo do site (src/data/produtos.json):
 // é por esse nome que o site acha a foto certa. Modelo novo no site precisa
-// entrar aqui também.
+// entrar aqui também. Os modelos do fim (13 Pro, 12, 11, XR...) não são
+// vendidos lacrados: a foto deles fica em src/data/seminovosExtras.js e,
+// enquanto não tiver, o site mostra o card com uma foto genérica.
 const CATALOGO_SEMINOVOS = {
   'iPhone 18 Pro Max': ['Bordô', 'Azul Glacial', 'Prata', 'Preto'],
   'iPhone 18 Pro': ['Bordô', 'Azul Glacial', 'Prata', 'Preto'],
@@ -372,6 +376,20 @@ const CATALOGO_SEMINOVOS = {
   'MacBook Air': ['Dourado', 'Meia-noite', 'Starlight', 'Prata', 'Cinza-espacial', 'Sky Blue'],
   'MacBook Pro M4': ['Preto Espacial', 'Prata'],
   'MacBook Pro M5': ['Preto Espacial', 'Prata'],
+  // Só seminovos
+  'iPhone 15 Plus': ['Preto', 'Azul', 'Verde', 'Amarelo', 'Rosa'],
+  'iPhone 14 Plus': ['Meia-noite', 'Luz das Estrelas', 'Azul', 'Roxo', 'Amarelo', 'Vermelho'],
+  'iPhone 13 Pro Max': ['Grafite', 'Dourado', 'Prata', 'Azul-Sierra', 'Verde-Alpino'],
+  'iPhone 13 Pro': ['Grafite', 'Dourado', 'Prata', 'Azul-Sierra', 'Verde-Alpino'],
+  'iPhone 13 mini': ['Meia-noite', 'Luz das Estrelas', 'Azul', 'Rosa', 'Verde', 'Vermelho'],
+  'iPhone 12 Pro Max': ['Grafite', 'Dourado', 'Prata', 'Azul-Pacífico'],
+  'iPhone 12 Pro': ['Grafite', 'Dourado', 'Prata', 'Azul-Pacífico'],
+  'iPhone 12': ['Preto', 'Branco', 'Azul', 'Verde', 'Roxo', 'Vermelho'],
+  'iPhone 12 mini': ['Preto', 'Branco', 'Azul', 'Verde', 'Roxo', 'Vermelho'],
+  'iPhone 11 Pro Max': ['Cinza-espacial', 'Prata', 'Dourado', 'Verde-meia-noite'],
+  'iPhone 11 Pro': ['Cinza-espacial', 'Prata', 'Dourado', 'Verde-meia-noite'],
+  'iPhone 11': ['Preto', 'Branco', 'Verde', 'Amarelo', 'Roxo', 'Vermelho'],
+  'iPhone XR': ['Preto', 'Branco', 'Azul', 'Amarelo', 'Coral', 'Vermelho'],
 }
 
 // Como a cor costuma vir escrita na lista (inglês ou abreviada) -> cores do
@@ -387,19 +405,28 @@ const APELIDOS_COR = {
   'LARANJA': ['Laranja Cósmico'],
   'BURGUNDY': ['Bordô'],
   'GLACIER BLUE': ['Azul Glacial'],
-  'BLACK': ['Preto', 'Preto Espacial', 'Titânio Preto', 'Preto Jacto', 'Meia-noite', 'Meia-Noite'],
-  'PRETO': ['Preto', 'Preto Espacial', 'Titânio Preto', 'Preto Jacto', 'Meia-noite', 'Meia-Noite'],
-  'WHITE': ['Branco', 'Titânio Branco', 'Luz das Estrelas', 'Starlight'],
-  'BRANCO': ['Branco', 'Titânio Branco', 'Luz das Estrelas', 'Starlight'],
+  'BLACK': ['Preto', 'Preto Espacial', 'Titânio Preto', 'Preto Jacto', 'Meia-noite', 'Meia-Noite', 'Grafite', 'Cinza-espacial'],
+  'PRETO': ['Preto', 'Preto Espacial', 'Titânio Preto', 'Preto Jacto', 'Meia-noite', 'Meia-Noite', 'Grafite', 'Cinza-espacial'],
+  'GRAPHITE': ['Grafite'],
+  // iPhone Pro "branco" é o Prata
+  'WHITE': ['Branco', 'Titânio Branco', 'Luz das Estrelas', 'Starlight', 'Prata'],
+  'BRANCO': ['Branco', 'Titânio Branco', 'Luz das Estrelas', 'Starlight', 'Prata'],
+  'RED': ['Vermelho'],
+  'PRODUCT RED': ['Vermelho'],
+  'SIERRA BLUE': ['Azul-Sierra'],
+  'ALPINE GREEN': ['Verde-Alpino'],
+  'PACIFIC BLUE': ['Azul-Pacífico'],
+  'MIDNIGHT GREEN': ['Verde-meia-noite'],
   'LAVENDER': ['Lavanda'],
   'SAGE': ['Sálvia'],
   'MIST BLUE': ['Azul Névoa'],
   'ULTRAMARINE': ['Ultramarino'],
   'TEAL': ['Azul-petróleo'],
   'PINK': ['Rosa'],
-  'BLUE': ['Azul', 'Titânio Azul'],
-  'AZUL': ['Azul', 'Titânio Azul'],
-  'GREEN': ['Verde'],
+  'BLUE': ['Azul', 'Titânio Azul', 'Azul-Sierra', 'Azul-Pacífico'],
+  'AZUL': ['Azul', 'Titânio Azul', 'Azul-Sierra', 'Azul-Pacífico'],
+  'GREEN': ['Verde', 'Verde-Alpino', 'Verde-meia-noite'],
+  'VERDE': ['Verde', 'Verde-Alpino', 'Verde-meia-noite'],
   'YELLOW': ['Amarelo'],
   'PURPLE': ['Roxo', 'Roxo Profundo'],
   'ROXO': ['Roxo', 'Roxo Profundo'],
@@ -445,14 +472,18 @@ function compacto(texto) {
 
 // Tira o "[29/10 14:32] Fulano:" que o WhatsApp põe ao copiar, os emojis
 // e os asteriscos de negrito
+// O ⚠️ vira a marca "[AVISO]" antes dos emojis saírem: essas linhas
+// (peça trocada etc.) aparecem no card
 function limparLinha(linha) {
   return String(linha)
+    .replace(/\u26A0\uFE0F?/g, ' [AVISO] ')
     .replace(/^\[\d{1,2}[\/.]\d{1,2}(?:[\/.]\d{2,4})?,?\s+\d{1,2}:\d{2}(?::\d{2})?\]\s*[^:]{1,40}:\s*/, '')
     .replace(/^\d{1,2}\/\d{1,2}\/\d{2,4},?\s+\d{1,2}:\d{2}\s*-\s*[^:]{1,40}:\s*/, '')
     .replace(/[\p{Extended_Pictographic}\u{FE0F}\u{200D}\u{20E3}]/gu, '')
     .replace(/[*_~]/g, '')
     .replace(/\s+/g, ' ')
     .trim()
+    .replace(/^(\[AVISO\] ?)+/, '[AVISO] ')
 }
 
 // "6.890,00" -> 6890 | "650,11" -> 650.11 | "6.890" -> 6890
@@ -501,6 +532,11 @@ function resolverCor(modelo, texto) {
 // "MARCO DE 2027" -> "até mar/2027" | "03/2027" -> "até mar/2027"
 function garantiaAppleTexto(resto) {
   const meses = Object.keys(MESES_ABREV)
+  const comDia = resto.match(new RegExp('\\b(\\d{1,2})\\s*(?:DE\\s*)?(' + meses.join('|') + ')\\s*(?:DE\\s*)?(\\d{4})'))
+  if (comDia) {
+    // ano com 2 dígitos pra caber no card: "até 08/12/26"
+    return 'até ' + comDia[1].padStart(2, '0') + '/' + String(meses.indexOf(comDia[2]) + 1).padStart(2, '0') + '/' + comDia[3].slice(2)
+  }
   const porNome = resto.match(new RegExp('(' + meses.join('|') + ')\\s*(?:DE\\s*)?(\\d{4})'))
   if (porNome) return 'até ' + MESES_ABREV[porNome[1]] + '/' + porNome[2]
   const porNumero = resto.match(/\b(\d{1,2})\s*\/\s*(\d{4})\b/)
@@ -520,6 +556,23 @@ function garantiaLojaTexto(n) {
   return qtd + ' ' + unidade
 }
 
+// "IPHONE 13 PRO 128GB" -> "IPHONE 13 PRO"
+function modeloSemArmazenamento(texto) {
+  return String(texto || '').replace(/\s*\b\d+\s*(GB|TB)\b/i, '').trim()
+}
+
+// Identidade do aparelho: final do IMEI + modelo
+function chaveSeminovo(x) {
+  return x.imei + '|' + compacto(modeloSemArmazenamento(x.modelo || x.textoModelo))
+}
+
+// "CÂMERA TRASEIRA GENUÍNA APPLE" -> "Câmera traseira genuína Apple"
+function fraseNormal(texto) {
+  const t = String(texto).trim().toLowerCase()
+    .replace(/\bapple\b/g, 'Apple').replace(/\biphone\b/g, 'iPhone')
+  return t.charAt(0).toUpperCase() + t.slice(1)
+}
+
 const RE_LINHA_MODELO = /^(IPHONE|IPAD|APPLE WATCH|AIRPODS|MACBOOK|MAC MINI)\b/
 
 // Um aparelho = as linhas até o "IMEI: ..." (inclusive)
@@ -527,11 +580,18 @@ function lerBlocoSeminovo(linhas) {
   const ap = {
     imei: '', modelo: '', cor: '', armazenamento: '', bateria: null, preco: null,
     parcelas: null, valorParcela: null, garantiaApple: '', garantiaLoja: '', acompanha: '',
-    textoModelo: '', textoCor: '', problemas: [], ignoradas: [],
+    ciclos: null, avisos: '', textoModelo: '', textoCor: '', problemas: [], ignoradas: [],
   }
+  const avisos = []
   linhas.forEach(linha => {
     linha.split('|').map(s => s.trim()).filter(Boolean).forEach(seg => {
+      if (/^\[AVISO\]/.test(seg)) {
+        const t = seg.replace(/^\[AVISO\]\s*/, '')
+        if (t) avisos.push(fraseNormal(t))
+        return
+      }
       const n = normalizar(seg)
+      if (!/[A-Z0-9]/.test(n)) return // separadores como "-"
       let m
       if ((m = n.match(/^IMEI\s*:?\s*([0-9A-Z]+)/))) { ap.imei = m[1]; return }
       if (!ap.textoModelo && RE_LINHA_MODELO.test(n)) {
@@ -547,6 +607,7 @@ function lerBlocoSeminovo(linhas) {
       }
       if ((m = n.match(/R\$\s*([\d.,]+)/)) && ap.preco == null) { ap.preco = numeroBR(m[1]); return }
       if ((m = n.match(/^(?:SAUDE (?:DA )?)?(?:BATERIA)?\s*:?\s*(\d{1,3})\s*%$/))) { ap.bateria = Number(m[1]); return }
+      if ((m = n.match(/^(\d+)\s*CICLOS?$/))) { ap.ciclos = Number(m[1]); return }
       if (n.includes('GARANTIA') && n.includes('APPLE')) {
         ap.garantiaApple = garantiaAppleTexto(n.replace(/^.*APPLE\s*(?:ATE\s*)?/, '').trim())
         return
@@ -564,6 +625,7 @@ function lerBlocoSeminovo(linhas) {
     })
   })
 
+  ap.avisos = avisos.join('; ')
   if (!ap.textoModelo) {
     ap.problemas.push({ tipo: 'modelo', msg: 'não achei a linha do modelo' })
   } else {
@@ -595,11 +657,12 @@ function lerListaWhatsApp(texto) {
   const vistos = {}
   aparelhos.forEach(ap => {
     ap.ignoradas.forEach(t => ignoradas.push(t))
-    if (ap.imei && vistos[ap.imei]) {
+    const chave = chaveSeminovo(ap)
+    if (ap.imei && vistos[chave]) {
       ap.duplicado = true
-      ap.problemas.push({ tipo: 'imei', msg: 'IMEI ' + ap.imei + ' aparece duas vezes na lista' })
+      ap.problemas.push({ tipo: 'imei', msg: 'IMEI ' + ap.imei + ' aparece duas vezes na lista para o mesmo modelo' })
     }
-    vistos[ap.imei] = true
+    vistos[chave] = true
   })
 
   // Sobrou texto depois do último IMEI: se tem cara de aparelho, avisa
@@ -628,6 +691,7 @@ const ROTULOS_CAMPOS = {
   modelo: 'modelo', cor: 'cor', armazenamento: 'armazenamento', bateria: 'bateria',
   preco: 'preço', parcelas: 'parcelas', valorParcela: 'valor da parcela',
   garantiaApple: 'garantia Apple', garantiaLoja: 'garantia MasterBR', acompanha: 'acompanha',
+  ciclos: 'ciclos', avisos: 'avisos',
 }
 
 function formatarCampo(campo, valor) {
@@ -655,16 +719,16 @@ function compararSeminovo(atual, ap) {
 }
 
 function planejarSeminovos(lidos, linhasPlanilha) {
-  const porImei = {}
-  linhasPlanilha.forEach(l => { if (l.imei) porImei[l.imei] = l })
+  const porChave = {}
+  linhasPlanilha.forEach(l => { if (l.imei) porChave[chaveSeminovo(l)] = l })
 
   const plano = { novos: [], atualizados: [], iguais: 0, vendidos: [], revisar: [], mantidos: [], duplicados: [] }
   const naLista = {}
 
   lidos.aparelhos.forEach(ap => {
     if (ap.duplicado) { plano.duplicados.push(ap); return }
-    naLista[ap.imei] = true
-    const atual = porImei[ap.imei]
+    naLista[chaveSeminovo(ap)] = true
+    const atual = porChave[chaveSeminovo(ap)]
     let final = ap
     if (ap.problemas.length) {
       // Modelo/cor não reconhecidos, mas alguém já corrigiu essa linha na
@@ -687,14 +751,14 @@ function planejarSeminovos(lidos, linhasPlanilha) {
   })
 
   linhasPlanilha.forEach(l => {
-    if (l.imei && !naLista[l.imei] && statusNormalizado(l.status) !== 'VENDIDO') plano.vendidos.push(l)
+    if (l.imei && !naLista[chaveSeminovo(l)] && statusNormalizado(l.status) !== 'VENDIDO') plano.vendidos.push(l)
   })
   plano.prontos = plano.novos.length + plano.atualizados.length + plano.iguais
   return plano
 }
 
 function descreverSeminovo(x) {
-  return [x.modelo || x.textoModelo, x.armazenamento, x.cor || x.textoCor].filter(Boolean).join(' ') +
+  return [x.modelo || modeloSemArmazenamento(x.textoModelo), x.armazenamento, x.cor || x.textoCor].filter(Boolean).join(' ') +
     ' · IMEI ' + (x.imei || '?')
 }
 
@@ -775,6 +839,8 @@ function lerSeminovosParaSite(planilha) {
       garantiaApple: l.garantiaApple,
       garantiaLoja: l.garantiaLoja,
       acompanha: l.acompanha,
+      ciclos: l.ciclos,
+      avisos: l.avisos ? l.avisos.split(/\s*;\s*/).filter(Boolean) : [],
       reservado: statusNormalizado(l.status) === 'RESERVADO',
     }))
 }
@@ -795,8 +861,8 @@ function criarAbaSeminovos(silencioso) {
   aba.setFrozenRows(1)
 
   const coluna = letra => aba.getRange(letra + '2:' + letra)
-  ;['A', 'B', 'C', 'D', 'I', 'J', 'K', 'L', 'N'].forEach(l => coluna(l).setNumberFormat('@'))
-  ;['E', 'G'].forEach(l => coluna(l).setNumberFormat('0'))
+  ;['A', 'B', 'C', 'D', 'I', 'J', 'K', 'L', 'N', 'P'].forEach(l => coluna(l).setNumberFormat('@'))
+  ;['E', 'G', 'O'].forEach(l => coluna(l).setNumberFormat('0'))
   ;['F', 'H'].forEach(l => coluna(l).setNumberFormat('"R$" #,##0.00'))
   coluna('M').setNumberFormat('dd/mm/yyyy hh:mm')
 
@@ -823,7 +889,7 @@ function criarAbaSeminovos(silencioso) {
     regra('=$L2="Reservado"').setBackground('#e3edfd').build(),
   ])
 
-  const larguras = [95, 150, 130, 105, 85, 105, 70, 100, 120, 125, 150, 95, 125, 220]
+  const larguras = [95, 150, 130, 105, 85, 105, 70, 100, 120, 125, 150, 95, 125, 220, 70, 280]
   larguras.forEach((px, i) => aba.setColumnWidth(i + 1, px))
 
   if (silencioso !== true) {
@@ -871,7 +937,7 @@ function aplicarSeminovos(texto) {
     const novas = plano.novos.map(ap => Object.assign(camposDoAparelho(ap), {
       status: STATUS_SEMINOVO.disponivel, atualizadoEm: agora, observacao: '',
     })).concat(plano.revisar.map(ap => Object.assign(camposDoAparelho(ap), {
-      modelo: ap.modelo || ap.textoModelo,
+      modelo: ap.modelo || modeloSemArmazenamento(ap.textoModelo),
       cor: ap.cor || ap.textoCor,
       status: STATUS_SEMINOVO.revisar,
       atualizadoEm: agora,

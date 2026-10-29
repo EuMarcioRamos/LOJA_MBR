@@ -218,6 +218,21 @@ O que importa: **modelo e armazenamento na primeira linha, cor logo
 abaixo, e cada aparelho termina na linha do IMEI**. A cor pode vir em
 inglês (SILVER, DEEP BLUE, NATURAL TITANIUM…) ou em português.
 
+Também são lidos, quando aparecem:
+- `🔄 185 CICLOS` → coluna **Ciclos**, mostrada no card.
+- Linhas com `⚠️` (ex.: `⚠️ TAMPA TRASEIRA SUBSTITUÍDA`) → coluna
+  **Avisos**, mostrados no card logo abaixo da ficha.
+- Separadores (`-`) e o título da mensagem são ignorados.
+
+Dois aparelhos podem ter o mesmo final de IMEI se forem de modelos
+diferentes: a identidade de cada um é **IMEI + modelo**.
+
+### Modelos sem foto (13 Pro, 12, 11, XR…)
+
+Os modelos que a loja não vende lacrados entram normalmente na planilha e
+no site, mas aparecem com uma silhueta no lugar da foto até a foto ser
+cadastrada em `src/data/seminovosExtras.js` (uma por modelo + cor).
+
 ### Status de cada aparelho
 
 | Status | No site |
