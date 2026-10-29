@@ -8,11 +8,11 @@ import FaixaBeneficios from './components/FaixaBeneficios'
 import ProvaSocial from './components/ProvaSocial'
 import CarrinhoFlutuante from './components/CarrinhoFlutuante'
 import produtosBase from './data/produtos.json'
-// Protótipo: aparelhos de exemplo. A tabela de verdade (provavelmente uma aba
-// "Seminovos" na planilha, uma linha por aparelho) ainda vai ser definida
-import seminovosBase from './data/seminovos.json'
+// Aparelhos de exemplo, usados só enquanto a planilha ainda não tem a aba
+// "Seminovos" (script antigo, que não devolve o campo "seminovos")
+import seminovosExemplo from './data/seminovos.json'
 import { PLANILHA_PRECOS_URL } from './config'
-import { buscarPrecosRemotos, aplicarPrecos, lerPrecosCache, salvarPrecosCache } from './data/precosRemotos'
+import { buscarPrecosRemotos, aplicarPrecos, montarSeminovos, lerPrecosCache, salvarPrecosCache } from './data/precosRemotos'
 import { revelar } from './revelar'
 
 const CARRINHO_STORAGE_KEY = 'mbr-carrinho-v1'
@@ -115,6 +115,8 @@ function useIsDesktop() {
 export default function App() {
   const [produtos, setProdutos] = useState(produtosBase)
   const [precosProntos, setPrecosProntos] = useState(false)
+  // null = a planilha ainda não respondeu ou não tem a aba "Seminovos"
+  const [seminovosPlanilha, setSeminovosPlanilha] = useState(null)
   const [filtroCategoria, setFiltroCategoria] = useState('Destaque')
   const [filtroModelo, setFiltroModelo] = useState('Todos')
   const [busca, setBusca] = useState('')
@@ -151,8 +153,13 @@ export default function App() {
     let cancelado = false
 
     const precosCache = lerPrecosCache()
+    const aplicarSeminovos = (dados) => {
+      if (Array.isArray(dados.seminovos)) setSeminovosPlanilha(montarSeminovos(dados.seminovos, produtosBase))
+    }
+
     if (precosCache) {
       setProdutos(aplicarPrecos(produtosBase, precosCache))
+      aplicarSeminovos(precosCache)
       setPrecosProntos(true)
     }
 
@@ -160,6 +167,7 @@ export default function App() {
       .then(precos => {
         if (!cancelado && precos) {
           setProdutos(aplicarPrecos(produtosBase, precos))
+          aplicarSeminovos(precos)
           salvarPrecosCache(precos)
         }
       })
@@ -208,6 +216,14 @@ export default function App() {
     irParaProdutos()
   }
 
+  // Antes da planilha responder não mostra nada (nem o exemplo, pra não piscar
+  // aparelho e preço que não existem)
+  const usandoExemplo = seminovosPlanilha === null
+  const seminovosBase = useMemo(
+    () => seminovosPlanilha ?? (precosProntos ? montarSeminovos(seminovosExemplo, produtosBase) : []),
+    [seminovosPlanilha, precosProntos]
+  )
+
   const ordemAtual = ORDEM_MODELOS[filtroCategoria] || []
   const linhasAtual = LINHAS_POR_CATEGORIA[filtroCategoria]
 
@@ -220,7 +236,7 @@ export default function App() {
         .map(l => l.linha)
     }
     return ordemAtual.filter(m => fonte.some(p => p.modelo === m))
-  }, [filtroCategoria, produtos, condicao])
+  }, [filtroCategoria, produtos, condicao, seminovosBase])
 
   const termoBusca = busca.trim().toLowerCase()
 
@@ -269,7 +285,7 @@ export default function App() {
         return linhaSel ? linhaSel.modelos.includes(s.modelo) : s.modelo === filtroModelo
       })
       .sort((a, b) => ordemDoModelo(a.modelo) - ordemDoModelo(b.modelo) || b.preco - a.preco)
-  }, [filtroCategoria, filtroModelo, termoBusca, linhasAtual])
+  }, [filtroCategoria, filtroModelo, termoBusca, linhasAtual, seminovosBase])
 
   const emSeminovos = condicao === 'seminovo'
   const itensDaLista = emSeminovos ? seminovos : grupos
@@ -317,8 +333,10 @@ export default function App() {
             </div>
           ) : emSeminovos ? (
             <>
-              <p className="aviso-prototipo">Protótipo · aparelhos, preços e estados de exemplo</p>
-              {seminovos.length === 0 ? (
+              {usandoExemplo && precosProntos && (
+                <p className="aviso-prototipo">Protótipo · aparelhos e preços de exemplo</p>
+              )}
+              {!precosProntos ? null : seminovos.length === 0 ? (
                 <div style={{ textAlign: 'center', padding: '60px 0', color: '#8a8a8a' }}>
                   <p style={{ fontSize: 16, marginBottom: 16 }}>Nenhum seminovo disponível nesse filtro agora.</p>
                   <button className="btn-ver-mais" style={{ marginTop: 0 }} onClick={() => setCondicao('lacrado')}>

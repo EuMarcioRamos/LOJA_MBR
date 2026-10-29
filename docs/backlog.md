@@ -19,7 +19,11 @@ site cresce. Marco cada item como feito quando aplicado.
 - [ ] **Conferir as opções de configuração do MacBook Pro (M4 e M5)** —
       verificar se os pares chip/tamanho/armazenamento disponíveis no
       site batem com o que a Apple realmente vende.
-- [ ] **Aparelhos seminovos** — adicionar 2 opções por produto:
+- [~] **Aparelhos seminovos** — em protótipo na branch
+      `seminovos-prototipo`: chave Lacrados | Seminovos, uma linha por
+      aparelho na aba `Seminovos` (preço e estoque reais, peça a peça),
+      preenchida colando a lista do WhatsApp (ver
+      `planilha-de-precos.md`). Pedido original: adicionar 2 opções por produto:
       "Modelo Lacrado" e "Modelo Semi-novo", em todos os modelos do
       catálogo. **Precisa de definição antes de começar** (ver
       pergunta em aberto abaixo).

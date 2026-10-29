@@ -3,8 +3,9 @@ import { WHATSAPP_NUMERO } from '../config'
 import { corDaLuz } from '../corDaLuz'
 
 // Card de um aparelho seminovo. Mesmo visual do ModeloCard, mas é uma unidade
-// só (cor e armazenamento já definidos), então no lugar dos seletores entra o
-// estado do aparelho: bateria, conservação e garantia da loja.
+// só (cor e armazenamento já definidos), então no lugar dos seletores entra a
+// ficha do aparelho, com o que vem no anúncio do WhatsApp: bateria, garantias
+// e o que acompanha (os dois últimos só quando informados).
 
 const icone = { width: 16, height: 16, viewBox: '0 0 24 24', fill: 'none', stroke: 'currentColor', strokeWidth: 1.8, strokeLinecap: 'round', strokeLinejoin: 'round', 'aria-hidden': true }
 
@@ -16,9 +17,17 @@ const IconeBateria = (
   </svg>
 )
 
-const IconeEstado = (
+const IconeCalendario = (
   <svg {...icone}>
-    <path d="M12 3l2.4 4.9 5.4.8-3.9 3.8.9 5.4-4.8-2.6-4.8 2.6.9-5.4-3.9-3.8 5.4-.8z" />
+    <rect x="3" y="5" width="18" height="16" rx="2.5" />
+    <path d="M3 10h18M8 3v4M16 3v4" />
+  </svg>
+)
+
+const IconeCaixa = (
+  <svg {...icone}>
+    <path d="M21 8l-9-5-9 5 9 5 9-5z" />
+    <path d="M3 8v8l9 5 9-5V8M12 13v8" />
   </svg>
 )
 
@@ -30,23 +39,33 @@ const IconeGarantia = (
 )
 
 // Uma linha da ficha: ícone, rótulo à esquerda e valor à direita
-function LinhaEstado({ icone: Icone, rotulo, children }) {
+function LinhaEstado({ icone: Icone, rotulo, quebra = false, children }) {
   return (
     <div className="seminovo-estado-linha">
       <span className="seminovo-estado-icone">{Icone}</span>
       <span className="seminovo-estado-rotulo">{rotulo}</span>
-      <span className="seminovo-estado-valor">{children}</span>
+      <span className={`seminovo-estado-valor${quebra ? ' seminovo-estado-valor--quebra' : ''}`}>{children}</span>
     </div>
   )
 }
 
+const emReais = (valor) => valor.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })
+
 export default function SeminovoCard({ aparelho, carrinhoIds = [], onAlternarCarrinho }) {
   const [hover, setHover] = useState(false)
-  const { modelo, cor, corHex, imagem, armazenamento, preco, bateria, estado, garantia, disponivel } = aparelho
+  const {
+    imei, modelo, cor, corHex, imagem, armazenamento, preco, parcelas, valorParcela,
+    bateria, garantiaApple, garantiaLoja, acompanha, reservado,
+  } = aparelho
+  const disponivel = !reservado
+  const temBateria = bateria != null && bateria !== ''
 
-  const precoTexto = preco.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })
+  const precoTexto = emReais(preco)
+  const parcelamento = parcelas && valorParcela ? `ou ${parcelas}x de ${emReais(valorParcela)}` : null
+  const descricao = [modelo, armazenamento, cor].filter(Boolean).join(' ')
+  const detalhes = [temBateria && `bateria ${bateria}%`, imei && `IMEI final ${imei}`].filter(Boolean).join(', ')
   const mensagem = encodeURIComponent(
-    `Olá! Tenho interesse no ${modelo} ${armazenamento} ${cor} seminovo (bateria ${bateria}%, estado ${estado.toLowerCase()}). Ainda está disponível?`
+    `Olá! Tenho interesse no ${descricao} seminovo${detalhes ? ` (${detalhes})` : ''}. Ainda está disponível?`
   )
   const whatsappUrl = `https://wa.me/${WHATSAPP_NUMERO}?text=${mensagem}`
 
@@ -90,6 +109,7 @@ export default function SeminovoCard({ aparelho, carrinhoIds = [], onAlternarCar
           decoding="async"
         />
         <span className="selo-seminovo">Seminovo</span>
+        {reservado && <span className="selo-seminovo selo-seminovo--reservado">Reservado</span>}
       </div>
 
       {/* Info */}
@@ -108,20 +128,23 @@ export default function SeminovoCard({ aparelho, carrinhoIds = [], onAlternarCar
               border: '1px solid rgba(255,255,255,0.2)',
               flexShrink: 0,
             }} />
-            <span style={{ fontSize: 12, color: '#888' }}>{cor} · {armazenamento}</span>
+            <span style={{ fontSize: 12, color: '#888' }}>{[cor, armazenamento].filter(Boolean).join(' · ')}</span>
           </div>
         </div>
 
         {/* Ficha do aparelho: um item por linha, separados por filetes */}
         <div className="seminovo-estado">
-          <LinhaEstado icone={IconeBateria} rotulo="Saúde da bateria">
-            <span className="seminovo-pilha" style={{ color: 'var(--whatsapp)' }} aria-hidden="true">
-              <span style={{ width: `${bateria}%` }} />
-            </span>
-            <span style={{ color: 'var(--whatsapp)' }}>{bateria}%</span>
-          </LinhaEstado>
-          <LinhaEstado icone={IconeEstado} rotulo="Estado">{estado}</LinhaEstado>
-          <LinhaEstado icone={IconeGarantia} rotulo="Garantia">{garantia}</LinhaEstado>
+          {temBateria && (
+            <LinhaEstado icone={IconeBateria} rotulo="Saúde da bateria">
+              <span className="seminovo-pilha" style={{ color: 'var(--whatsapp)' }} aria-hidden="true">
+                <span style={{ width: `${Math.min(bateria, 100)}%` }} />
+              </span>
+              <span style={{ color: 'var(--whatsapp)' }}>{bateria}%</span>
+            </LinhaEstado>
+          )}
+          {garantiaApple && <LinhaEstado icone={IconeCalendario} rotulo="Garantia Apple">{garantiaApple}</LinhaEstado>}
+          {garantiaLoja && <LinhaEstado icone={IconeGarantia} rotulo="Garantia MasterBR">{garantiaLoja}</LinhaEstado>}
+          {acompanha && <LinhaEstado icone={IconeCaixa} rotulo="Acompanha" quebra>{acompanha}</LinhaEstado>}
         </div>
       </div>
 
@@ -132,6 +155,11 @@ export default function SeminovoCard({ aparelho, carrinhoIds = [], onAlternarCar
           <p style={{ fontSize: 24, fontWeight: 700, color: disponivel ? '#fff' : '#444', letterSpacing: '-0.5px' }}>
             {precoTexto}
           </p>
+          {parcelamento && disponivel && (
+            <p style={{ fontSize: 14, fontWeight: 600, color: '#ddd', marginTop: 4 }}>
+              {parcelamento}
+            </p>
+          )}
         </div>
 
         <div style={{ display: 'flex', gap: 8 }}>
@@ -159,7 +187,7 @@ export default function SeminovoCard({ aparelho, carrinhoIds = [], onAlternarCar
                   <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
                 </svg>
               </>
-            ) : 'Vendido'}
+            ) : 'Reservado'}
           </a>
 
           <button

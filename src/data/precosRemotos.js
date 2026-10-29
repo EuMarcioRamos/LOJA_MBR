@@ -53,6 +53,18 @@ export function salvarPrecosCache(precos) {
   }
 }
 
+// Seminovos vêm da aba "Seminovos" (uma linha por aparelho, identificado pelo
+// final do IMEI). A planilha só traz modelo e cor; a foto e o tom da cor saem
+// do catálogo, do lacrado de mesmo modelo e cor.
+export function montarSeminovos(lista, produtosBase) {
+  return lista.flatMap(aparelho => {
+    const doModelo = produtosBase.filter(p => p.modelo === aparelho.modelo)
+    const variante = doModelo.find(p => p.cor === aparelho.cor) || doModelo[0]
+    if (!variante) return []
+    return [{ ...aparelho, id: `semi-${aparelho.imei}`, imagem: variante.imagem, corHex: variante.corHex }]
+  })
+}
+
 export function aplicarPrecos(produtosBase, dados) {
   if (!dados) return produtosBase
 

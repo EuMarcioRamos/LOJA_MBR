@@ -162,3 +162,70 @@ caso me manda a URL nova que eu atualizo o `src/config.js`.
 
 Feche e abra a planilha de novo depois — é isso que faz o menu "Preços"
 aparecer atualizado na barra de cima.
+
+---
+
+## Seminovos (aba `Seminovos`)
+
+Seminovo é sempre uma peça única: cada linha da aba é **um aparelho**,
+identificado pelo **final do IMEI** que vem no anúncio. O site mostra a
+foto oficial do modelo na cor escolhida (vem do catálogo), então não
+precisa mandar foto.
+
+### Configuração (uma vez só)
+
+1. Atualize o script como em "Atualizando o script depois de uma mudança"
+   (logo acima): colar o código novo, salvar e publicar uma **Nova versão**
+   na implantação existente. A URL continua a mesma.
+2. Feche e abra a planilha. Aparece um menu novo, **Seminovos**.
+3. Menu **Seminovos → Criar / ajustar aba Seminovos**. Ela é criada com o
+   cabeçalho, as listas suspensas e as cores por status. Se o Google pedir
+   autorização de novo, é só permitir.
+
+### No dia a dia: colar a lista do WhatsApp
+
+1. Copie a mensagem do WhatsApp com o **estoque completo** de seminovos.
+2. Menu **Seminovos → Importar lista do WhatsApp**, cole o texto e clique
+   em **Conferir**. Nada é gravado ainda; aparece um resumo:
+   - **Entram no site**: IMEIs que não estavam na planilha.
+   - **Atualizados**: IMEIs que já estavam e mudaram (preço, bateria…),
+     mostrando o antes e o depois.
+   - **Saem do site**: IMEIs da planilha que não estão mais na lista
+     (viram "Vendido").
+   - **Precisam de revisão**: aparelhos que o script não entendeu (ex.:
+     cor que não existe naquele modelo).
+   - **Linhas que não entendi**: texto solto que foi ignorado (título da
+     mensagem, recado no fim etc.).
+3. Se estiver certo, clique em **Aplicar na planilha**. O site atualiza em
+   instantes.
+
+O formato esperado de cada aparelho é o que vocês já usam (os emojis são
+ignorados, e as linhas de garantia Apple e de "COM CAIXA…" são opcionais):
+
+```
+IPHONE 17 PRO MAX 256GB
+SILVER ⚪️
+100%🔋
+R$ 6.890,00💰
+12X 650,11 💳
+GARANTIA APPLE ATÉ MARÇO DE 2027
+SEMI NOVO | GARANTIA 6 MESES MASTERBR
+COM CAIXA E ACESSÓRIOS DE BRINDE 🎁
+IMEI: 0651
+```
+
+O que importa: **modelo e armazenamento na primeira linha, cor logo
+abaixo, e cada aparelho termina na linha do IMEI**. A cor pode vir em
+inglês (SILVER, DEEP BLUE, NATURAL TITANIUM…) ou em português.
+
+### Status de cada aparelho
+
+| Status | No site |
+|---|---|
+| **Disponível** | Aparece normalmente |
+| **Reservado** | Aparece com o selo "Reservado" e o botão de compra travado. Marque à mão; a importação não tira o "Reservado" enquanto o aparelho estiver na lista |
+| **Vendido** | Não aparece. A linha fica na planilha como histórico |
+| **Revisar** | Não aparece. O script não entendeu o modelo ou a cor (a coluna Observação diz o motivo). Corrija Modelo/Cor pela lista suspensa e troque o Status para "Disponível"; nas próximas importações ele lembra da correção |
+
+Também dá para editar qualquer linha à mão (preço, bateria etc.). Só
+lembre que a próxima importação vale o que estiver na lista do WhatsApp.
