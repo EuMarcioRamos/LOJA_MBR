@@ -53,6 +53,7 @@ export default function Header({ carrinhoCount = 0, carrinhoAnimKey = 0, onAbrir
           <button
             key={carrinhoAnimKey}
             onClick={onAbrirCarrinho}
+            aria-haspopup="dialog"
             aria-label={`Carrinho${carrinhoCount > 0 ? `, ${carrinhoCount} ${carrinhoCount === 1 ? 'item selecionado' : 'itens selecionados'}` : ' vazio'}`}
             className={`header-carrinho-btn${carrinhoAnimKey > 0 ? ' header-carrinho-btn--animar' : ''}`}
           >

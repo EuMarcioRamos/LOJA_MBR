@@ -387,7 +387,7 @@ export default function App() {
       <Header
         carrinhoCount={carrinho.length}
         carrinhoAnimKey={carrinhoAnimKey}
-        onAbrirCarrinho={() => setCarrinhoAberto(a => !a)}
+        onAbrirCarrinho={() => setCarrinhoAberto(true)}
       />
 
       <GiroIphone

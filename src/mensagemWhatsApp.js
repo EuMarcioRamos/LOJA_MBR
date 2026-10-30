@@ -15,6 +15,12 @@ import { WHATSAPP_NUMERO } from './config'
 
 const emReais = (valor) => valor.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })
 
+// Tamanho, armazenamento e cor do item, sem o "Padrão" dos AirPods (que só
+// existe pra preencher o campo de armazenamento)
+export function detalhesDoItem(item) {
+  return [item.tamanho, item.armazenamento === 'Padrão' ? null : item.armazenamento, item.cor].filter(Boolean)
+}
+
 function linhaCondicao(item) {
   if (!item.seminovo) return 'Lacrado'
   return item.imei ? `Seminovo · IMEI: ${item.imei}` : 'Seminovo'
@@ -22,7 +28,7 @@ function linhaCondicao(item) {
 
 // No card do seminovo a abertura já diz "seminovo": a linha fica só com o IMEI
 function blocoDoItem(item, { soImei = false } = {}) {
-  const titulo = [item.nome, item.tamanho, item.armazenamento].filter(Boolean).join(' ')
+  const titulo = [item.nome, ...detalhesDoItem({ ...item, cor: null })].join(' ')
   const linhas = [`📱 *${titulo}${item.cor ? ` - ${item.cor}` : ''}*`]
   if (!soImei) linhas.push(linhaCondicao(item))
   else if (item.imei) linhas.push(`IMEI: ${item.imei}`)

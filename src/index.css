@@ -1656,87 +1656,193 @@ body {
   border: 2px solid #0a0a0a;
 }
 
-.carrinho-painel {
+/* ── Carrinho em modal (CarrinhoFlutuante.jsx) ──
+   <dialog> aberto com showModal(): fica na camada de cima do navegador, acima
+   do header, com o ::backdrop escurecendo o site (sem desfoque, pelo mesmo
+   motivo do header: seria recalculado a cada quadro). No celular é uma folha que
+   sobe de baixo (o botão do WhatsApp fica na área do polegar) e ocupa só o
+   necessário, até 88% da tela; do tablet pra cima é uma gaveta à direita, na
+   altura toda. A posição fica fixa mesmo fechando, pra animação de saída não
+   pular de lugar nos navegadores que tiram o dialog da camada de cima na hora. */
+.carrinho-modal {
   position: fixed;
-  top: 82px;
-  right: 24px;
-  width: min(360px, calc(100vw - 32px));
-  max-height: 70vh;
+  inset: auto 0 0 0;
+  z-index: 1000;
+  width: 100%;
+  max-width: none;
+  max-height: 88vh;
+  max-height: 88dvh;
+  margin: 0;
+  padding: 0;
+  border: none;
+  border-top: 1px solid #2a2a2a;
+  border-radius: 20px 20px 0 0;
+  background: #141414;
+  color: #fff;
+  overflow: hidden;
+  box-shadow: 0 -12px 48px rgba(0, 0, 0, 0.55);
+  transform: translateY(100%);
+  transition:
+    transform 0.32s cubic-bezier(0.32, 0.72, 0, 1),
+    display 0.32s allow-discrete,
+    overlay 0.32s allow-discrete;
+}
+
+.carrinho-modal[open] {
   display: flex;
   flex-direction: column;
-  background: #161616;
-  border: 1px solid #2a2a2a;
-  border-radius: 16px;
-  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.6);
+  transform: none;
+}
+
+@starting-style {
+  .carrinho-modal[open] {
+    transform: translateY(100%);
+  }
+}
+
+.carrinho-modal::backdrop {
+  background: rgba(0, 0, 0, 0);
+  transition:
+    background-color 0.32s ease,
+    display 0.32s allow-discrete,
+    overlay 0.32s allow-discrete;
+}
+
+.carrinho-modal[open]::backdrop {
+  background: rgba(0, 0, 0, 0.65);
+}
+
+@starting-style {
+  .carrinho-modal[open]::backdrop {
+    background: rgba(0, 0, 0, 0);
+  }
+}
+
+@media (min-width: 768px) {
+  .carrinho-modal {
+    inset: 0 0 0 auto;
+    width: min(420px, 92vw);
+    height: 100vh;
+    height: 100dvh;
+    max-height: none;
+    border-top: none;
+    border-left: 1px solid #2a2a2a;
+    border-radius: 0;
+    box-shadow: -16px 0 48px rgba(0, 0, 0, 0.5);
+    transform: translateX(100%);
+  }
+
+  .carrinho-modal[open] {
+    transform: none;
+  }
+
+  @starting-style {
+    .carrinho-modal[open] {
+      transform: translateX(100%);
+    }
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .carrinho-modal,
+  .carrinho-modal::backdrop {
+    transition: none;
+  }
+}
+
+/* A página atrás não rola enquanto o carrinho está aberto; o espaço da barra
+   de rolagem fica reservado pra nada pular de lugar */
+html:has(.carrinho-modal[open]) {
   overflow: hidden;
-  z-index: 90;
-  animation: fadeIn 0.2s ease;
+  scrollbar-gutter: stable;
 }
 
-.carrinho-vazio {
-  padding: 28px 20px;
-  text-align: center;
-  color: #888;
-  font-size: 13px;
-  line-height: 1.6;
+.carrinho-modal :focus-visible {
+  outline: 2px solid var(--whatsapp);
+  outline-offset: 2px;
 }
 
-.carrinho-painel-cabecalho {
+.carrinho-modal-cabecalho {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 16px 16px 12px;
+  gap: 12px;
+  padding: 18px 16px 14px 20px;
   border-bottom: 1px solid #222;
   flex-shrink: 0;
 }
 
-.carrinho-painel-titulo {
-  font-size: 12.5px;
+.carrinho-modal-titulo {
+  font-size: 17px;
   font-weight: 700;
   color: #fff;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
+  letter-spacing: -0.2px;
+}
+
+.carrinho-modal-contagem {
+  margin-top: 2px;
+  font-size: 13px;
+  color: var(--rotulo-card);
 }
 
 .carrinho-fechar {
-  background: transparent;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  flex-shrink: 0;
   border: none;
-  color: #888;
-  font-size: 20px;
-  line-height: 1;
+  border-radius: 50%;
+  background: #222;
+  color: #e6e6e6;
   cursor: pointer;
-  padding: 4px;
-  transition: color 0.15s ease;
+  transition: background-color 0.15s ease, color 0.15s ease;
 }
 
 .carrinho-fechar:hover {
+  background: #2e2e2e;
   color: #fff;
 }
 
+.carrinho-vazio {
+  padding: 40px 24px 48px;
+  text-align: center;
+  color: #b0b0b0;
+  font-size: 14px;
+  line-height: 1.6;
+}
+
 .carrinho-lista {
+  flex: 1;
+  min-height: 0;
   overflow-y: auto;
-  padding: 10px 12px;
+  overscroll-behavior: contain;
+  margin: 0;
+  padding: 12px 16px;
+  list-style: none;
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 10px;
 }
 
 .carrinho-item {
   display: flex;
   align-items: center;
-  gap: 10px;
-  padding: 8px;
-  border-radius: 10px;
+  gap: 12px;
+  padding: 10px;
+  border-radius: 12px;
   background: #1c1c1c;
+  border: 1px solid #242424;
 }
 
 .carrinho-item-img {
-  width: 44px;
-  height: 44px;
+  width: 56px;
+  height: 56px;
   object-fit: contain;
   flex-shrink: 0;
   background: #111;
-  border-radius: 8px;
+  border-radius: 10px;
 }
 
 .carrinho-item-info {
@@ -1745,7 +1851,7 @@ body {
 }
 
 .carrinho-item-nome {
-  font-size: 12.5px;
+  font-size: 14px;
   font-weight: 600;
   color: #fff;
   white-space: nowrap;
@@ -1753,19 +1859,41 @@ body {
   text-overflow: ellipsis;
 }
 
+/* Mesmo selo da foto do card do seminovo, em tamanho de lista */
+.carrinho-item-selo {
+  flex-shrink: 0;
+  padding: 2px 7px;
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  border-radius: 50px;
+  color: #e6e6e6;
+  font-size: 9.5px;
+  font-weight: 700;
+  letter-spacing: 0.8px;
+  text-transform: uppercase;
+}
+
+/* Cor, armazenamento e preço bem legíveis: antes #888/#ccc em letra miúda */
 .carrinho-item-detalhe {
-  font-size: 11px;
-  color: #888;
-  margin-top: 1px;
+  margin-top: 3px;
+  font-size: 13px;
+  color: #d0d0d0;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
 }
 
+.carrinho-item-linha-preco {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 4px;
+}
+
 .carrinho-item-preco {
-  font-size: 11.5px;
-  color: #ccc;
-  margin-top: 2px;
+  font-size: 14.5px;
+  font-weight: 700;
+  color: #fff;
+  white-space: nowrap;
 }
 
 /* Item que esgotou ou foi vendido depois de entrar no carrinho: fica na
@@ -1777,56 +1905,51 @@ body {
 }
 
 .carrinho-item--indisponivel .carrinho-item-preco {
-  color: rgba(224, 160, 40, 0.88);
+  font-size: 13px;
+  font-weight: 600;
+  color: rgba(224, 160, 40, 0.9);
 }
 
 .carrinho-item-remover {
-  background: transparent;
-  border: none;
-  color: #666;
-  font-size: 18px;
-  cursor: pointer;
-  padding: 4px 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
   flex-shrink: 0;
-  transition: color 0.15s ease;
+  border: none;
+  border-radius: 50%;
+  background: transparent;
+  color: #9a9a9a;
+  cursor: pointer;
+  transition: background-color 0.15s ease, color 0.15s ease;
 }
 
 .carrinho-item-remover:hover {
+  background: #2a2a2a;
   color: #fff;
 }
 
-.carrinho-painel-rodape {
-  padding: 12px 16px 16px;
-  border-top: 1px solid #222;
+.carrinho-modal-rodape {
   display: flex;
   flex-direction: column;
   gap: 10px;
   flex-shrink: 0;
-}
-
-.carrinho-total {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  font-size: 13px;
-  color: #ccc;
-}
-
-.carrinho-total strong {
-  font-size: 16px;
-  color: #fff;
+  padding: 14px 16px max(16px, env(safe-area-inset-bottom));
+  border-top: 1px solid #222;
+  background: #141414;
 }
 
 .carrinho-limpar {
-  background: transparent;
+  padding: 11px;
   border: 1px solid #333;
-  color: #999;
-  border-radius: 8px;
-  padding: 9px;
-  font-size: 12px;
-  cursor: pointer;
+  border-radius: 10px;
+  background: transparent;
+  color: #c4c4c4;
+  font-size: 13px;
   font-family: inherit;
-  transition: all 0.15s ease;
+  cursor: pointer;
+  transition: border-color 0.15s ease, color 0.15s ease;
 }
 
 .carrinho-limpar:hover {
@@ -1835,12 +1958,15 @@ body {
 }
 
 .carrinho-enviar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 14px;
+  border-radius: 12px;
   background: var(--vidro-verde);
   color: #fff;
-  text-align: center;
-  padding: 12px;
-  border-radius: 10px;
-  font-size: 13.5px;
+  font-size: 15px;
   font-weight: 600;
   text-decoration: none;
   transition: background-color 0.2s ease;
@@ -1851,14 +1977,7 @@ body {
 }
 
 .carrinho-aviso {
-  font-size: 12px;
-  color: #8a8a8a;
+  font-size: 13px;
+  color: #a0a0a0;
   text-align: center;
-}
-
-@media (max-width: 480px) {
-  .carrinho-painel {
-    right: 12px;
-    top: 78px;
-  }
 }
