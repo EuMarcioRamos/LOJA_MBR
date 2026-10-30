@@ -7,6 +7,7 @@ import GiroIphone from './components/GiroIphone'
 import FaixaBeneficios from './components/FaixaBeneficios'
 import ProvaSocial from './components/ProvaSocial'
 import CarrinhoFlutuante from './components/CarrinhoFlutuante'
+import AvisoWhatsApp from './components/AvisoWhatsApp'
 import Protegido from './components/Protegido'
 import produtosBase from './data/produtos.json'
 // Aparelhos de exemplo, usados só enquanto a planilha ainda não tem a aba
@@ -515,6 +516,8 @@ export default function App() {
         }}
         onFechar={() => setCarrinhoAberto(false)}
       />
+
+      <AvisoWhatsApp />
     </div>
   )
 }

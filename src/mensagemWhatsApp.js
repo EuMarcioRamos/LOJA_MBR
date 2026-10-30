@@ -36,6 +36,27 @@ function blocoDoItem(item, { soImei = false } = {}) {
   return linhas.join('\n')
 }
 
+// Navegadores de dentro de outros apps (Instagram, Facebook, TikTok...) às
+// vezes bloqueiam abrir o WhatsApp direto: neles o link segue abrindo a
+// página do WhatsApp na web, como sempre
+const NAVEGADOR_DE_APP = /Instagram|FBAN|FBAV|FB_IAB|FBIOS|Line\/|TikTok|musical_ly|BytedanceWebview|Snapchat|LinkedInApp/i
+
+// No celular (e no iPad, que se apresenta como Mac com tela de toque) o link
+// abre o app do WhatsApp direto, sem passar pela página dele na web, que
+// tirava a pessoa do site. No computador nada muda: o link abre numa aba nova
+export function abreWhatsAppDireto(ua = navigator.userAgent, plataforma = navigator.platform, toques = navigator.maxTouchPoints) {
+  if (NAVEGADOR_DE_APP.test(ua)) return false
+  return /Android|iPhone|iPad|iPod/i.test(ua) || (plataforma === 'MacIntel' && toques > 1)
+}
+
+// "https://wa.me/5583...?text=Olá" -> "whatsapp://send?phone=5583...&text=Ol%C3%A1"
+export function enderecoNoApp(link) {
+  const url = new URL(link)
+  const telefone = url.pathname.replace(/\D/g, '')
+  const texto = url.searchParams.get('text')
+  return `whatsapp://send?phone=${telefone}${texto ? `&text=${encodeURIComponent(texto)}` : ''}`
+}
+
 export function linkWhatsApp(texto) {
   return `https://wa.me/${WHATSAPP_NUMERO}?text=${encodeURIComponent(texto)}`
 }
