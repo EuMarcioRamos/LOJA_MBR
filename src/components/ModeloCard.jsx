@@ -2,7 +2,7 @@ import { useState, useEffect, useRef } from 'react'
 import { WHATSAPP_NUMERO } from '../config'
 import { corDaLuz } from '../corDaLuz'
 
-export default function ModeloCard({ modelo, variantes, precosProntos = true, carrinhoIds = [], onAlternarCarrinho }) {
+export default function ModeloCard({ modelo, variantes, precosProntos = true, planilhaFalhou = false, carrinhoIds = [], onAlternarCarrinho }) {
   const chips = [...new Set(variantes.map(v => v.chip).filter(Boolean))]
   const temChips = chips.length > 1
 
@@ -78,7 +78,10 @@ export default function ModeloCard({ modelo, variantes, precosProntos = true, ca
     setOpcaoIdx(0)
   }
 
-  const preco = opcaoAtual.preco.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })
+  // Opção sem preço na planilha vem sem valor (e indisponível): fica um traço
+  const preco = opcaoAtual.preco == null
+    ? '—'
+    : opcaoAtual.preco.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })
   const parcelamento = opcaoAtual.parcelas && opcaoAtual.valorParcela
     ? `ou ${opcaoAtual.parcelas}x de ${opcaoAtual.valorParcela.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}`
     : null
@@ -94,6 +97,9 @@ export default function ModeloCard({ modelo, variantes, precosProntos = true, ca
 
   const itemCarrinhoId = `${atual.id}-${opcaoAtual.armazenamento}`
   const noCarrinho = carrinhoIds.includes(itemCarrinhoId)
+  // Só entra no carrinho com o preço da planilha na tela: antes dela responder,
+  // o preço do item seria o fixo do produtos.json
+  const podeAdicionar = opcaoAtual.disponivel && precosProntos
   const itemCarrinho = {
     id: itemCarrinhoId,
     nome: nomeCompleto,
@@ -336,6 +342,11 @@ export default function ModeloCard({ modelo, variantes, precosProntos = true, ca
                 </p>
               )}
             </>
+          ) : planilhaFalhou ? (
+            // Nunca o preço fixo do produtos.json no lugar: ele está desatualizado
+            <p style={{ fontSize: 15, fontWeight: 600, color: '#9a9a9a', marginTop: 4 }}>
+              Não foi possível carregar
+            </p>
           ) : (
             <div className="preco-skeleton">
               <div className="preco-skeleton-linha preco-skeleton-linha--preco" />
@@ -375,19 +386,19 @@ export default function ModeloCard({ modelo, variantes, precosProntos = true, ca
 
           <button
             className="carrinho-toggle-btn"
-            onClick={() => opcaoAtual.disponivel && onAlternarCarrinho?.(itemCarrinho)}
-            disabled={!opcaoAtual.disponivel}
+            onClick={() => podeAdicionar && onAlternarCarrinho?.(itemCarrinho)}
+            disabled={!podeAdicionar}
             title={noCarrinho ? 'Remover da seleção' : 'Adicionar à seleção'}
             aria-label={noCarrinho ? 'Remover da seleção' : 'Adicionar à seleção'}
             style={{
               width: 46,
               flexShrink: 0,
-              background: !opcaoAtual.disponivel ? 'transparent' : noCarrinho ? 'rgba(37,211,102,0.14)' : 'transparent',
-              color: !opcaoAtual.disponivel ? '#3a3a3a' : 'var(--whatsapp)',
-              border: `1.5px solid ${!opcaoAtual.disponivel ? '#222' : noCarrinho ? 'var(--whatsapp)' : '#444'}`,
+              background: !podeAdicionar ? 'transparent' : noCarrinho ? 'rgba(37,211,102,0.14)' : 'transparent',
+              color: !podeAdicionar ? '#3a3a3a' : 'var(--whatsapp)',
+              border: `1.5px solid ${!podeAdicionar ? '#222' : noCarrinho ? 'var(--whatsapp)' : '#444'}`,
               borderRadius: 10,
               display: 'flex', alignItems: 'center', justifyContent: 'center',
-              cursor: !opcaoAtual.disponivel ? 'not-allowed' : 'pointer',
+              cursor: !podeAdicionar ? 'not-allowed' : 'pointer',
               transition: 'all 0.2s',
             }}
           >

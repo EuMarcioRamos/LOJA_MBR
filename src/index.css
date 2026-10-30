@@ -1768,6 +1768,18 @@ body {
   margin-top: 2px;
 }
 
+/* Item que esgotou ou foi vendido depois de entrar no carrinho: fica na
+   lista, apagado, com o aviso no lugar do preço (no âmbar do selo "Reservado") */
+.carrinho-item--indisponivel .carrinho-item-img,
+.carrinho-item--indisponivel .carrinho-item-nome,
+.carrinho-item--indisponivel .carrinho-item-detalhe {
+  opacity: 0.45;
+}
+
+.carrinho-item--indisponivel .carrinho-item-preco {
+  color: rgba(224, 160, 40, 0.88);
+}
+
 .carrinho-item-remover {
   background: transparent;
   border: none;
@@ -1836,6 +1848,12 @@ body {
 
 .carrinho-enviar:hover {
   background: var(--vidro-verde-hover);
+}
+
+.carrinho-aviso {
+  font-size: 12px;
+  color: #8a8a8a;
+  text-align: center;
 }
 
 @media (max-width: 480px) {

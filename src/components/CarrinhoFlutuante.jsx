@@ -18,8 +18,11 @@ export default function CarrinhoFlutuante({ aberto, carrinho, onRemover, onLimpa
   if (!aberto) return null
 
   const vazio = carrinho.length === 0
-  const total = carrinho.reduce((soma, item) => soma + item.preco, 0)
-  const whatsappUrl = `https://wa.me/${WHATSAPP_NUMERO}?text=${montarMensagem(carrinho)}`
+  // Item que esgotou ou foi vendido depois de entrar continua na lista, pra
+  // pessoa ver o que aconteceu, mas fica fora do total e da mensagem
+  const disponiveis = carrinho.filter(item => !item.indisponivel)
+  const total = disponiveis.reduce((soma, item) => soma + item.preco, 0)
+  const whatsappUrl = `https://wa.me/${WHATSAPP_NUMERO}?text=${montarMensagem(disponiveis)}`
 
   return (
     <div className="carrinho-painel">
@@ -36,14 +39,16 @@ export default function CarrinhoFlutuante({ aberto, carrinho, onRemover, onLimpa
         <>
           <div className="carrinho-lista">
             {carrinho.map(item => (
-              <div className="carrinho-item" key={item.id}>
+              <div className={`carrinho-item${item.indisponivel ? ' carrinho-item--indisponivel' : ''}`} key={item.id}>
                 {item.imagem && <img src={item.imagem} alt={item.nome} className="carrinho-item-img" />}
                 <div className="carrinho-item-info">
                   <p className="carrinho-item-nome">{item.nome}</p>
                   <p className="carrinho-item-detalhe">
                     {item.tamanho ? `${item.tamanho} · ` : ''}{item.armazenamento} · {item.cor}
                   </p>
-                  <p className="carrinho-item-preco">{formatarPreco(item.preco)}</p>
+                  <p className="carrinho-item-preco">
+                    {item.indisponivel ? 'Indisponível no momento' : formatarPreco(item.preco)}
+                  </p>
                 </div>
                 <button
                   className="carrinho-item-remover"
@@ -62,9 +67,13 @@ export default function CarrinhoFlutuante({ aberto, carrinho, onRemover, onLimpa
               <strong>{formatarPreco(total)}</strong>
             </div>
             <button className="carrinho-limpar" onClick={onLimpar}>Limpar seleção</button>
-            <a className="carrinho-enviar" href={whatsappUrl} target="_blank" rel="noreferrer">
-              Enviar interesse via WhatsApp
-            </a>
+            {disponiveis.length > 0 ? (
+              <a className="carrinho-enviar" href={whatsappUrl} target="_blank" rel="noreferrer">
+                Enviar interesse via WhatsApp
+              </a>
+            ) : (
+              <p className="carrinho-aviso">Nenhum item da seleção está disponível agora.</p>
+            )}
           </div>
         </>
       )}

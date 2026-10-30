@@ -7,6 +7,7 @@ import GiroIphone from './components/GiroIphone'
 import FaixaBeneficios from './components/FaixaBeneficios'
 import ProvaSocial from './components/ProvaSocial'
 import CarrinhoFlutuante from './components/CarrinhoFlutuante'
+import Protegido from './components/Protegido'
 import produtosBase from './data/produtos.json'
 // Aparelhos de exemplo, usados só enquanto a planilha ainda não tem a aba
 // "Seminovos" (script antigo, que não devolve o campo "seminovos")
@@ -17,14 +18,38 @@ import { revelar } from './revelar'
 
 const CARRINHO_STORAGE_KEY = 'mbr-carrinho-v1'
 
+// O Google costuma responder em 1,5 a 3,5 s. Passou disso aqui, a lista não
+// fica mais esperando (ver desistir); se a resposta chegar depois, os preços
+// se atualizam sozinhos
+const ESPERA_MAXIMA_PLANILHA_MS = 10000
+
 function lerCarrinhoSalvo() {
   try {
     const bruto = localStorage.getItem(CARRINHO_STORAGE_KEY)
     const dados = bruto ? JSON.parse(bruto) : []
-    return Array.isArray(dados) ? dados : []
+    // Só itens completos: um item sem preço (salvo com defeito ou mexido à mão)
+    // quebrava o painel do carrinho e, com ele, a página inteira
+    return Array.isArray(dados)
+      ? dados.filter(item => typeof item?.id === 'string' && typeof item.nome === 'string' && Number.isFinite(item.preco))
+      : []
   } catch {
     return []
   }
+}
+
+// Preço e disponibilidade de agora de tudo que pode estar no carrinho, pelo
+// mesmo id que os cards usam ao adicionar (lacrado: variante + armazenamento)
+function situacaoDosItens(produtos, seminovos) {
+  const situacao = new Map()
+  for (const variante of produtos) {
+    for (const opcao of variante.opcoes) {
+      situacao.set(`${variante.id}-${opcao.armazenamento}`, { preco: opcao.preco, disponivel: opcao.disponivel })
+    }
+  }
+  for (const aparelho of seminovos || []) {
+    situacao.set(aparelho.id, { preco: aparelho.preco, disponivel: !aparelho.reservado })
+  }
+  return situacao
 }
 
 const ORDEM_MODELOS = {
@@ -123,6 +148,9 @@ function useIsDesktop() {
 export default function App() {
   const [produtos, setProdutos] = useState(produtosBase)
   const [precosProntos, setPrecosProntos] = useState(false)
+  // A planilha não respondeu (erro ou demora): sem uma cópia salva dela, os
+  // cards mostram "Não foi possível carregar" no lugar do preço
+  const [planilhaFalhou, setPlanilhaFalhou] = useState(false)
   // null = a planilha ainda não respondeu ou não tem a aba "Seminovos"
   const [seminovosPlanilha, setSeminovosPlanilha] = useState(null)
   const [filtroCategoria, setFiltroCategoria] = useState('Destaque')
@@ -159,6 +187,7 @@ export default function App() {
 
   useEffect(() => {
     let cancelado = false
+    let respondeu = false
 
     const precosCache = lerPrecosCache()
     const aplicarSeminovos = (dados) => {
@@ -171,22 +200,65 @@ export default function App() {
       setPrecosProntos(true)
     }
 
-    buscarPrecosRemotos(PLANILHA_PRECOS_URL)
+    // A planilha não respondeu (fora do ar ou demorando demais): quem já
+    // visitou o site vê a última cópia dela salva neste navegador, mesmo
+    // antiga; quem nunca visitou vê "Não foi possível carregar" no lugar do
+    // preço. Nunca os preços fixos do produtos.json, que estão desatualizados.
+    // Os seminovos de uma cópia antiga não entram: aparelho já vendido
+    // continuaria na lista
+    const desistir = () => {
+      if (cancelado || respondeu) return
+      const copia = lerPrecosCache(Infinity)
+      if (copia) {
+        setProdutos(aplicarPrecos(produtosBase, copia))
+        setPrecosProntos(true)
+      }
+      setPlanilhaFalhou(true)
+    }
+    const espera = setTimeout(desistir, ESPERA_MAXIMA_PLANILHA_MS)
+
+    const buscar = () => buscarPrecosRemotos(PLANILHA_PRECOS_URL)
+    buscar()
+      // Um erro passageiro do Google não vira aviso na hora: tenta de novo 2 s depois
+      .catch(() => new Promise(r => setTimeout(r, 2000)).then(() => (cancelado ? null : buscar())))
       .then(precos => {
-        if (!cancelado && precos) {
-          setProdutos(aplicarPrecos(produtosBase, precos))
-          aplicarSeminovos(precos)
+        if (cancelado) return
+        // Sem planilha configurada (config.js vazio) valem os preços fixos
+        const atualizados = precos ? aplicarPrecos(produtosBase, precos) : produtosBase
+        respondeu = true
+        setProdutos(atualizados)
+        setPrecosProntos(true)
+        setPlanilhaFalhou(false)
+        if (precos) {
           salvarPrecosCache(precos)
+          aplicarSeminovos(precos)
         }
       })
-      .catch(() => {
-        // planilha fora do ar ou ainda não configurada: mantém os preços fixos do produtos.json
-      })
-      .finally(() => {
-        if (!cancelado) setPrecosProntos(true)
-      })
-    return () => { cancelado = true }
+      .catch(desistir)
+      .finally(() => clearTimeout(espera))
+    return () => {
+      cancelado = true
+      clearTimeout(espera)
+    }
   }, [])
+
+  // O carrinho fica salvo no navegador com o preço do dia em que cada item
+  // entrou. No painel e na mensagem do WhatsApp vale o preço de agora; o que
+  // esgotou, foi reservado ou vendido continua na lista, marcado como
+  // indisponível e fora do total
+  const carrinhoAtual = useMemo(() => {
+    if (!precosProntos) return carrinho
+    const situacao = situacaoDosItens(produtos, seminovosPlanilha)
+    return carrinho.map(item => {
+      // Sem a lista real de seminovos (planilha fora do ar) não dá pra saber
+      // se o aparelho ainda existe: fica como foi salvo
+      if (item.id.startsWith('semi-') && !seminovosPlanilha) return item
+      const agora = situacao.get(item.id)
+      if (!agora?.disponivel) return { ...item, indisponivel: true }
+      return { ...item, preco: agora.preco }
+    })
+  }, [carrinho, produtos, seminovosPlanilha, precosProntos])
+
   const isDesktop = useIsDesktop()
   const filtrosRef = useRef(null)
 
@@ -224,13 +296,15 @@ export default function App() {
     irParaProdutos()
   }
 
-  // Antes da planilha responder não mostra nada (nem o exemplo, pra não piscar
-  // aparelho e preço que não existem)
-  const usandoExemplo = seminovosPlanilha === null
+  // Os aparelhos de exemplo só aparecem quando a planilha respondeu sem a aba
+  // "Seminovos". Antes de ela responder, ou se ela falhou, não mostra nenhum
+  // (nem o exemplo, pra não mostrar aparelho e preço que não existem)
+  const usandoExemplo = seminovosPlanilha === null && precosProntos && !planilhaFalhou
   const seminovosBase = useMemo(
-    () => seminovosPlanilha ?? (precosProntos ? montarSeminovos(seminovosExemplo, produtosBase) : []),
-    [seminovosPlanilha, precosProntos]
+    () => seminovosPlanilha ?? (usandoExemplo ? montarSeminovos(seminovosExemplo, produtosBase) : []),
+    [seminovosPlanilha, usandoExemplo]
   )
+  const seminovosCarregados = seminovosPlanilha !== null || usandoExemplo
 
   const ordemAtual = ORDEM_MODELOS[filtroCategoria] || []
   const linhasAtual = LINHAS_POR_CATEGORIA[filtroCategoria]
@@ -341,10 +415,14 @@ export default function App() {
             </div>
           ) : emSeminovos ? (
             <>
-              {usandoExemplo && precosProntos && (
+              {usandoExemplo && (
                 <p className="aviso-prototipo">Protótipo · aparelhos e preços de exemplo</p>
               )}
-              {!precosProntos ? null : seminovos.length === 0 ? (
+              {!seminovosCarregados ? (
+                <p style={{ textAlign: 'center', padding: '60px 0', color: '#8a8a8a', fontSize: 15 }}>
+                  {planilhaFalhou ? 'Não foi possível carregar os aparelhos. Tente recarregar a página.' : 'Carregando aparelhos…'}
+                </p>
+              ) : seminovos.length === 0 ? (
                 <div style={{ textAlign: 'center', padding: '60px 0', color: '#8a8a8a' }}>
                   <p style={{ fontSize: 16, marginBottom: 16 }}>Nenhum seminovo disponível nesse filtro agora.</p>
                   <button className="btn-ver-mais" style={{ marginTop: 0 }} onClick={() => setCondicao('lacrado')}>
@@ -354,13 +432,15 @@ export default function App() {
               ) : (
                 <div className="produtos-grid">
                   {seminovosExibidos.map(aparelho => (
-                    <div className="revelar" ref={revelar} key={aparelho.id}>
-                      <SeminovoCard
-                        aparelho={aparelho}
-                        carrinhoIds={carrinhoIds}
-                        onAlternarCarrinho={alternarCarrinho}
-                      />
-                    </div>
+                    <Protegido key={aparelho.id}>
+                      <div className="revelar" ref={revelar}>
+                        <SeminovoCard
+                          aparelho={aparelho}
+                          carrinhoIds={carrinhoIds}
+                          onAlternarCarrinho={alternarCarrinho}
+                        />
+                      </div>
+                    </Protegido>
                   ))}
                 </div>
               )}
@@ -379,16 +459,20 @@ export default function App() {
               <div className="produtos-grid">
                 {gruposExibidos.map(({ modelo, variantes }) => (
                   // O aparecer fica num envoltório porque o card usa transform e
-                  // transition inline no hover, que anulariam o efeito nele
-                  <div className="revelar" ref={revelar} key={modelo}>
-                    <ModeloCard
-                      modelo={modelo}
-                      variantes={variantes}
-                      precosProntos={precosProntos}
-                      carrinhoIds={carrinhoIds}
-                      onAlternarCarrinho={alternarCarrinho}
-                    />
-                  </div>
+                  // transition inline no hover, que anulariam o efeito nele.
+                  // Protegido por fora: um card que quebrar some sem deixar buraco
+                  <Protegido key={modelo}>
+                    <div className="revelar" ref={revelar}>
+                      <ModeloCard
+                        modelo={modelo}
+                        variantes={variantes}
+                        precosProntos={precosProntos}
+                        planilhaFalhou={planilhaFalhou}
+                        carrinhoIds={carrinhoIds}
+                        onAlternarCarrinho={alternarCarrinho}
+                      />
+                    </div>
+                  </Protegido>
                 ))}
               </div>
               {limitarLista && (
@@ -418,7 +502,7 @@ export default function App() {
 
       <CarrinhoFlutuante
         aberto={carrinhoAberto}
-        carrinho={carrinho}
+        carrinho={carrinhoAtual}
         onRemover={removerDoCarrinho}
         onLimpar={() => {
           setCarrinho([])
