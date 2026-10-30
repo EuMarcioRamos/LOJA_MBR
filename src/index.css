@@ -1149,24 +1149,52 @@ body {
   .giro-dica { display: none; }
 }
 
+/* "Ver mais modelos/seminovos" (e "Ver lacrados", "Recarregar"): o mesmo botão
+   branco de vidro do "Ver produtos" do topo, já que no site as ações de
+   navegação são brancas e as de compra, verdes. O contorno escuro de antes
+   (#2a2a2a sobre o preto) quase sumia e o botão passava despercebido */
 .btn-ver-mais {
-  display: block;
-  margin: 28px auto 0;
-  padding: 13px 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  width: fit-content;
+  height: 46px;
+  margin: 32px auto 0;
+  padding: 0 26px;
+  border: none;
   border-radius: 50px;
-  border: 1px solid #2a2a2a;
-  background: transparent;
-  color: #fff;
-  font-size: 14px;
+  background: var(--vidro-branco);
+  color: #000;
+  font-size: 15px;
   font-weight: 600;
   font-family: inherit;
   cursor: pointer;
-  transition: all 0.18s ease;
+  transition: background-color 0.18s ease, transform 0.18s ease;
 }
 
 .btn-ver-mais:hover {
-  border-color: #555;
-  background: rgba(255, 255, 255, 0.06);
+  background: #fff;
+}
+
+.btn-ver-mais:active {
+  transform: scale(0.97);
+}
+
+.btn-ver-mais:focus-visible {
+  outline: 2px solid var(--whatsapp);
+  outline-offset: 3px;
+}
+
+/* Seta pra baixo nos que abrem mais itens na própria lista */
+.btn-ver-mais--expandir::after {
+  content: '';
+  width: 7px;
+  height: 7px;
+  margin-top: -4px;
+  border-right: 2px solid currentColor;
+  border-bottom: 2px solid currentColor;
+  transform: rotate(45deg);
 }
 
 /* Luz suave no centro da seção, que chega ao preto da página antes das bordas

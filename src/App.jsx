@@ -450,7 +450,7 @@ export default function App() {
                 </div>
               )}
               {limitarLista && (
-                <button className="btn-ver-mais" onClick={() => setMostrarTodos(true)}>
+                <button className="btn-ver-mais btn-ver-mais--expandir" onClick={() => setMostrarTodos(true)}>
                   Ver mais seminovos ({seminovos.length - LIMITE_INICIAL})
                 </button>
               )}
@@ -482,7 +482,7 @@ export default function App() {
               </div>
               {limitarLista && (
                 <button
-                  className="btn-ver-mais"
+                  className="btn-ver-mais btn-ver-mais--expandir"
                   onClick={() => setMostrarTodos(true)}
                 >
                   Ver mais modelos ({grupos.length - LIMITE_INICIAL})
