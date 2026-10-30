@@ -15,6 +15,10 @@ dist-ssr
 # Fotos de clientes (originais do iCloud): ficam só no computador, o repositório é público
 Img_clientes/
 
+# Fotos originais baixadas dos seminovos: o site usa as versões em WebP
+public/iphones/*/originais/
+public/iphones/*/original/
+
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json
