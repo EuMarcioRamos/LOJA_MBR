@@ -1,6 +1,6 @@
 import { useState } from 'react'
-import { WHATSAPP_NUMERO } from '../config'
 import { corDaLuz } from '../corDaLuz'
+import { linkWhatsApp, mensagemDoCard } from '../mensagemWhatsApp'
 
 // Card de um aparelho seminovo. Mesmo visual do ModeloCard, mas é uma unidade
 // só (cor e armazenamento já definidos), então no lugar dos seletores entra a
@@ -70,24 +70,20 @@ export default function SeminovoCard({ aparelho, carrinhoIds = [], onAlternarCar
 
   const precoTexto = emReais(preco)
   const parcelamento = parcelas && valorParcela ? `ou ${parcelas}x de ${emReais(valorParcela)}` : null
-  const descricao = [modelo, armazenamento, cor].filter(Boolean).join(' ')
-  const detalhes = [temBateria && `bateria ${bateria}%`, imei && `IMEI final ${imei}`].filter(Boolean).join(', ')
-  const mensagem = encodeURIComponent(
-    `Olá! Tenho interesse no ${descricao} seminovo${detalhes ? ` (${detalhes})` : ''}. Ainda está disponível?`
-  )
-  const whatsappUrl = `https://wa.me/${WHATSAPP_NUMERO}?text=${mensagem}`
-
   const itemCarrinhoId = aparelho.id
   const noCarrinho = carrinhoIds.includes(itemCarrinhoId)
   const itemCarrinho = {
     id: itemCarrinhoId,
-    nome: `${modelo} (seminovo)`,
+    nome: modelo,
+    seminovo: true,
+    imei,
     tamanho: null,
     armazenamento,
     cor,
     imagem,
     preco,
   }
+  const whatsappUrl = linkWhatsApp(mensagemDoCard(itemCarrinho))
 
   return (
     <div

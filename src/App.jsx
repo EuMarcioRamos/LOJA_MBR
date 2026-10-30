@@ -29,9 +29,14 @@ function lerCarrinhoSalvo() {
     const dados = bruto ? JSON.parse(bruto) : []
     // Só itens completos: um item sem preço (salvo com defeito ou mexido à mão)
     // quebrava o painel do carrinho e, com ele, a página inteira
-    return Array.isArray(dados)
-      ? dados.filter(item => typeof item?.id === 'string' && typeof item.nome === 'string' && Number.isFinite(item.preco))
-      : []
+    if (!Array.isArray(dados)) return []
+    return dados
+      .filter(item => typeof item?.id === 'string' && typeof item.nome === 'string' && Number.isFinite(item.preco))
+      // Seminovo salvo antes de o item levar a marca "seminovo" (o nome vinha
+      // com "(seminovo)" no fim); o IMEI vem da lista atual (situacaoDosItens)
+      .map(item => item.id.startsWith('semi-') && !item.seminovo
+        ? { ...item, seminovo: true, nome: item.nome.replace(/ \(seminovo\)$/, '') }
+        : item)
   } catch {
     return []
   }
@@ -47,7 +52,7 @@ function situacaoDosItens(produtos, seminovos) {
     }
   }
   for (const aparelho of seminovos || []) {
-    situacao.set(aparelho.id, { preco: aparelho.preco, disponivel: !aparelho.reservado })
+    situacao.set(aparelho.id, { preco: aparelho.preco, disponivel: !aparelho.reservado, imei: aparelho.imei })
   }
   return situacao
 }
@@ -255,7 +260,7 @@ export default function App() {
       if (item.id.startsWith('semi-') && !seminovosPlanilha) return item
       const agora = situacao.get(item.id)
       if (!agora?.disponivel) return { ...item, indisponivel: true }
-      return { ...item, preco: agora.preco }
+      return { ...item, preco: agora.preco, ...(agora.imei && { imei: agora.imei }) }
     })
   }, [carrinho, produtos, seminovosPlanilha, precosProntos])
 

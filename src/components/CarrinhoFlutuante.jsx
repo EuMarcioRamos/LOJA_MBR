@@ -1,17 +1,7 @@
-import { WHATSAPP_NUMERO } from '../config'
+import { linkWhatsApp, mensagemDoCarrinho } from '../mensagemWhatsApp'
 
 function formatarPreco(valor) {
   return valor.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })
-}
-
-function montarMensagem(itens) {
-  const linhas = itens.map((item, i) => {
-    const tamanho = item.tamanho ? `${item.tamanho} ` : ''
-    return `${i + 1}. ${item.nome} ${tamanho}${item.armazenamento} - ${item.cor} (${formatarPreco(item.preco)})`
-  })
-  return encodeURIComponent(
-    `Olá! Tenho interesse nesses produtos:\n${linhas.join('\n')}\n\nAinda estão disponíveis?`
-  )
 }
 
 export default function CarrinhoFlutuante({ aberto, carrinho, onRemover, onLimpar, onFechar }) {
@@ -22,7 +12,7 @@ export default function CarrinhoFlutuante({ aberto, carrinho, onRemover, onLimpa
   // pessoa ver o que aconteceu, mas fica fora do total e da mensagem
   const disponiveis = carrinho.filter(item => !item.indisponivel)
   const total = disponiveis.reduce((soma, item) => soma + item.preco, 0)
-  const whatsappUrl = `https://wa.me/${WHATSAPP_NUMERO}?text=${montarMensagem(disponiveis)}`
+  const whatsappUrl = linkWhatsApp(mensagemDoCarrinho(disponiveis))
 
   return (
     <div className="carrinho-painel">
@@ -42,7 +32,7 @@ export default function CarrinhoFlutuante({ aberto, carrinho, onRemover, onLimpa
               <div className={`carrinho-item${item.indisponivel ? ' carrinho-item--indisponivel' : ''}`} key={item.id}>
                 {item.imagem && <img src={item.imagem} alt={item.nome} className="carrinho-item-img" />}
                 <div className="carrinho-item-info">
-                  <p className="carrinho-item-nome">{item.nome}</p>
+                  <p className="carrinho-item-nome">{item.nome}{item.seminovo ? ' (seminovo)' : ''}</p>
                   <p className="carrinho-item-detalhe">
                     {item.tamanho ? `${item.tamanho} · ` : ''}{item.armazenamento} · {item.cor}
                   </p>

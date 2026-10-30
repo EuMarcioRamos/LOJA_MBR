@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from 'react'
-import { WHATSAPP_NUMERO } from '../config'
 import { corDaLuz } from '../corDaLuz'
+import { linkWhatsApp, mensagemDoCard } from '../mensagemWhatsApp'
 
 export default function ModeloCard({ modelo, variantes, precosProntos = true, planilhaFalhou = false, carrinhoIds = [], onAlternarCarrinho }) {
   const chips = [...new Set(variantes.map(v => v.chip).filter(Boolean))]
@@ -85,16 +85,10 @@ export default function ModeloCard({ modelo, variantes, precosProntos = true, pl
   const parcelamento = opcaoAtual.parcelas && opcaoAtual.valorParcela
     ? `ou ${opcaoAtual.parcelas}x de ${opcaoAtual.valorParcela.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}`
     : null
-  const tamanhoMsg = atual.tamanho ? `${atual.tamanho} ` : ''
   const linhaBase = modelo.replace(/ M\d+$/, '')
   const nomeCompleto = atual.chip ? `${linhaBase} ${atual.chip}` : atual.modelo
   const eyebrow = temChips ? linhaBase : 'Apple'
   const titulo = temChips ? chipSel : modelo
-  const mensagem = encodeURIComponent(
-    `Olá! Tenho interesse no ${nomeCompleto} ${tamanhoMsg}${opcaoAtual.armazenamento} ${atual.cor}. Ainda está disponível?`
-  )
-  const whatsappUrl = `https://wa.me/${WHATSAPP_NUMERO}?text=${mensagem}`
-
   const itemCarrinhoId = `${atual.id}-${opcaoAtual.armazenamento}`
   const noCarrinho = carrinhoIds.includes(itemCarrinhoId)
   // Só entra no carrinho com o preço da planilha na tela: antes dela responder,
@@ -109,6 +103,7 @@ export default function ModeloCard({ modelo, variantes, precosProntos = true, pl
     imagem: atual.imagem,
     preco: opcaoAtual.preco,
   }
+  const whatsappUrl = linkWhatsApp(mensagemDoCard(itemCarrinho))
 
   // Selecionado: o branco de sempre, um pouco transparente (--vidro-branco em index.css)
   const btnSelector = (sel, disabled = false) => ({
