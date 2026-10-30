@@ -593,10 +593,14 @@ body {
 }
 
 /* Chave Lacrados | Seminovos: mesma pílula escura da busca, com a opção
-   escolhida no branco dos seletores do card */
+   escolhida no branco dos seletores do card e uma borda no verde da loja.
+   As duas metades têm a mesma largura (grade 1fr 1fr), pra o fundo branco
+   (.condicao-trilho) deslizar de uma pra outra ao trocar */
 .condicao-chave {
+  position: relative;
   flex: none;
-  display: flex;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
   gap: 2px;
   padding: 3px;
   height: 44px;
@@ -605,7 +609,30 @@ body {
   border: 1px solid #2a2a2a;
 }
 
+/* Fundo do escolhido: metade da chave (descontando o padding de 3px e o gap
+   de 2px), andando uma metade + o gap pra ir ao Seminovos */
+.condicao-trilho {
+  position: absolute;
+  top: 3px;
+  bottom: 3px;
+  left: 3px;
+  width: calc(50% - 4px);
+  border-radius: 50px;
+  background: var(--vidro-branco);
+  box-shadow: inset 0 0 0 1.5px var(--whatsapp);
+  transition: transform 0.35s cubic-bezier(0.32, 0.72, 0, 1);
+}
+
+.condicao-chave--seminovo .condicao-trilho {
+  transform: translateX(calc(100% + 2px));
+}
+
 .condicao-opcao {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
   padding: 0 16px;
   border: none;
   border-radius: 50px;
@@ -616,7 +643,11 @@ body {
   font-family: inherit;
   white-space: nowrap;
   cursor: pointer;
-  transition: background 0.2s ease, color 0.2s ease;
+  transition: color 0.3s ease;
+}
+
+.condicao-opcao svg {
+  flex-shrink: 0;
 }
 
 .condicao-opcao:hover:not(.condicao-opcao--ativa) {
@@ -624,7 +655,6 @@ body {
 }
 
 .condicao-opcao--ativa {
-  background: var(--vidro-branco);
   color: #000;
 }
 
@@ -663,9 +693,6 @@ body {
     order: 3;
     width: 100%;
     height: 40px;
-  }
-  .condicao-opcao {
-    flex: 1;
   }
 }
 
@@ -737,6 +764,10 @@ body {
   .busca-pilula-acao,
   .filtros-ativo {
     animation: none;
+  }
+  .condicao-trilho,
+  .condicao-opcao {
+    transition: none;
   }
   .busca-pilula-anel-luz {
     transform: translate(-50%, -50%);

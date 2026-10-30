@@ -110,10 +110,29 @@ const IconeSeta = (
   </svg>
 )
 
-// Lacrados (catálogo) ou seminovos (aparelhos avulsos, cada um com seu estado)
+// Lacrados (catálogo) ou seminovos (aparelhos avulsos, cada um com seu estado),
+// com ícone como as categorias do menu: caixa fechada e setas de renovação
 const CONDICOES = [
-  { id: 'lacrado', label: 'Lacrados' },
-  { id: 'seminovo', label: 'Seminovos' },
+  {
+    id: 'lacrado',
+    label: 'Lacrados',
+    icon: (
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+        <path d="M12 3l8 4.5v9L12 21l-8-4.5v-9L12 3z" />
+        <path d="M12 12l8-4.5M12 12v9M12 12L4 7.5M16 5.25l-8 4.5" />
+      </svg>
+    ),
+  },
+  {
+    id: 'seminovo',
+    label: 'Seminovos',
+    icon: (
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+        <path d="M20 11a8.1 8.1 0 0 0-15.5-2M4 5v4h4" />
+        <path d="M4 13a8.1 8.1 0 0 0 15.5 2M20 19v-4h-4" />
+      </svg>
+    ),
+  },
 ]
 
 export default function Filtros({ modelos, filtroCategoria, setFiltroCategoria, filtroModelo, setFiltroModelo, busca, setBusca, condicao, setCondicao, onIrParaLista }) {
@@ -289,7 +308,13 @@ export default function Filtros({ modelos, filtroCategoria, setFiltroCategoria, 
 
           {/* Chave Lacrados | Seminovos: fica na barra presa, sempre à mão.
               No celular desce pra uma linha própria, abaixo da pílula */}
-          <div className="condicao-chave" role="radiogroup" aria-label="Condição do aparelho">
+          <div
+            className={`condicao-chave${condicao === 'seminovo' ? ' condicao-chave--seminovo' : ''}`}
+            role="radiogroup"
+            aria-label="Condição do aparelho"
+          >
+            {/* O fundo branco do escolhido é um só e desliza de um lado pro outro */}
+            <span className="condicao-trilho" aria-hidden="true" />
             {CONDICOES.map(c => (
               <button
                 key={c.id}
@@ -299,6 +324,7 @@ export default function Filtros({ modelos, filtroCategoria, setFiltroCategoria, 
                 className={`condicao-opcao${condicao === c.id ? ' condicao-opcao--ativa' : ''}`}
                 onClick={() => setCondicao(c.id)}
               >
+                {c.icon}
                 {c.label}
               </button>
             ))}
