@@ -634,6 +634,13 @@ body {
     width: 200px;
     height: 48px;
   }
+  /* O resumo do filtro nunca abre uma linha só pra ele (a barra presa
+     cresceria e empurraria a página): busca longa fica com reticências ao lado
+     da pílula, e o texto curto ocupa só o próprio tamanho */
+  .filtros-ativo {
+    flex: 1 1 0;
+    max-width: max-content;
+  }
   .busca-pilula--aberta {
     width: 100%;
   }

@@ -132,6 +132,25 @@ export default function Filtros({ modelos, filtroCategoria, setFiltroCategoria, 
   // a pílula volta a ser botão (a não ser que a pessoa esteja digitando)
   const pilulaAberta = aberto && (!presa || digitando)
 
+  // Ao recolher, a pílula encolhe animando (100% -> 200px, 0,45s no CSS da
+  // .busca-pilula) e o resumo do filtro ("ipad" ×) só entra depois. Antes ele
+  // aparecia junto, não cabia ao lado da pílula ainda larga e quebrava pra uma
+  // linha nova por um instante: com a barra presa, ela crescia 42px e empurrava
+  // a página, e o toque que tirou o foco da busca (num card, no "Ver mais"...)
+  // caía fora do botão e se perdia. Ajustado durante a renderização, como os
+  // modelos visíveis abaixo, pra o resumo não aparecer nem no primeiro quadro
+  const [pilulaAntes, setPilulaAntes] = useState(pilulaAberta)
+  const [recolhendo, setRecolhendo] = useState(false)
+  if (pilulaAntes !== pilulaAberta) {
+    setPilulaAntes(pilulaAberta)
+    setRecolhendo(!pilulaAberta)
+  }
+  useEffect(() => {
+    if (!recolhendo) return
+    const espera = setTimeout(() => setRecolhendo(false), 450)
+    return () => clearTimeout(espera)
+  }, [recolhendo])
+
   // Guarda os últimos modelos, pra linha poder recolher com eles ainda na tela
   if (modelos.length > 0 && modelos !== modelosVisiveis) {
     setModelosVisiveis(modelos)
@@ -285,7 +304,7 @@ export default function Filtros({ modelos, filtroCategoria, setFiltroCategoria, 
             ))}
           </div>
 
-          {!pilulaAberta && filtroAtivo && (
+          {!pilulaAberta && !recolhendo && filtroAtivo && (
             <button
               type="button"
               className="filtros-ativo"
