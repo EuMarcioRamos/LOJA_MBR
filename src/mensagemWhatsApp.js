@@ -49,16 +49,26 @@ export function abreWhatsAppDireto(ua = navigator.userAgent, plataforma = naviga
   return /Android|iPhone|iPad|iPod/i.test(ua) || (plataforma === 'MacIntel' && toques > 1)
 }
 
-// "https://wa.me/5583...?text=Olá" -> "whatsapp://send?phone=5583...&text=Ol%C3%A1"
+// Os links do WhatsApp do site (os wa.me também, se algum aparecer)
+export const SELETOR_LINK_WHATSAPP = 'a[href^="https://api.whatsapp.com/send"], a[href^="https://wa.me/"]'
+
+// "https://api.whatsapp.com/send/?phone=5583...&text=Olá" (ou wa.me/5583...?text=Olá)
+// -> "whatsapp://send?phone=5583...&text=Ol%C3%A1"
 export function enderecoNoApp(link) {
   const url = new URL(link)
-  const telefone = url.pathname.replace(/\D/g, '')
+  const telefone = (url.searchParams.get('phone') || url.pathname).replace(/\D/g, '')
   const texto = url.searchParams.get('text')
   return `whatsapp://send?phone=${telefone}${texto ? `&text=${encodeURIComponent(texto)}` : ''}`
 }
 
+// Link do WhatsApp da loja, com ou sem mensagem pronta. Vai direto pro
+// api.whatsapp.com/send, o endereço pra onde o wa.me redireciona: nesse
+// redirecionamento o wa.me troca cada emoji por "�" e a mensagem chegava com
+// "?" no lugar deles (os acentos passavam). Os parâmetros são os mesmos que o
+// próprio wa.me põe. Use sempre esta função, nunca um link wa.me
 export function linkWhatsApp(texto) {
-  return `https://wa.me/${WHATSAPP_NUMERO}?text=${encodeURIComponent(texto)}`
+  const mensagem = texto ? `&text=${encodeURIComponent(texto)}` : ''
+  return `https://api.whatsapp.com/send/?phone=${WHATSAPP_NUMERO}${mensagem}&type=phone_number&app_absent=0`
 }
 
 export function mensagemDoCarrinho(itens) {

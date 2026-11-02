@@ -1,9 +1,5 @@
-import { WHATSAPP_NUMERO } from '../config'
+import { linkWhatsApp } from '../mensagemWhatsApp'
 import { revelar } from '../revelar'
-
-function linkWhatsapp(mensagem) {
-  return `https://wa.me/${WHATSAPP_NUMERO}?text=${encodeURIComponent(mensagem)}`
-}
 
 const BENEFICIOS = [
   {
@@ -37,7 +33,7 @@ export default function FaixaBeneficios() {
             <p className="beneficio-texto">{item.texto}</p>
             <a
               className="beneficio-link"
-              href={linkWhatsapp(item.mensagem)}
+              href={linkWhatsApp(item.mensagem)}
               target="_blank"
               rel="noreferrer"
             >

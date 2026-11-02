@@ -1,5 +1,5 @@
 import { Component } from 'react'
-import { WHATSAPP_NUMERO } from '../config'
+import { linkWhatsApp } from '../mensagemWhatsApp'
 
 // Se um pedaço da página quebra (por exemplo, um card com um dado inesperado
 // da planilha), só esse pedaço some. Sem isso o React desmonta a página
@@ -36,7 +36,7 @@ export function AvisoDeFalha() {
         </button>
         <a
           className="carrinho-enviar"
-          href={`https://wa.me/${WHATSAPP_NUMERO}`}
+          href={linkWhatsApp()}
           target="_blank"
           rel="noreferrer"
           style={{ padding: '13px 28px', borderRadius: 50 }}

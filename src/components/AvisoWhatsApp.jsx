@@ -1,8 +1,8 @@
 import { useEffect, useRef, useState } from 'react'
 import { createPortal } from 'react-dom'
-import { abreWhatsAppDireto, enderecoNoApp } from '../mensagemWhatsApp'
+import { abreWhatsAppDireto, enderecoNoApp, SELETOR_LINK_WHATSAPP } from '../mensagemWhatsApp'
 
-// No celular, todo link do WhatsApp do site ("https://wa.me/...", nos cards,
+// No celular, todo link do WhatsApp do site (linkWhatsApp, nos cards,
 // no carrinho, no topo...) abre o app direto pelo endereço whatsapp://. Antes
 // ele carregava a página do WhatsApp na web numa aba nova e a pessoa saía do
 // site; agora o site fica onde estava e mostra um aviso embaixo. Se o app não
@@ -32,7 +32,7 @@ const IconeWhatsApp = (
 )
 
 export default function AvisoWhatsApp() {
-  // { fase: 'abrindo' | 'falhou', link: o wa.me original, alvo: onde o aviso aparece }
+  // { fase: 'abrindo' | 'falhou', link: o link original (web), alvo: onde o aviso aparece }
   const [aviso, setAviso] = useState(null)
   const espera = useRef(null)
 
@@ -41,7 +41,7 @@ export default function AvisoWhatsApp() {
 
     const aoClicar = (e) => {
       if (e.defaultPrevented || e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return
-      const link = e.target.closest?.('a[href^="https://wa.me/"]')
+      const link = e.target.closest?.(SELETOR_LINK_WHATSAPP)
       // o "Abrir de novo" do próprio aviso abre pela web, de propósito
       if (!link || link.hasAttribute('data-whatsapp-web')) return
       e.preventDefault()

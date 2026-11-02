@@ -1,4 +1,4 @@
-import { WHATSAPP_NUMERO } from '../config'
+import { linkWhatsApp } from '../mensagemWhatsApp'
 
 export default function Header({ carrinhoCount = 0, carrinhoAnimKey = 0, onAbrirCarrinho }) {
   return (
@@ -28,7 +28,7 @@ export default function Header({ carrinhoCount = 0, carrinhoAnimKey = 0, onAbrir
 
         <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
           <a
-            href={`https://wa.me/${WHATSAPP_NUMERO}`}
+            href={linkWhatsApp()}
             target="_blank"
             rel="noreferrer"
             style={{

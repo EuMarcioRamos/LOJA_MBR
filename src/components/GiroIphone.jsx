@@ -1,5 +1,5 @@
 import { useEffect, useRef } from 'react'
-import { WHATSAPP_NUMERO } from '../config'
+import { linkWhatsApp } from '../mensagemWhatsApp'
 
 // Giro do iPhone controlado pela rolagem (técnica das páginas da Apple):
 // uma sequência de imagens em public/giro é desenhada num canvas, e a posição
@@ -37,7 +37,7 @@ function opacidadeNoTrecho(p, { de, ate }) {
   return 1
 }
 
-const mensagemWhatsapp = encodeURIComponent('Olá! Tenho interesse no iPhone 18 Pro Max. Pode me passar as informações?')
+const linkDoBanner = linkWhatsApp('Olá! Tenho interesse no iPhone 18 Pro Max. Pode me passar as informações?')
 
 export default function GiroIphone({ onVerProdutos, onEscolherCategoria }) {
   const secaoRef = useRef(null)
@@ -323,7 +323,7 @@ export default function GiroIphone({ onVerProdutos, onEscolherCategoria }) {
                 <button className="giro-cta giro-cta-branco" onClick={() => onEscolherCategoria('iPhone')}>Ver iPhones</button>
                 <a
                   className="giro-cta giro-cta-verde"
-                  href={`https://wa.me/${WHATSAPP_NUMERO}?text=${mensagemWhatsapp}`}
+                  href={linkDoBanner}
                   target="_blank"
                   rel="noreferrer"
                 >
