@@ -2126,3 +2126,149 @@ html:has(.carrinho-modal[open]) {
     animation: none;
   }
 }
+
+/* ── Rodapé ──
+   Os dados da loja em colunas. Sem linha separando do resto da página: a luz
+   radial no topo continua o fundo da seção de cima, como nas outras seções.
+   Um padrão só de cor: títulos em branco e todo o resto (textos, links e
+   pílulas) no mesmo cinza; o link só clareia ao passar o mouse */
+.rodape {
+  background: radial-gradient(ellipse 80% 70% at 50% 0%, var(--bg-elevado), var(--bg-primary) 70%);
+  padding: clamp(48px, 6vw, 72px) 24px 28px;
+  color: var(--text-secondary);
+}
+
+.rodape-info {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1.3fr 1fr 1fr 1fr;
+  gap: 40px;
+}
+
+.rodape-logo {
+  height: 42px;
+  width: auto;
+  margin-bottom: 14px;
+}
+
+.rodape-frase {
+  font-size: 14px;
+  line-height: 1.6;
+  margin-bottom: 18px;
+}
+
+.rodape-redes {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+/* Rede social em pílula, com o @ à mostra (no celular não há dica ao passar o mouse) */
+.rodape-rede {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  height: 36px;
+  padding: 0 14px;
+  border: 1px solid var(--border);
+  border-radius: 50px;
+  color: inherit;
+  font-size: 13px;
+  text-decoration: none;
+  transition: border-color 0.18s ease, color 0.18s ease;
+}
+
+.rodape-rede:hover {
+  border-color: var(--border-hover);
+  color: #fff;
+}
+
+.rodape-titulo {
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #fff;
+  margin-bottom: 16px;
+}
+
+.rodape-lista {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  font-size: 14px;
+  line-height: 1.55;
+}
+
+.rodape-lista li {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+}
+
+.rodape-lista svg {
+  flex-shrink: 0;
+  margin-top: 2px;
+  color: #8a8a8a;
+}
+
+.rodape-lista a {
+  color: inherit;
+  text-decoration: none;
+  /* o e-mail é uma palavra só: sem isso estourava a coluna no celular */
+  overflow-wrap: anywhere;
+}
+
+.rodape-lista a:hover {
+  color: #fff;
+}
+
+.rodape-link {
+  display: inline-block;
+  margin-top: 14px;
+  font-size: 14px;
+  color: inherit;
+  text-decoration: none;
+}
+
+.rodape-link:hover {
+  color: #fff;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.rodape-legal {
+  max-width: 1200px;
+  margin: clamp(48px, 6vw, 72px) auto 0;
+  text-align: center;
+  font-size: 12.5px;
+  line-height: 1.6;
+  color: #6f6f6f;
+}
+
+/* No celular a linha quebra: "CNPJ" não fica longe do número */
+.rodape-cnpj {
+  white-space: nowrap;
+}
+
+/* Tablet: a marca em cima, ocupando a largura, e as colunas duas a duas */
+@media (max-width: 900px) {
+  .rodape-info {
+    grid-template-columns: 1fr 1fr;
+    gap: 36px 28px;
+  }
+
+  .rodape-marca {
+    grid-column: 1 / -1;
+  }
+}
+
+/* Celular: uma coluna só */
+@media (max-width: 560px) {
+  .rodape-info {
+    grid-template-columns: 1fr;
+    gap: 32px;
+  }
+}

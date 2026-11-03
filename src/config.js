@@ -6,3 +6,16 @@ export const PLANILHA_PRECOS_URL = 'https://script.google.com/macros/s/AKfycbzNG
 // Número de WhatsApp da loja (com DDI+DDD), usado em todos os links do WhatsApp
 // do site (montados por linkWhatsApp, em src/mensagemWhatsApp.js).
 export const WHATSAPP_NUMERO = '5583991281912'
+
+// Dados da loja mostrados no rodapé (src/components/Rodape.jsx)
+export const LOJA = {
+  cnpj: '00.000.000/0000-00', // provisório: trocar pelo CNPJ da empresa
+  email: 'masterbrimports@gmail.com',
+  instagram: 'masterbrpb',
+  tiktok: 'masterbrpatos',
+  endereco: 'Rua Geraldo Cabral, São Sebastião',
+  cidade: 'Patos, PB',
+  cep: '58700-970',
+  dias: 'Segunda a sexta',
+  horario: ['9h às 12h', '14h às 18h'],
+}

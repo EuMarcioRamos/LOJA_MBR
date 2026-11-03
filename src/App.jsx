@@ -6,6 +6,7 @@ import SeminovoCard from './components/SeminovoCard'
 import GiroIphone from './components/GiroIphone'
 import FaixaBeneficios from './components/FaixaBeneficios'
 import ProvaSocial from './components/ProvaSocial'
+import Rodape from './components/Rodape'
 import CarrinhoFlutuante from './components/CarrinhoFlutuante'
 import AvisoWhatsApp from './components/AvisoWhatsApp'
 import Protegido from './components/Protegido'
@@ -498,13 +499,7 @@ export default function App() {
 
       <ProvaSocial />
 
-      <footer style={{
-        background: 'linear-gradient(var(--bg-primary), var(--bg-elevado))',
-        padding: '24px', textAlign: 'center',
-        color: '#8a8a8a', fontSize: 13,
-      }}>
-        © {new Date().getFullYear()} MasterBR — Assistência Especializada Apple
-      </footer>
+      <Rodape />
 
       <CarrinhoFlutuante
         aberto={carrinhoAberto}
