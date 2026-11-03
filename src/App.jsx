@@ -1,4 +1,4 @@
-import { useState, useMemo, useEffect, useRef } from 'react'
+import { useState, useMemo, useEffect, useLayoutEffect, useRef } from 'react'
 import Header from './components/Header'
 import Filtros from './components/Filtros'
 import ModeloCard from './components/ModeloCard'
@@ -272,6 +272,24 @@ export default function App() {
 
   useEffect(() => {
     setMostrarTodos(false)
+  }, [filtroCategoria, filtroModelo, busca, condicao])
+
+  // Trocou o filtro (Lacrados/Seminovos, categoria, modelo, busca) com a lista
+  // já rolada: o conteúdo novo pode ser bem mais curto (29 seminovos -> 6
+  // lacrados do destaque) e a página ficava lá embaixo, já na seção seguinte
+  // ("Sobre a MasterBR"). Volta pro começo da lista antes de pintar a tela
+  // (useLayoutEffect), sem animação, como quem troca de aba. Se o começo da
+  // lista já está na tela, nada se mexe
+  const filtrosJaMontados = useRef(false)
+  useLayoutEffect(() => {
+    if (!filtrosJaMontados.current) {
+      filtrosJaMontados.current = true
+      return
+    }
+    const loja = filtrosRef.current
+    if (!loja) return
+    const topo = loja.getBoundingClientRect().top
+    if (topo < 69) window.scrollTo(0, topo + window.scrollY - 70)
   }, [filtroCategoria, filtroModelo, busca, condicao])
 
   // Rola até a lista, deixando o começo dela logo abaixo do Header (70px).
