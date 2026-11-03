@@ -415,10 +415,13 @@ export default function App() {
         />
 
         <div style={{ maxWidth: 1200, margin: '0 auto', padding: '24px 24px 60px' }}>
+          {/* Entra com o mesmo aparecer dos cards (fade + leve subida), antes deles */}
           {!categoriaIndisponivel && (
-            <AvisoValores>
-              Preços e disponibilidade sujeitos a alteração sem aviso prévio. O valor final é confirmado no atendimento via WhatsApp.
-            </AvisoValores>
+            <div className="revelar" ref={revelar}>
+              <AvisoValores>
+                Preços e disponibilidade sujeitos a alteração sem aviso prévio. O valor final é confirmado no atendimento via WhatsApp.
+              </AvisoValores>
+            </div>
           )}
           {categoriaIndisponivel ? (
             <div style={{ textAlign: 'center', padding: '100px 0' }}>

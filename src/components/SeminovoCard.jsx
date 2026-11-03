@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { corDaLuz } from '../corDaLuz'
 import { linkWhatsApp, mensagemDoCard } from '../mensagemWhatsApp'
+import { validadeGarantiaApple } from '../garantiaApple'
 
 // Card de um aparelho seminovo. Mesmo visual do ModeloCard, mas é uma unidade
 // só (cor e armazenamento já definidos), então no lugar dos seletores entra a
@@ -46,12 +47,16 @@ const IconeGarantia = (
   </svg>
 )
 
-// Uma linha da ficha: ícone, rótulo à esquerda e valor à direita
-function LinhaEstado({ icone: Icone, rotulo, quebra = false, children }) {
+// Uma linha da ficha: ícone, rótulo à esquerda e valor à direita. O detalhe
+// é uma segunda linha menor embaixo do rótulo (a validade da garantia Apple)
+function LinhaEstado({ icone: Icone, rotulo, detalhe, quebra = false, children }) {
   return (
-    <div className="seminovo-estado-linha">
+    <div className={`seminovo-estado-linha${detalhe ? ' seminovo-estado-linha--detalhe' : ''}`}>
       <span className="seminovo-estado-icone">{Icone}</span>
-      <span className="seminovo-estado-rotulo">{rotulo}</span>
+      <span className="seminovo-estado-rotulo">
+        {rotulo}
+        {detalhe && <span className="seminovo-estado-detalhe">{detalhe}</span>}
+      </span>
       <span className={`seminovo-estado-valor${quebra ? ' seminovo-estado-valor--quebra' : ''}`}>{children}</span>
     </div>
   )
@@ -67,6 +72,7 @@ export default function SeminovoCard({ aparelho, carrinhoIds = [], onAlternarCar
   } = aparelho
   const disponivel = !reservado
   const temBateria = bateria != null && bateria !== ''
+  const garantia = validadeGarantiaApple(garantiaApple)
 
   const precoTexto = emReais(preco)
   const parcelamento = parcelas && valorParcela ? `ou ${parcelas}x de ${emReais(valorParcela)}` : null
@@ -148,7 +154,11 @@ export default function SeminovoCard({ aparelho, carrinhoIds = [], onAlternarCar
               <span style={{ color: 'var(--whatsapp)' }}>{bateria}%</span>
             </LinhaEstado>
           )}
-          {garantiaApple && <LinhaEstado icone={IconeCalendario} rotulo="Garantia Apple">{garantiaApple}</LinhaEstado>}
+          {garantia && !garantia.vencida && (
+            <LinhaEstado icone={IconeCalendario} rotulo="Garantia Apple" detalhe={garantia.detalhe}>
+              <span className="seminovo-estado-ativa">Ativa</span>
+            </LinhaEstado>
+          )}
           {garantiaLoja && <LinhaEstado icone={IconeGarantia} rotulo="Garantia MasterBR">{garantiaLoja}</LinhaEstado>}
           {acompanha && <LinhaEstado icone={IconeCaixa} rotulo="Acompanha" quebra>{acompanha}</LinhaEstado>}
         </div>
