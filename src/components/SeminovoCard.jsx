@@ -18,10 +18,10 @@ const IconeBateria = (
   </svg>
 )
 
-const IconeCalendario = (
+const IconeApple = (
   <svg {...icone}>
-    <rect x="3" y="5" width="18" height="16" rx="2.5" />
-    <path d="M3 10h18M8 3v4M16 3v4" />
+    <path d="M8.286 7.008c-3.216 0-4.286 3.23-4.286 5.92 0 3.229 2.143 8.072 4.286 8.072 1.165-.05 1.799-.538 3.214-.538 1.406 0 1.607.538 3.214.538s4.286-3.229 4.286-5.381c-.03-.011-2.649-.434-2.679-3.23-.02-2.335 2.589-3.179 2.679-3.228-1.096-1.606-3.162-2.113-3.75-2.153-1.535-.12-3.032 1.077-3.75 1.077-.729 0-2.036-1.077-3.214-1.077z" />
+    <path d="M12 4a2 2 0 0 0 2-2 2 2 0 0 0-2 2" />
   </svg>
 )
 
@@ -47,17 +47,18 @@ const IconeGarantia = (
   </svg>
 )
 
-// Uma linha da ficha: ícone, rótulo à esquerda e valor à direita. O detalhe
-// é uma segunda linha menor embaixo do rótulo (a validade da garantia Apple)
-function LinhaEstado({ icone: Icone, rotulo, detalhe, quebra = false, children }) {
+// Uma linha da ficha: ícone, rótulo à esquerda e valor à direita. O
+// subvalor é uma segunda linha menor embaixo do valor (a validade da garantia
+// Apple, embaixo do tempo que resta)
+function LinhaEstado({ icone: Icone, rotulo, subvalor, quebra = false, children }) {
   return (
-    <div className={`seminovo-estado-linha${detalhe ? ' seminovo-estado-linha--detalhe' : ''}`}>
+    <div className={`seminovo-estado-linha${subvalor ? ' seminovo-estado-linha--dupla' : ''}`}>
       <span className="seminovo-estado-icone">{Icone}</span>
-      <span className="seminovo-estado-rotulo">
-        {rotulo}
-        {detalhe && <span className="seminovo-estado-detalhe">{detalhe}</span>}
+      <span className="seminovo-estado-rotulo">{rotulo}</span>
+      <span className={`seminovo-estado-valor${quebra ? ' seminovo-estado-valor--quebra' : ''}${subvalor ? ' seminovo-estado-valor--duplo' : ''}`}>
+        {children}
+        {subvalor && <span className="seminovo-estado-subvalor">{subvalor}</span>}
       </span>
-      <span className={`seminovo-estado-valor${quebra ? ' seminovo-estado-valor--quebra' : ''}`}>{children}</span>
     </div>
   )
 }
@@ -155,8 +156,8 @@ export default function SeminovoCard({ aparelho, carrinhoIds = [], onAlternarCar
             </LinhaEstado>
           )}
           {garantia && !garantia.vencida && (
-            <LinhaEstado icone={IconeCalendario} rotulo="Garantia Apple" detalhe={garantia.detalhe}>
-              <span className="seminovo-estado-ativa">Ativa</span>
+            <LinhaEstado icone={IconeApple} rotulo="Garantia Apple" subvalor={garantia.validade}>
+              <span className="seminovo-estado-ativa">{garantia.restante ?? 'Ativa'}</span>
             </LinhaEstado>
           )}
           {garantiaLoja && <LinhaEstado icone={IconeGarantia} rotulo="Garantia MasterBR">{garantiaLoja}</LinhaEstado>}
