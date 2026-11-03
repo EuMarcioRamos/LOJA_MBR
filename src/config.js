@@ -9,7 +9,7 @@ export const WHATSAPP_NUMERO = '5583991281912'
 
 // Dados da loja mostrados no rodapé (src/components/Rodape.jsx)
 export const LOJA = {
-  cnpj: '00.000.000/0000-00', // provisório: trocar pelo CNPJ da empresa
+  cnpj: '61.982.942/0001-07',
   email: 'masterbrimports@gmail.com',
   instagram: 'masterbrpb',
   tiktok: 'masterbrpatos',
