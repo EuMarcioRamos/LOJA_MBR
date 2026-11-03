@@ -585,6 +585,38 @@ body {
   background: currentColor;
 }
 
+/* Aviso de preços e disponibilidade sujeitos a alteração (AvisoValores.jsx):
+   no âmbar do selo "Reservado", discreto mas legível sobre o preto. Na lista
+   ocupa só a largura do texto; no carrinho, a do rodapé */
+.aviso-valores {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  width: fit-content;
+  max-width: 100%;
+  margin-bottom: 20px;
+  padding: 11px 16px 11px 14px;
+  border-radius: 12px;
+  background: rgba(224, 160, 40, 0.1);
+  border: 1px solid rgba(224, 160, 40, 0.35);
+  color: #f0c46a;
+  font-size: 13.5px;
+  line-height: 1.45;
+}
+
+.aviso-valores svg {
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+
+.aviso-valores--compacto {
+  width: auto;
+  gap: 8px;
+  margin: 0;
+  padding: 9px 12px;
+  font-size: 12.5px;
+}
+
 /* Aviso do protótipo, acima da grade de seminovos */
 .aviso-prototipo {
   margin-bottom: 16px;

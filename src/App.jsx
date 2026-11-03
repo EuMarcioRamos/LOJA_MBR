@@ -9,6 +9,7 @@ import ProvaSocial from './components/ProvaSocial'
 import Rodape from './components/Rodape'
 import CarrinhoFlutuante from './components/CarrinhoFlutuante'
 import AvisoWhatsApp from './components/AvisoWhatsApp'
+import AvisoValores from './components/AvisoValores'
 import Protegido from './components/Protegido'
 import produtosBase from './data/produtos.json'
 // Aparelhos de exemplo, usados só enquanto a planilha ainda não tem a aba
@@ -414,6 +415,11 @@ export default function App() {
         />
 
         <div style={{ maxWidth: 1200, margin: '0 auto', padding: '24px 24px 60px' }}>
+          {!categoriaIndisponivel && (
+            <AvisoValores>
+              Preços e disponibilidade sujeitos a alteração sem aviso prévio. O valor final é confirmado no atendimento via WhatsApp.
+            </AvisoValores>
+          )}
           {categoriaIndisponivel ? (
             <div style={{ textAlign: 'center', padding: '100px 0' }}>
               <p style={{ fontSize: 40, marginBottom: 16 }}>🔜</p>

@@ -1,5 +1,6 @@
 import { useEffect, useRef } from 'react'
 import { detalhesDoItem, linkWhatsApp, mensagemDoCarrinho } from '../mensagemWhatsApp'
+import AvisoValores from './AvisoValores'
 
 function formatarPreco(valor) {
   return valor.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })
@@ -122,6 +123,11 @@ export default function CarrinhoFlutuante({ aberto, carrinho, onRemover, onLimpa
           </ul>
 
           <div className="carrinho-modal-rodape">
+            {disponiveis.length > 0 && (
+              <AvisoValores compacto>
+                Preços sujeitos a alteração. O valor final é confirmado no atendimento via WhatsApp.
+              </AvisoValores>
+            )}
             <button className="carrinho-limpar" onClick={onLimpar}>Limpar seleção</button>
             {disponiveis.length > 0 ? (
               <a className="carrinho-enviar" href={whatsappUrl} target="_blank" rel="noreferrer">
