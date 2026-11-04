@@ -3280,6 +3280,134 @@
     "tamanho": "46mm"
   },
   {
+    "id": "watch-s12-preto-42",
+    "modelo": "Apple Watch S12",
+    "cor": "Preto",
+    "corHex": "#1C1C1E",
+    "imagem": "/watches/watch-series12-preto.webp",
+    "destaque": false,
+    "opcoes": [
+      {
+        "armazenamento": "GPS",
+        "preco": 5499,
+        "disponivel": true
+      }
+    ],
+    "tamanho": "42mm"
+  },
+  {
+    "id": "watch-s12-preto-46",
+    "modelo": "Apple Watch S12",
+    "cor": "Preto",
+    "corHex": "#1C1C1E",
+    "imagem": "/watches/watch-series12-preto.webp",
+    "destaque": false,
+    "opcoes": [
+      {
+        "armazenamento": "GPS",
+        "preco": 6099,
+        "disponivel": true
+      }
+    ],
+    "tamanho": "46mm"
+  },
+  {
+    "id": "watch-s12-cinza-espacial-42",
+    "modelo": "Apple Watch S12",
+    "cor": "Cinza Espacial",
+    "corHex": "#5E5E62",
+    "imagem": "/watches/watch-series12-cinza-espacial.webp",
+    "destaque": false,
+    "opcoes": [
+      {
+        "armazenamento": "GPS",
+        "preco": 5499,
+        "disponivel": true
+      }
+    ],
+    "tamanho": "42mm"
+  },
+  {
+    "id": "watch-s12-cinza-espacial-46",
+    "modelo": "Apple Watch S12",
+    "cor": "Cinza Espacial",
+    "corHex": "#5E5E62",
+    "imagem": "/watches/watch-series12-cinza-espacial.webp",
+    "destaque": false,
+    "opcoes": [
+      {
+        "armazenamento": "GPS",
+        "preco": 6099,
+        "disponivel": true
+      }
+    ],
+    "tamanho": "46mm"
+  },
+  {
+    "id": "watch-s12-bronze-escuro-42",
+    "modelo": "Apple Watch S12",
+    "cor": "Bronze Escuro",
+    "corHex": "#6B5038",
+    "imagem": "/watches/watch-series12-bronze-escuro.webp",
+    "destaque": false,
+    "opcoes": [
+      {
+        "armazenamento": "GPS",
+        "preco": 5499,
+        "disponivel": true
+      }
+    ],
+    "tamanho": "42mm"
+  },
+  {
+    "id": "watch-s12-bronze-escuro-46",
+    "modelo": "Apple Watch S12",
+    "cor": "Bronze Escuro",
+    "corHex": "#6B5038",
+    "imagem": "/watches/watch-series12-bronze-escuro.webp",
+    "destaque": false,
+    "opcoes": [
+      {
+        "armazenamento": "GPS",
+        "preco": 6099,
+        "disponivel": true
+      }
+    ],
+    "tamanho": "46mm"
+  },
+  {
+    "id": "watch-s12-dourado-claro-42",
+    "modelo": "Apple Watch S12",
+    "cor": "Dourado Claro",
+    "corHex": "#E6D2A8",
+    "imagem": "/watches/watch-series12-dourado-claro.webp",
+    "destaque": false,
+    "opcoes": [
+      {
+        "armazenamento": "GPS",
+        "preco": 5499,
+        "disponivel": true
+      }
+    ],
+    "tamanho": "42mm"
+  },
+  {
+    "id": "watch-s12-dourado-claro-46",
+    "modelo": "Apple Watch S12",
+    "cor": "Dourado Claro",
+    "corHex": "#E6D2A8",
+    "imagem": "/watches/watch-series12-dourado-claro.webp",
+    "destaque": false,
+    "opcoes": [
+      {
+        "armazenamento": "GPS",
+        "preco": 6099,
+        "disponivel": true
+      }
+    ],
+    "tamanho": "46mm"
+  },
+  {
     "id": "watch-s11-preto-jacto-42",
     "modelo": "Apple Watch S11",
     "cor": "Preto Jacto",
@@ -3406,6 +3534,36 @@
     ]
   },
   {
+    "id": "watch-ultra4-titanio-natural",
+    "modelo": "Apple Watch Ultra 4",
+    "cor": "Titânio Natural",
+    "corHex": "#A8A79E",
+    "imagem": "/watches/watch-ultra4-titanio-natural.webp",
+    "destaque": true,
+    "opcoes": [
+      {
+        "armazenamento": "GPS",
+        "preco": 10499,
+        "disponivel": true
+      }
+    ]
+  },
+  {
+    "id": "watch-ultra4-titanio-preto",
+    "modelo": "Apple Watch Ultra 4",
+    "cor": "Titânio Preto",
+    "corHex": "#3A3A3C",
+    "imagem": "/watches/watch-ultra4-titanio-preto.webp",
+    "destaque": true,
+    "opcoes": [
+      {
+        "armazenamento": "GPS",
+        "preco": 10499,
+        "disponivel": true
+      }
+    ]
+  },
+  {
     "id": "watch-ultra3-titanio-natural",
     "modelo": "Apple Watch Ultra 3",
     "cor": "Titânio Natural",
@@ -3506,6 +3664,21 @@
       {
         "armazenamento": "Padrão",
         "preco": 1150,
+        "disponivel": true
+      }
+    ]
+  },
+  {
+    "id": "airpods-5",
+    "modelo": "AirPods 5",
+    "cor": "Branco",
+    "corHex": "#F5F5F5",
+    "imagem": "/airpods/airpods5.webp",
+    "destaque": false,
+    "opcoes": [
+      {
+        "armazenamento": "Padrão",
+        "preco": 1499,
         "disponivel": true
       }
     ]

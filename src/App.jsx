@@ -80,12 +80,13 @@ const ORDEM_MODELOS = {
     'iPad 11 A16', 'iPad 10',
   ],
   'Apple Watch': [
-    'Apple Watch Ultra 3', 'Apple Watch Ultra 2',
-    'Apple Watch S11', 'Apple Watch S10',
+    'Apple Watch Ultra 4', 'Apple Watch Ultra 3', 'Apple Watch Ultra 2',
+    'Apple Watch S12', 'Apple Watch S11', 'Apple Watch S10',
     'Apple Watch SE 3ª', 'Apple Watch SE 2ª',
   ],
   AirPods: [
     'AirPods Pro 3', 'AirPods Pro 2',
+    'AirPods 5',
     'AirPods 4 ANC', 'AirPods 4',
     'AirPods 3',
   ],
