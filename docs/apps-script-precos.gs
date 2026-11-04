@@ -341,11 +341,14 @@ const CATALOGO_SEMINOVOS = {
   'iPhone 18 Pro': ['Bordô', 'Azul Glacial', 'Prata', 'Preto'],
   'iPhone 17 Pro Max': ['Prata', 'Azul Profundo', 'Laranja Cósmico'],
   'iPhone 17 Pro': ['Prata', 'Azul Profundo', 'Laranja Cósmico'],
+  'iPhone Air': ['Azul Céu', 'Dourado Claro', 'Branco Nuvem', 'Preto Espacial'],
   'iPhone 17': ['Preto', 'Branco', 'Lavanda', 'Sálvia', 'Azul Névoa'],
+  'iPhone 17e': ['Preto', 'Branco', 'Rosa Pálido'],
   'iPhone 16 Pro Max': ['Titânio Deserto', 'Titânio Preto', 'Titânio Branco', 'Titânio Natural'],
   'iPhone 16 Pro': ['Titânio Deserto', 'Titânio Preto', 'Titânio Branco', 'Titânio Natural'],
   'iPhone 16 Plus': ['Preto', 'Ultramarino', 'Azul-petróleo', 'Rosa', 'Branco'],
   'iPhone 16': ['Preto', 'Ultramarino', 'Azul-petróleo', 'Rosa', 'Branco'],
+  'iPhone 16e': ['Preto', 'Branco'],
   'iPhone 15 Pro Max': ['Titânio Preto', 'Titânio Branco', 'Titânio Azul', 'Titânio Natural'],
   'iPhone 15 Pro': ['Titânio Preto', 'Titânio Branco', 'Titânio Azul', 'Titânio Natural'],
   'iPhone 15': ['Preto', 'Azul', 'Verde', 'Amarelo', 'Rosa'],
@@ -409,8 +412,9 @@ const APELIDOS_COR = {
   'PRETO': ['Preto', 'Preto Espacial', 'Titânio Preto', 'Preto Jacto', 'Meia-noite', 'Meia-Noite', 'Grafite', 'Cinza-espacial'],
   'GRAPHITE': ['Grafite'],
   // iPhone Pro "branco" é o Prata
-  'WHITE': ['Branco', 'Titânio Branco', 'Luz das Estrelas', 'Starlight', 'Prata'],
-  'BRANCO': ['Branco', 'Titânio Branco', 'Luz das Estrelas', 'Starlight', 'Prata'],
+  'WHITE': ['Branco', 'Titânio Branco', 'Luz das Estrelas', 'Starlight', 'Prata', 'Branco Nuvem'],
+  'BRANCO': ['Branco', 'Titânio Branco', 'Luz das Estrelas', 'Starlight', 'Prata', 'Branco Nuvem'],
+  'CLOUD WHITE': ['Branco Nuvem'],
   'RED': ['Vermelho'],
   'PRODUCT RED': ['Vermelho'],
   'SIERRA BLUE': ['Azul-Sierra'],
@@ -422,16 +426,21 @@ const APELIDOS_COR = {
   'MIST BLUE': ['Azul Névoa'],
   'ULTRAMARINE': ['Ultramarino'],
   'TEAL': ['Azul-petróleo'],
-  'PINK': ['Rosa'],
-  'BLUE': ['Azul', 'Titânio Azul', 'Azul-Sierra', 'Azul-Pacífico'],
-  'AZUL': ['Azul', 'Titânio Azul', 'Azul-Sierra', 'Azul-Pacífico'],
+  'PINK': ['Rosa', 'Rosa Pálido'],
+  'ROSA': ['Rosa', 'Rosa Pálido'],
+  'SOFT PINK': ['Rosa Pálido'],
+  'BLUE': ['Azul', 'Titânio Azul', 'Azul-Sierra', 'Azul-Pacífico', 'Azul Céu'],
+  'AZUL': ['Azul', 'Titânio Azul', 'Azul-Sierra', 'Azul-Pacífico', 'Azul Céu'],
+  'SKY BLUE': ['Azul Céu'],
   'GREEN': ['Verde', 'Verde-Alpino', 'Verde-meia-noite'],
   'VERDE': ['Verde', 'Verde-Alpino', 'Verde-meia-noite'],
   'YELLOW': ['Amarelo'],
   'PURPLE': ['Roxo', 'Roxo Profundo'],
   'ROXO': ['Roxo', 'Roxo Profundo'],
   'DEEP PURPLE': ['Roxo Profundo'],
-  'GOLD': ['Dourado'],
+  'GOLD': ['Dourado', 'Dourado Claro'],
+  'DOURADO': ['Dourado', 'Dourado Claro'],
+  'LIGHT GOLD': ['Dourado Claro'],
   'SPACE BLACK': ['Preto Espacial'],
   'SPACE GRAY': ['Cinza Espacial', 'Cinza-espacial'],
   'SPACE GREY': ['Cinza Espacial', 'Cinza-espacial'],
@@ -496,12 +505,20 @@ function numeroBR(texto) {
   return isFinite(n) && n > 0 ? n : null
 }
 
+// Outros nomes que a loja usa pro mesmo aparelho (já sem espaços, como fica
+// o texto em resolverModelo): o iPhone Air saiu junto com o 17
+const APELIDOS_MODELO = {
+  IPHONE17AIR: 'iPhone Air',
+  IPHONEAIR17: 'iPhone Air',
+}
+
 function resolverModelo(texto) {
   const c = normalizar(texto)
     .replace(/\b\d+\s*(GB|TB)\b/g, ' ')
     .replace(/\bSERIES\s+(\d+)/g, 'S$1')
     .replace(/\bSEMI\s*NOVO\b/g, ' ')
     .replace(/\s+/g, '')
+  if (APELIDOS_MODELO[c]) return APELIDOS_MODELO[c]
   const modelos = Object.keys(CATALOGO_SEMINOVOS)
   const exato = modelos.find(m => compacto(m) === c)
   if (exato) return exato

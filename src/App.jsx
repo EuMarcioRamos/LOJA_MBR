@@ -63,8 +63,8 @@ function situacaoDosItens(produtos, seminovos) {
 const ORDEM_MODELOS = {
   iPhone: [
     'iPhone 18 Pro Max', 'iPhone 18 Pro',
-    'iPhone 17 Pro Max', 'iPhone 17 Pro', 'iPhone 17',
-    'iPhone 16 Pro Max', 'iPhone 16 Pro', 'iPhone 16 Plus', 'iPhone 16',
+    'iPhone 17 Pro Max', 'iPhone 17 Pro', 'iPhone Air', 'iPhone 17', 'iPhone 17e',
+    'iPhone 16 Pro Max', 'iPhone 16 Pro', 'iPhone 16 Plus', 'iPhone 16', 'iPhone 16e',
     'iPhone 15 Pro Max', 'iPhone 15 Pro', 'iPhone 15 Plus', 'iPhone 15',
     'iPhone 14 Pro Max', 'iPhone 14 Pro', 'iPhone 14 Plus', 'iPhone 14',
     'iPhone 13 Pro Max', 'iPhone 13 Pro', 'iPhone 13', 'iPhone 13 mini',
@@ -109,12 +109,13 @@ const DESTAQUE_MODELOS = [
 ]
 
 // No filtro, o iPhone é exibido por linha (geração) — cada linha engloba
-// as variantes Pro Max / Pro / Plus / base daquela geração.
+// as variantes Pro Max / Pro / Plus / base daquela geração (o iPhone Air
+// saiu junto com o 17 e entra na linha dele; os "e" na linha do número).
 const LINHAS_POR_CATEGORIA = {
   iPhone: [
     { linha: 'Linha 18', modelos: ['iPhone 18 Pro Max', 'iPhone 18 Pro'] },
-    { linha: 'Linha 17', modelos: ['iPhone 17 Pro Max', 'iPhone 17 Pro', 'iPhone 17'] },
-    { linha: 'Linha 16', modelos: ['iPhone 16 Pro Max', 'iPhone 16 Pro', 'iPhone 16 Plus', 'iPhone 16'] },
+    { linha: 'Linha 17', modelos: ['iPhone 17 Pro Max', 'iPhone 17 Pro', 'iPhone Air', 'iPhone 17', 'iPhone 17e'] },
+    { linha: 'Linha 16', modelos: ['iPhone 16 Pro Max', 'iPhone 16 Pro', 'iPhone 16 Plus', 'iPhone 16', 'iPhone 16e'] },
     { linha: 'Linha 15', modelos: ['iPhone 15 Pro Max', 'iPhone 15 Pro', 'iPhone 15 Plus', 'iPhone 15'] },
     { linha: 'Linha 14', modelos: ['iPhone 14 Pro Max', 'iPhone 14 Pro', 'iPhone 14 Plus', 'iPhone 14'] },
     { linha: 'Linha 13', modelos: ['iPhone 13 Pro Max', 'iPhone 13 Pro', 'iPhone 13', 'iPhone 13 mini'] },

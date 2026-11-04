@@ -385,6 +385,106 @@
     ]
   },
   {
+    "id": "air-skyblue",
+    "modelo": "iPhone Air",
+    "cor": "Azul Céu",
+    "corHex": "#A9C8E6",
+    "imagem": "/iphones/17/air-skyblue.webp",
+    "destaque": false,
+    "opcoes": [
+      {
+        "armazenamento": "256GB",
+        "preco": 10499,
+        "disponivel": true
+      },
+      {
+        "armazenamento": "512GB",
+        "preco": 11999,
+        "disponivel": true
+      },
+      {
+        "armazenamento": "1TB",
+        "preco": 13499,
+        "disponivel": true
+      }
+    ]
+  },
+  {
+    "id": "air-lightgold",
+    "modelo": "iPhone Air",
+    "cor": "Dourado Claro",
+    "corHex": "#E6D2A8",
+    "imagem": "/iphones/17/air-lightgold.webp",
+    "destaque": false,
+    "opcoes": [
+      {
+        "armazenamento": "256GB",
+        "preco": 10499,
+        "disponivel": true
+      },
+      {
+        "armazenamento": "512GB",
+        "preco": 11999,
+        "disponivel": true
+      },
+      {
+        "armazenamento": "1TB",
+        "preco": 13499,
+        "disponivel": true
+      }
+    ]
+  },
+  {
+    "id": "air-cloudwhite",
+    "modelo": "iPhone Air",
+    "cor": "Branco Nuvem",
+    "corHex": "#F2F1EC",
+    "imagem": "/iphones/17/air-cloudwhite.webp",
+    "destaque": false,
+    "opcoes": [
+      {
+        "armazenamento": "256GB",
+        "preco": 10499,
+        "disponivel": true
+      },
+      {
+        "armazenamento": "512GB",
+        "preco": 11999,
+        "disponivel": true
+      },
+      {
+        "armazenamento": "1TB",
+        "preco": 13499,
+        "disponivel": true
+      }
+    ]
+  },
+  {
+    "id": "air-spaceblack",
+    "modelo": "iPhone Air",
+    "cor": "Preto Espacial",
+    "corHex": "#2D2B2B",
+    "imagem": "/iphones/17/air-spaceblack.webp",
+    "destaque": false,
+    "opcoes": [
+      {
+        "armazenamento": "256GB",
+        "preco": 10499,
+        "disponivel": true
+      },
+      {
+        "armazenamento": "512GB",
+        "preco": 11999,
+        "disponivel": true
+      },
+      {
+        "armazenamento": "1TB",
+        "preco": 13499,
+        "disponivel": true
+      }
+    ]
+  },
+  {
     "id": "17-black",
     "modelo": "iPhone 17",
     "cor": "Preto",
@@ -480,6 +580,66 @@
       {
         "armazenamento": "512GB",
         "preco": 11499,
+        "disponivel": true
+      }
+    ]
+  },
+  {
+    "id": "17e-black",
+    "modelo": "iPhone 17e",
+    "cor": "Preto",
+    "corHex": "#1C1C1E",
+    "imagem": "/iphones/17/17e-black.webp",
+    "destaque": false,
+    "opcoes": [
+      {
+        "armazenamento": "256GB",
+        "preco": 5799,
+        "disponivel": true
+      },
+      {
+        "armazenamento": "512GB",
+        "preco": 7299,
+        "disponivel": true
+      }
+    ]
+  },
+  {
+    "id": "17e-white",
+    "modelo": "iPhone 17e",
+    "cor": "Branco",
+    "corHex": "#F5F5F5",
+    "imagem": "/iphones/17/17e-white.webp",
+    "destaque": false,
+    "opcoes": [
+      {
+        "armazenamento": "256GB",
+        "preco": 5799,
+        "disponivel": true
+      },
+      {
+        "armazenamento": "512GB",
+        "preco": 7299,
+        "disponivel": true
+      }
+    ]
+  },
+  {
+    "id": "17e-pink",
+    "modelo": "iPhone 17e",
+    "cor": "Rosa Pálido",
+    "corHex": "#F2C4CC",
+    "imagem": "/iphones/17/17e-pink.webp",
+    "destaque": false,
+    "opcoes": [
+      {
+        "armazenamento": "256GB",
+        "preco": 5799,
+        "disponivel": true
+      },
+      {
+        "armazenamento": "512GB",
+        "preco": 7299,
         "disponivel": true
       }
     ]
@@ -950,6 +1110,56 @@
       {
         "armazenamento": "512GB",
         "preco": 9999,
+        "disponivel": true
+      }
+    ]
+  },
+  {
+    "id": "16e-black",
+    "modelo": "iPhone 16e",
+    "cor": "Preto",
+    "corHex": "#1C1C1E",
+    "imagem": "/iphones/16/16e-black.webp",
+    "destaque": false,
+    "opcoes": [
+      {
+        "armazenamento": "128GB",
+        "preco": 5799,
+        "disponivel": true
+      },
+      {
+        "armazenamento": "256GB",
+        "preco": 6599,
+        "disponivel": true
+      },
+      {
+        "armazenamento": "512GB",
+        "preco": 8099,
+        "disponivel": true
+      }
+    ]
+  },
+  {
+    "id": "16e-white",
+    "modelo": "iPhone 16e",
+    "cor": "Branco",
+    "corHex": "#F5F5F5",
+    "imagem": "/iphones/16/16e-white.webp",
+    "destaque": false,
+    "opcoes": [
+      {
+        "armazenamento": "128GB",
+        "preco": 5799,
+        "disponivel": true
+      },
+      {
+        "armazenamento": "256GB",
+        "preco": 6599,
+        "disponivel": true
+      },
+      {
+        "armazenamento": "512GB",
+        "preco": 8099,
         "disponivel": true
       }
     ]
