@@ -3713,7 +3713,7 @@
     "opcoes": [
       {
         "armazenamento": "8GB / 256GB",
-        "preco": 4990,
+        "preco": 5290,
         "disponivel": true
       },
       {
@@ -3733,7 +3733,7 @@
     "opcoes": [
       {
         "armazenamento": "8GB / 256GB",
-        "preco": 4990,
+        "preco": 5290,
         "disponivel": true
       },
       {
@@ -3753,7 +3753,7 @@
     "opcoes": [
       {
         "armazenamento": "8GB / 256GB",
-        "preco": 4990,
+        "preco": 5290,
         "disponivel": true
       },
       {
@@ -4238,12 +4238,17 @@
     "opcoes": [
       {
         "armazenamento": "16GB / 512GB",
-        "preco": 8490,
+        "preco": 8290,
+        "disponivel": true
+      },
+      {
+        "armazenamento": "16GB / 1TB",
+        "preco": 11490,
         "disponivel": true
       },
       {
         "armazenamento": "24GB / 1TB",
-        "preco": 12890,
+        "preco": 12749,
         "disponivel": true
       }
     ]
@@ -4260,12 +4265,17 @@
     "opcoes": [
       {
         "armazenamento": "16GB / 512GB",
-        "preco": 8490,
+        "preco": 8290,
+        "disponivel": true
+      },
+      {
+        "armazenamento": "16GB / 1TB",
+        "preco": 11490,
         "disponivel": true
       },
       {
         "armazenamento": "24GB / 1TB",
-        "preco": 12890,
+        "preco": 12749,
         "disponivel": true
       }
     ]
@@ -4282,12 +4292,17 @@
     "opcoes": [
       {
         "armazenamento": "16GB / 512GB",
-        "preco": 8490,
+        "preco": 8290,
+        "disponivel": true
+      },
+      {
+        "armazenamento": "16GB / 1TB",
+        "preco": 11490,
         "disponivel": true
       },
       {
         "armazenamento": "24GB / 1TB",
-        "preco": 12890,
+        "preco": 12749,
         "disponivel": true
       }
     ]
@@ -4304,17 +4319,17 @@
     "opcoes": [
       {
         "armazenamento": "16GB / 512GB",
-        "preco": 9790,
+        "preco": 10390,
         "disponivel": true
       },
       {
         "armazenamento": "16GB / 1TB",
-        "preco": 11790,
+        "preco": 12690,
         "disponivel": true
       },
       {
         "armazenamento": "24GB / 1TB",
-        "preco": 13690,
+        "preco": 13790,
         "disponivel": true
       }
     ]
@@ -4331,17 +4346,17 @@
     "opcoes": [
       {
         "armazenamento": "16GB / 512GB",
-        "preco": 9790,
+        "preco": 10390,
         "disponivel": true
       },
       {
         "armazenamento": "16GB / 1TB",
-        "preco": 11790,
+        "preco": 12690,
         "disponivel": true
       },
       {
         "armazenamento": "24GB / 1TB",
-        "preco": 13690,
+        "preco": 13790,
         "disponivel": true
       }
     ]
@@ -4358,17 +4373,17 @@
     "opcoes": [
       {
         "armazenamento": "16GB / 512GB",
-        "preco": 9790,
+        "preco": 10390,
         "disponivel": true
       },
       {
         "armazenamento": "16GB / 1TB",
-        "preco": 11790,
+        "preco": 12690,
         "disponivel": true
       },
       {
         "armazenamento": "24GB / 1TB",
-        "preco": 13690,
+        "preco": 13790,
         "disponivel": true
       }
     ]
@@ -4669,27 +4684,32 @@
     "opcoes": [
       {
         "armazenamento": "16GB / 512GB",
-        "preco": 11990,
-        "disponivel": true
-      },
-      {
-        "armazenamento": "16GB / 1TB",
         "preco": 12790,
         "disponivel": true
       },
       {
+        "armazenamento": "16GB / 1TB",
+        "preco": 12990,
+        "disponivel": true
+      },
+      {
         "armazenamento": "24GB / 1TB",
-        "preco": 14690,
+        "preco": 14890,
         "disponivel": true
       },
       {
         "armazenamento": "32GB / 1TB",
-        "preco": 18890,
+        "preco": 17690,
         "disponivel": true
       },
       {
         "armazenamento": "48GB / 1TB",
-        "preco": 26790,
+        "preco": 19790,
+        "disponivel": true
+      },
+      {
+        "armazenamento": "24GB / 2TB",
+        "preco": 19990,
         "disponivel": true
       }
     ]
@@ -4706,27 +4726,32 @@
     "opcoes": [
       {
         "armazenamento": "16GB / 512GB",
-        "preco": 11990,
-        "disponivel": true
-      },
-      {
-        "armazenamento": "16GB / 1TB",
         "preco": 12790,
         "disponivel": true
       },
       {
+        "armazenamento": "16GB / 1TB",
+        "preco": 12990,
+        "disponivel": true
+      },
+      {
         "armazenamento": "24GB / 1TB",
-        "preco": 14690,
+        "preco": 14890,
         "disponivel": true
       },
       {
         "armazenamento": "32GB / 1TB",
-        "preco": 18890,
+        "preco": 17690,
         "disponivel": true
       },
       {
         "armazenamento": "48GB / 1TB",
-        "preco": 26790,
+        "preco": 19790,
+        "disponivel": true
+      },
+      {
+        "armazenamento": "24GB / 2TB",
+        "preco": 19990,
         "disponivel": true
       }
     ]
@@ -4749,6 +4774,11 @@
       {
         "armazenamento": "32GB / 1TB",
         "preco": 18890,
+        "disponivel": true
+      },
+      {
+        "armazenamento": "48GB / 1TB",
+        "preco": 23890,
         "disponivel": true
       },
       {
@@ -4779,6 +4809,11 @@
         "disponivel": true
       },
       {
+        "armazenamento": "48GB / 1TB",
+        "preco": 23890,
+        "disponivel": true
+      },
+      {
         "armazenamento": "36GB / 2TB",
         "preco": 29990,
         "disponivel": true
@@ -4797,12 +4832,12 @@
     "opcoes": [
       {
         "armazenamento": "24GB / 1TB",
-        "preco": 16490,
+        "preco": 16790,
         "disponivel": true
       },
       {
         "armazenamento": "24GB / 2TB",
-        "preco": 18490,
+        "preco": 19390,
         "disponivel": true
       }
     ]
@@ -4819,12 +4854,12 @@
     "opcoes": [
       {
         "armazenamento": "24GB / 1TB",
-        "preco": 16490,
+        "preco": 16790,
         "disponivel": true
       },
       {
         "armazenamento": "24GB / 2TB",
-        "preco": 18490,
+        "preco": 19390,
         "disponivel": true
       }
     ]
@@ -5061,12 +5096,17 @@
     "opcoes": [
       {
         "armazenamento": "16GB / 512GB",
-        "preco": 8490,
+        "preco": 8290,
+        "disponivel": true
+      },
+      {
+        "armazenamento": "16GB / 1TB",
+        "preco": 11490,
         "disponivel": true
       },
       {
         "armazenamento": "24GB / 1TB",
-        "preco": 12890,
+        "preco": 12749,
         "disponivel": true
       }
     ]
@@ -5083,17 +5123,17 @@
     "opcoes": [
       {
         "armazenamento": "16GB / 512GB",
-        "preco": 9790,
+        "preco": 10390,
         "disponivel": true
       },
       {
         "armazenamento": "16GB / 1TB",
-        "preco": 11790,
+        "preco": 12690,
         "disponivel": true
       },
       {
         "armazenamento": "24GB / 1TB",
-        "preco": 13690,
+        "preco": 13790,
         "disponivel": true
       }
     ]
