@@ -15,7 +15,7 @@ export const LOJA = {
   tiktok: 'masterbrpatos',
   endereco: 'Rua Geraldo Cabral, São Sebastião',
   cidade: 'Patos, PB',
-  cep: '58700-970',
+  cep: '58706-300',
   dias: 'Segunda a sexta',
   horario: ['9h às 12h', '14h às 18h'],
 }
