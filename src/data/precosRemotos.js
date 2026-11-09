@@ -71,6 +71,15 @@ function parcelasQueFecham(preco, parcelas, valorParcela) {
   return { parcelas, valorParcela }
 }
 
+// Avisos de peça do seminovo: a planilha manda um texto só, com os avisos
+// separados por ";" ("Tampa traseira substituída; Câmera traseira genuína
+// Apple") ou um por linha, se alguém editar a célula à mão. Vira uma lista
+// (cada aviso é uma linha da ficha); vazio ou qualquer outra coisa vira lista vazia
+function listaDeAvisos(valor) {
+  const itens = Array.isArray(valor) ? valor : typeof valor === 'string' ? valor.split(/[;\n]/) : []
+  return itens.filter(item => typeof item === 'string').map(item => item.trim()).filter(Boolean)
+}
+
 // Seminovos vêm da aba "Seminovos" (uma linha por aparelho, identificado pelo
 // final do IMEI + modelo). A planilha só traz modelo e cor; a foto e o tom da
 // cor saem do catálogo, do lacrado de mesmo modelo e cor, ou do
@@ -88,6 +97,8 @@ export function montarSeminovos(lista, produtosBase) {
       return {
         ...aparelho,
         bateria: numeroOuNulo(aparelho.bateria),
+        ciclos: numeroOuNulo(aparelho.ciclos),
+        avisos: listaDeAvisos(aparelho.avisos),
         ...parcelasQueFecham(aparelho.preco, numeroOuNulo(aparelho.parcelas), numeroOuNulo(aparelho.valorParcela)),
         reservado: aparelho.reservado === true,
         id: `semi-${aparelho.imei}-${slug}`,

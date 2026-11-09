@@ -864,6 +864,10 @@ function lerSeminovosParaSite(planilha) {
       garantiaApple: l.garantiaApple,
       garantiaLoja: l.garantiaLoja,
       acompanha: l.acompanha,
+      // Ciclos da bateria e avisos de peça ("Tampa traseira substituída"),
+      // vários separados por "; ". O site mostra os dois na ficha do aparelho
+      ciclos: l.ciclos,
+      avisos: l.avisos,
       reservado: statusNormalizado(l.status) === 'RESERVADO',
     }))
 }

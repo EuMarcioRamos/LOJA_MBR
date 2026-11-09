@@ -5,8 +5,9 @@ import { validadeGarantiaApple } from '../garantiaApple'
 
 // Card de um aparelho seminovo. Mesmo visual do ModeloCard, mas é uma unidade
 // só (cor e armazenamento já definidos), então no lugar dos seletores entra a
-// ficha do aparelho, com o que vem no anúncio do WhatsApp: bateria, garantias
-// e o que acompanha (os dois últimos só quando informados).
+// ficha do aparelho, com o que vem no anúncio do WhatsApp: bateria (com os
+// ciclos embaixo), garantias, o que acompanha e os avisos de peça, um por
+// linha (esses últimos só quando informados).
 
 const icone = { width: 16, height: 16, viewBox: '0 0 24 24', fill: 'none', stroke: 'currentColor', strokeWidth: 1.8, strokeLinecap: 'round', strokeLinejoin: 'round', 'aria-hidden': true }
 
@@ -47,9 +48,16 @@ const IconeGarantia = (
   </svg>
 )
 
+const IconeAviso = (
+  <svg {...icone}>
+    <path d="M12 3l10 18H2L12 3z" />
+    <path d="M12 10v5M12 18h.01" />
+  </svg>
+)
+
 // Uma linha da ficha: ícone, rótulo à esquerda e valor à direita. O
 // subvalor é uma segunda linha menor embaixo do valor (a validade da garantia
-// Apple, embaixo do tempo que resta)
+// Apple, embaixo do tempo que resta; os ciclos, embaixo da bateria)
 function LinhaEstado({ icone: Icone, rotulo, subvalor, quebra = false, children }) {
   return (
     <div className={`seminovo-estado-linha${subvalor ? ' seminovo-estado-linha--dupla' : ''}`}>
@@ -69,10 +77,12 @@ export default function SeminovoCard({ aparelho, carrinhoIds = [], onAlternarCar
   const [hover, setHover] = useState(false)
   const {
     imei, modelo, cor, corHex, imagem, armazenamento, preco, parcelas, valorParcela,
-    bateria, garantiaApple, garantiaLoja, acompanha, reservado,
+    bateria, ciclos, garantiaApple, garantiaLoja, acompanha, reservado,
   } = aparelho
+  const avisos = aparelho.avisos || []
   const disponivel = !reservado
   const temBateria = bateria != null && bateria !== ''
+  const textoCiclos = ciclos != null ? `${ciclos.toLocaleString('pt-BR')} ${ciclos === 1 ? 'ciclo' : 'ciclos'}` : null
   const garantia = validadeGarantiaApple(garantiaApple)
 
   const precoTexto = emReais(preco)
@@ -148,11 +158,14 @@ export default function SeminovoCard({ aparelho, carrinhoIds = [], onAlternarCar
         {/* Ficha do aparelho: um item por linha, separados por filetes */}
         <div className="seminovo-estado">
           {temBateria && (
-            <LinhaEstado icone={IconeBateria} rotulo="Saúde da bateria">
-              <span className="seminovo-pilha" style={{ color: 'var(--whatsapp)' }} aria-hidden="true">
-                <span style={{ width: `${Math.min(bateria, 100)}%` }} />
+            <LinhaEstado icone={IconeBateria} rotulo="Saúde da bateria" subvalor={textoCiclos}>
+              {/* Pilha e porcentagem na mesma linha, com os ciclos embaixo */}
+              <span style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                <span className="seminovo-pilha" style={{ color: 'var(--whatsapp)' }} aria-hidden="true">
+                  <span style={{ width: `${Math.min(bateria, 100)}%` }} />
+                </span>
+                <span style={{ color: 'var(--whatsapp)' }}>{bateria}%</span>
               </span>
-              <span style={{ color: 'var(--whatsapp)' }}>{bateria}%</span>
             </LinhaEstado>
           )}
           {garantia && !garantia.vencida && (
@@ -162,6 +175,14 @@ export default function SeminovoCard({ aparelho, carrinhoIds = [], onAlternarCar
           )}
           {garantiaLoja && <LinhaEstado icone={IconeGarantia} rotulo="Garantia MasterBR">{garantiaLoja}</LinhaEstado>}
           {acompanha && <LinhaEstado icone={IconeCaixa} rotulo="Acompanha" quebra>{acompanha}</LinhaEstado>}
+          {/* Cada aviso de peça é uma linha da ficha: ícone âmbar e a
+              mensagem inteira, usando a largura toda da linha */}
+          {avisos.map((texto, i) => (
+            <div key={i} className="seminovo-estado-linha seminovo-estado-linha--aviso">
+              <span className="seminovo-estado-icone seminovo-estado-icone--aviso">{IconeAviso}</span>
+              <span className="seminovo-estado-aviso">{texto}</span>
+            </div>
+          ))}
         </div>
       </div>
 

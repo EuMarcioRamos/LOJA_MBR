@@ -542,6 +542,25 @@ body {
   color: var(--rotulo-card);
 }
 
+/* Avisos de peça trocada ("Tampa traseira substituída"), um por linha da
+   ficha: ícone âmbar, o mesmo tom do selo "Reservado", pra chamar a atenção
+   sem parecer erro, e a mensagem inteira usando a largura toda da linha */
+.seminovo-estado-icone--aviso {
+  color: #e0a028;
+}
+
+.seminovo-estado-linha--aviso {
+  padding: 6px 0;
+}
+
+.seminovo-estado-aviso {
+  min-width: 0;
+  font-size: 13px;
+  font-weight: 600;
+  line-height: 1.3;
+  color: #f2f2f2;
+}
+
 .seminovo-estado-rotulo {
   flex-shrink: 0;
   font-size: 13px;

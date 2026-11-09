@@ -218,10 +218,18 @@ O que importa: **modelo e armazenamento na primeira linha, cor logo
 abaixo, e cada aparelho termina na linha do IMEI**. A cor pode vir em
 inglês (SILVER, DEEP BLUE, NATURAL TITANIUM…) ou em português.
 
-Também são lidos, mas ficam **só na planilha** (o site não mostra; essas
-informações são passadas na conversa do WhatsApp):
-- `🔄 185 CICLOS` → coluna **Ciclos**.
-- Linhas com `⚠️` (ex.: `⚠️ TAMPA TRASEIRA SUBSTITUÍDA`) → coluna **Avisos**.
+Também são lidos e aparecem na ficha do aparelho no site:
+- `🔄 185 CICLOS` → coluna **Ciclos**. No site, aparece embaixo da saúde da
+  bateria ("185 ciclos").
+- Linhas com `⚠️` (ex.: `⚠️ TAMPA TRASEIRA SUBSTITUÍDA`) → coluna **Avisos**
+  (vários avisos ficam separados por `;`; um por linha dentro da célula
+  também funciona). No site, cada aviso vira uma linha própria da ficha,
+  com o ícone ⚠ e a mensagem inteira. Sem aviso, nenhuma linha a mais
+  aparece.
+
+Ciclos e avisos só chegam ao site com o script de 09/11/2026 em diante
+(depois de colar, é preciso criar uma **nova versão** da implantação; veja
+"Atualizando o script depois de uma mudança", mais acima).
 
 Separadores (`-`) e o título da mensagem são ignorados.
 
