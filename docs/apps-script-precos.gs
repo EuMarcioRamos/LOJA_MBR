@@ -37,11 +37,15 @@ const ABAS_DO_SITE = [ABA_PRECOS, ABA_PRECOS_MODELO, ABA_SEMINOVOS, ABA_PEDIDO, 
 // (não reduz o tempo de despacho do próprio Apps Script como Web App, só
 // o tempo gasto lendo/montando os dados a cada chamada).
 const CACHE_SEGUNDOS = 180
+// O cache do Google aceita no máximo 100 KB por valor, e a resposta inteira
+// (pronta entrega + a pedido + seminovos) passa disso. Por isso ela é guardada
+// em pedaços menores, e um índice diz quais pedaços formam a resposta
+const CACHE_INDICE = 'precos-json-indice'
+const CACHE_PEDACO = 30000 // caracteres por pedaço, bem abaixo dos 100 KB
 
 function doGet() {
   const cache = CacheService.getScriptCache()
-  const cacheKey = 'precos-json'
-  const cacheado = cache.get(cacheKey)
+  const cacheado = lerRespostaDoCache(cache)
   if (cacheado) {
     return ContentService
       .createTextOutput(cacheado)
@@ -51,20 +55,72 @@ function doGet() {
   const planilha = SpreadsheetApp.getActiveSpreadsheet()
 
   // Pronta entrega nas abas de sempre; a pedido nas abas "Pedido...", com as
-  // mesmas colunas (aba que não existe vira lista vazia)
+  // mesmas colunas (aba que não existe vira lista vazia). Do a pedido só vão
+  // as linhas que mudam alguma coisa no site: modelo com preço, e cor com
+  // preço próprio ou que não dá para encomendar (Disponível diferente de SIM)
   const resposta = JSON.stringify({
     porModelo: lerPorModelo(planilha.getSheetByName(ABA_PRECOS_MODELO)),
     porCor: lerPorCor(planilha.getSheetByName(ABA_PRECOS)),
     seminovos: lerSeminovosParaSite(planilha),
-    pedidoPorModelo: lerPorModelo(planilha.getSheetByName(ABA_PEDIDO_MODELO)),
-    pedidoPorCor: lerPorCor(planilha.getSheetByName(ABA_PEDIDO)),
+    pedidoPorModelo: lerPorModelo(planilha.getSheetByName(ABA_PEDIDO_MODELO)).filter(linha => linha.preco),
+    pedidoPorCor: lerPorCor(planilha.getSheetByName(ABA_PEDIDO)).filter(linha => linha.preco || !linha.disponivel),
     seminovosPedido: lerSeminovosParaSite(planilha, ABA_SEMINOVOS_PEDIDO),
   })
-  cache.put(cacheKey, resposta, CACHE_SEGUNDOS)
+  guardarRespostaNoCache(cache, resposta)
 
   return ContentService
     .createTextOutput(resposta)
     .setMimeType(ContentService.MimeType.JSON)
+}
+
+// Junta os pedaços que o índice aponta. Se faltar algum (o Google pode
+// descartar itens do cache a qualquer momento), devolve null e o doGet lê a
+// planilha de novo
+function lerRespostaDoCache(cache) {
+  try {
+    const indice = cache.get(CACHE_INDICE) // "versão:quantidade de pedaços"
+    if (!indice) return null
+    const [versao, quantidade] = indice.split(':')
+    const chaves = []
+    for (let i = 0; i < Number(quantidade); i++) chaves.push('precos-json-' + versao + '-' + i)
+    if (!chaves.length) return null
+    const pedacos = cache.getAll(chaves)
+    if (chaves.some(chave => typeof pedacos[chave] !== 'string')) return null
+    return chaves.map(chave => pedacos[chave]).join('')
+  } catch (erro) {
+    return null
+  }
+}
+
+// Guarda a resposta em pedaços com uma versão própria no nome: duas visitas
+// ao mesmo tempo nunca misturam pedaços de respostas diferentes. Se o Google
+// recusar, segue sem cache (o site recebe a resposta do mesmo jeito; só que a
+// planilha é lida de novo na próxima visita)
+function guardarRespostaNoCache(cache, texto) {
+  try {
+    const versao = Date.now().toString(36) + Math.floor(Math.random() * 1e6).toString(36)
+    const pedacos = {}
+    let quantidade = 0
+    for (let inicio = 0; inicio < texto.length;) {
+      let fim = Math.min(inicio + CACHE_PEDACO, texto.length)
+      // Não corta um emoji ao meio (ele ocupa dois caracteres)
+      const codigo = texto.charCodeAt(fim - 1)
+      if (fim < texto.length && codigo >= 0xD800 && codigo <= 0xDBFF) fim++
+      pedacos['precos-json-' + versao + '-' + quantidade] = texto.slice(inicio, fim)
+      quantidade++
+      inicio = fim
+    }
+    cache.putAll(pedacos, CACHE_SEGUNDOS)
+    cache.put(CACHE_INDICE, versao + ':' + quantidade, CACHE_SEGUNDOS)
+  } catch (erro) {
+    // Sem cache desta vez
+  }
+}
+
+// Depois de mudar a planilha: a próxima visita do site já lê os valores novos
+// (sem o índice, os pedaços antigos são ignorados e expiram sozinhos)
+function limparCacheDoSite() {
+  CacheService.getScriptCache().remove(CACHE_INDICE)
 }
 
 // Aba "Precos por Modelo" (ou "Pedido por Modelo"): 0=Categoria 1=Modelo
@@ -106,7 +162,7 @@ function lerPorCor(aba) {
 function onEdit(e) {
   const nomeAba = e.range.getSheet().getName()
   if (ABAS_DO_SITE.includes(nomeAba)) {
-    CacheService.getScriptCache().remove('precos-json')
+    limparCacheDoSite()
   }
 }
 
@@ -171,7 +227,7 @@ function criarAbasPedido() {
     aba.setFrozenRows(1)
     feitas.push(destino + ' (' + (linhas.length - 1) + ' linhas)')
   })
-  CacheService.getScriptCache().remove('precos-json')
+  limparCacheDoSite()
   ui.alert(
     (feitas.length ? 'Criadas: ' + feitas.join(', ') + '.\nPreencha o Preço a pedido em "' + ABA_PEDIDO_MODELO + '"; linha sem preço não aparece como a pedido no site.' : 'Nenhuma aba criada.') +
     (puladas.length ? '\nJá existiam (não foram mexidas): ' + puladas.join(', ') + '.' : '')
@@ -1065,7 +1121,7 @@ function aplicarSeminovos(texto, nomeAba) {
     if (todas.length) {
       aba.getRange(2, 1, todas.length, COLUNAS_SEMINOVOS.length).setValues(todas.map(linhaParaPlanilha))
     }
-    CacheService.getScriptCache().remove('precos-json')
+    limparCacheDoSite()
 
     const partes = [
       plano.novos.length + ' novo(s)',
