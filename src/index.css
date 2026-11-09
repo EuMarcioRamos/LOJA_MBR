@@ -2354,3 +2354,162 @@ html:has(.carrinho-modal[open]) {
     gap: 32px;
   }
 }
+
+/* ── Pronta entrega e a pedido ──
+   Só aparece quando a planilha tem preços a pedido (abas "Pedido por Modelo"
+   e "Pedido") ou seminovos a pedido; sem isso o site fica como sempre */
+
+/* Chave "Pedido" ao lado de Lacrados | Seminovos: a mesma pílula escura da
+   barra, com o caminhão no traço dos outros ícones e um interruptor estilo
+   iPhone menor (36 x 22). Começa desligada */
+.pedido-chave {
+  flex: none;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  height: 44px;
+  padding: 0 10px 0 14px;
+  border-radius: 50px;
+  background: rgba(21, 21, 21, 0.6);
+  border: 1px solid #2a2a2a;
+  color: #cfcfcf;
+  font: inherit;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: color 0.2s ease, border-color 0.2s ease;
+}
+.pedido-chave svg {
+  flex-shrink: 0;
+}
+.pedido-chave:hover {
+  color: #fff;
+  border-color: #3a3a3a;
+}
+.pedido-interruptor {
+  position: relative;
+  flex-shrink: 0;
+  width: 36px;
+  height: 22px;
+  border-radius: 50px;
+  background: #3a3a3a;
+  transition: background 0.25s ease;
+}
+.pedido-interruptor::after {
+  content: '';
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: #fff;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.4);
+  transition: transform 0.25s cubic-bezier(0.32, 0.72, 0, 1);
+}
+.pedido-chave--ligada .pedido-interruptor {
+  background: var(--whatsapp);
+}
+.pedido-chave--ligada .pedido-interruptor::after {
+  transform: translateX(14px);
+}
+
+/* Selo do tipo de entrega na foto do card: verde na pronta entrega, escuro
+   (o mesmo do "Seminovo") no a pedido */
+.selo-entrega--pronta {
+  background: rgba(37, 211, 102, 0.9);
+  border-color: transparent;
+  color: #03140a;
+}
+
+/* Linha embaixo do preço: entrega imediata (verde) ou o prazo do a pedido (âmbar) */
+.entrega-nota {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 6px;
+  font-size: 12.5px;
+  font-weight: 600;
+  line-height: 1.35;
+}
+.entrega-nota::before {
+  content: '';
+  flex-shrink: 0;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: currentColor;
+}
+.entrega-nota--pronta {
+  color: var(--whatsapp);
+}
+.entrega-nota--pedido {
+  color: #e0a028;
+}
+
+/* Aviso verde do a pedido (prazo e sinal): o mesmo aviso de preços, no verde
+   da loja, entrando com um leve deslizar ao ligar a chave */
+.aviso-valores--verde {
+  background: rgba(37, 211, 102, 0.1);
+  border-color: rgba(37, 211, 102, 0.35);
+  color: #6fe3a0;
+}
+.aviso-entrando {
+  animation: aviso-entra 0.35s ease both;
+}
+@keyframes aviso-entra {
+  from { opacity: 0; transform: translateY(-6px); }
+  to { opacity: 1; transform: none; }
+}
+
+/* Selo "A pedido" no carrinho */
+.carrinho-item-selo--pedido {
+  border-color: rgba(224, 160, 40, 0.55);
+  color: #f0c46a;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .aviso-entrando { animation: none; }
+  .pedido-interruptor,
+  .pedido-interruptor::after { transition: none; }
+}
+
+/* Celular, com a chave na barra: Lacrados | Seminovos e o caminhão dividem a
+   mesma linha (a barra não cresce), e o "Pedido" escrito some */
+@media (max-width: 768px) {
+  .filtros-barra-conteudo--com-pedido .condicao-chave {
+    flex: 1 1 220px;
+    width: auto;
+  }
+  .filtros-barra-conteudo--com-pedido .condicao-opcao {
+    padding: 0 8px;
+  }
+  .pedido-chave {
+    order: 3;
+    height: 40px;
+    gap: 6px;
+    padding: 0 8px 0 10px;
+  }
+  .pedido-rotulo {
+    display: none;
+  }
+}
+/* Celulares estreitos: sem os ícones de Lacrados | Seminovos pra caber o caminhão */
+@media (max-width: 380px) {
+  .filtros-barra-conteudo--com-pedido .condicao-opcao svg {
+    display: none;
+  }
+}
+/* Celulares bem pequenos (320px): aperta mais um pouco pra não abrir uma terceira linha */
+@media (max-width: 340px) {
+  .filtros-barra-conteudo--com-pedido .condicao-chave {
+    flex-basis: 170px;
+  }
+  .filtros-barra-conteudo--com-pedido .condicao-opcao {
+    padding: 0 6px;
+    font-size: 13px;
+  }
+  .pedido-chave {
+    padding: 0 6px 0 8px;
+  }
+}

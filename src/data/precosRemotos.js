@@ -83,8 +83,10 @@ function listaDeAvisos(valor) {
 // Seminovos vêm da aba "Seminovos" (uma linha por aparelho, identificado pelo
 // final do IMEI + modelo). A planilha só traz modelo e cor; a foto e o tom da
 // cor saem do catálogo, do lacrado de mesmo modelo e cor, ou do
-// seminovosExtras.js nos modelos que não são vendidos lacrados
-export function montarSeminovos(lista, produtosBase) {
+// seminovosExtras.js nos modelos que não são vendidos lacrados.
+// Os da aba "Seminovos Pedido" (a pedido) passam por aqui com { pedido: true }:
+// ganham a marca e um id próprio, pra não se misturar com os de pronta entrega
+export function montarSeminovos(lista, produtosBase, { pedido = false } = {}) {
   return lista
     // Sem modelo ou sem preço o aparelho não entra: um seminovo sem preço
     // derrubava a página inteira. O script da planilha já tira essas linhas;
@@ -101,11 +103,27 @@ export function montarSeminovos(lista, produtosBase) {
         avisos: listaDeAvisos(aparelho.avisos),
         ...parcelasQueFecham(aparelho.preco, numeroOuNulo(aparelho.parcelas), numeroOuNulo(aparelho.valorParcela)),
         reservado: aparelho.reservado === true,
-        id: `semi-${aparelho.imei}-${slug}`,
+        pedido,
+        id: `${pedido ? 'semi-pedido-' : 'semi-'}${aparelho.imei}-${slug}`,
         imagem: variante?.imagem || FOTOS_SEMINOVOS[`${aparelho.modelo}|${aparelho.cor}`] || null,
         corHex: variante?.corHex || CORES_SEMINOVOS[aparelho.cor] || mesmaCor?.corHex || '#8a8a8a',
       }
     })
+}
+
+// A pedido: a mesma regra da pronta entrega (a exceção da cor, senão o preço
+// do modelo), nas abas "Pedido por Modelo" e "Pedido". Sem linha da cor vale
+// como disponível (encomenda dá pra fazer em qualquer cor); a linha da cor
+// com Disponível = NÃO tira só aquela cor. Sem preço nenhum: null (não tem a pedido)
+function precoAPedido(padrao, excecao) {
+  const fonte = [excecao, padrao].find(linha => Number(linha?.preco) > 0)
+  if (!fonte) return null
+  const preco = Number(fonte.preco)
+  return {
+    preco,
+    disponivel: excecao ? excecao.disponivel === true : true,
+    ...parcelasQueFecham(preco, numeroOuNulo(fonte.parcelas), numeroOuNulo(fonte.valorParcela)),
+  }
 }
 
 export function aplicarPrecos(produtosBase, dados) {
@@ -117,6 +135,12 @@ export function aplicarPrecos(produtosBase, dados) {
   const mapaCor = new Map(
     (dados.porCor || []).map(p => [`${p.id}|${p.armazenamento}`, p])
   )
+  const pedidoModelo = new Map(
+    (Array.isArray(dados.pedidoPorModelo) ? dados.pedidoPorModelo : []).map(p => [`${p.modelo}|${p.armazenamento}`, p])
+  )
+  const pedidoCor = new Map(
+    (Array.isArray(dados.pedidoPorCor) ? dados.pedidoPorCor : []).map(p => [`${p.id}|${p.armazenamento}`, p])
+  )
 
   return produtosBase.map(variante => {
     const chaveModelo = modeloId(variante)
@@ -125,6 +149,12 @@ export function aplicarPrecos(produtosBase, dados) {
       opcoes: variante.opcoes.map(opcao => {
         const padrao = mapaModelo.get(`${chaveModelo}|${opcao.armazenamento}`)
         const excecao = mapaCor.get(`${variante.id}|${opcao.armazenamento}`)
+        // O preço a pedido vai junto em cada opção (null quando não tem);
+        // os campos de sempre (preco, disponivel...) continuam sendo a pronta entrega
+        const pedido = precoAPedido(
+          pedidoModelo.get(`${chaveModelo}|${opcao.armazenamento}`),
+          pedidoCor.get(`${variante.id}|${opcao.armazenamento}`),
+        )
 
         // Preço e parcelas saem sempre da mesma linha da planilha (a exceção
         // da cor, senão o padrão do modelo). Antes cada campo vinha de onde
@@ -135,7 +165,7 @@ export function aplicarPrecos(produtosBase, dados) {
         // Sem preço em nenhuma das duas, a loja não tem preço pra essa opção:
         // ela fica indisponível (não dá pra escolher no card) e o preço fixo do
         // produtos.json nunca aparece no lugar
-        if (!fonte) return { ...opcao, preco: null, disponivel: false, parcelas: null, valorParcela: null }
+        if (!fonte) return { ...opcao, preco: null, disponivel: false, parcelas: null, valorParcela: null, pedido }
 
         const preco = Number(fonte.preco)
         // Disponibilidade é sempre por cor — não tem "padrão de modelo" aqui.
@@ -146,6 +176,7 @@ export function aplicarPrecos(produtosBase, dados) {
           preco,
           disponivel,
           ...parcelasQueFecham(preco, fonte.parcelas, fonte.valorParcela),
+          pedido,
         }
       }),
     }

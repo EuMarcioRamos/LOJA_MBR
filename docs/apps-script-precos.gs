@@ -22,6 +22,14 @@ const ABA_PRECOS_MODELO = 'Precos por Modelo'
 const ABA_ATUALIZACAO = 'Atualizar em Massa'
 const ABA_SEMINOVOS = 'Seminovos'
 
+// A pedido (encomenda, chega em até 7 a 8 dias úteis): as mesmas três listas
+// de pronta entrega, com as mesmas colunas. As de cima continuam valendo
+// para pronta entrega, como sempre
+const ABA_PEDIDO_MODELO = 'Pedido por Modelo'   // igual à "Precos por Modelo"
+const ABA_PEDIDO = 'Pedido'                     // igual à "Precos" (por cor)
+const ABA_SEMINOVOS_PEDIDO = 'Seminovos Pedido' // igual à "Seminovos"
+const ABAS_DO_SITE = [ABA_PRECOS, ABA_PRECOS_MODELO, ABA_SEMINOVOS, ABA_PEDIDO, ABA_PEDIDO_MODELO, ABA_SEMINOVOS_PEDIDO]
+
 // ────────────────────────────────────────────────────────────
 // 1. API pública (lida pelo site) — não precisa mexer aqui
 // ────────────────────────────────────────────────────────────
@@ -42,43 +50,52 @@ function doGet() {
 
   const planilha = SpreadsheetApp.getActiveSpreadsheet()
 
-  // Aba "Precos por Modelo": 0=Categoria 1=Modelo 2=Armazenamento
-  // 3=Preco 4=Parcelas 5=ValorParcela
-  const abaModelo = planilha.getSheetByName(ABA_PRECOS_MODELO)
-  const porModelo = abaModelo
-    ? abaModelo.getDataRange().getValues().slice(1)
-        .filter(linha => linha[1])
-        .map(linha => ({
-          modelo: String(linha[1]).trim(),
-          armazenamento: String(linha[2]).trim(),
-          preco: Number(linha[3]) || null,
-          parcelas: Number(linha[4]) || null,
-          valorParcela: Number(linha[5]) || null,
-        }))
-    : []
-
-  // Aba "Precos" (por cor): 0=Categoria 1=Modelo 2=Cor 3=Armazenamento
-  // 4=Preco 5=Disponivel 6=ID 7=Parcelas 8=ValorParcela
-  const abaCor = planilha.getSheetByName(ABA_PRECOS)
-  const porCor = abaCor
-    ? abaCor.getDataRange().getValues().slice(1)
-        .filter(linha => linha[6])
-        .map(linha => ({
-          id: String(linha[6]).trim(),
-          armazenamento: String(linha[3]).trim(),
-          preco: Number(linha[4]) || null,
-          disponivel: String(linha[5]).trim().toUpperCase() === 'SIM',
-          parcelas: Number(linha[7]) || null,
-          valorParcela: Number(linha[8]) || null,
-        }))
-    : []
-
-  const resposta = JSON.stringify({ porModelo, porCor, seminovos: lerSeminovosParaSite(planilha) })
+  // Pronta entrega nas abas de sempre; a pedido nas abas "Pedido...", com as
+  // mesmas colunas (aba que não existe vira lista vazia)
+  const resposta = JSON.stringify({
+    porModelo: lerPorModelo(planilha.getSheetByName(ABA_PRECOS_MODELO)),
+    porCor: lerPorCor(planilha.getSheetByName(ABA_PRECOS)),
+    seminovos: lerSeminovosParaSite(planilha),
+    pedidoPorModelo: lerPorModelo(planilha.getSheetByName(ABA_PEDIDO_MODELO)),
+    pedidoPorCor: lerPorCor(planilha.getSheetByName(ABA_PEDIDO)),
+    seminovosPedido: lerSeminovosParaSite(planilha, ABA_SEMINOVOS_PEDIDO),
+  })
   cache.put(cacheKey, resposta, CACHE_SEGUNDOS)
 
   return ContentService
     .createTextOutput(resposta)
     .setMimeType(ContentService.MimeType.JSON)
+}
+
+// Aba "Precos por Modelo" (ou "Pedido por Modelo"): 0=Categoria 1=Modelo
+// 2=Armazenamento 3=Preco 4=Parcelas 5=ValorParcela
+function lerPorModelo(aba) {
+  if (!aba) return []
+  return aba.getDataRange().getValues().slice(1)
+    .filter(linha => linha[1])
+    .map(linha => ({
+      modelo: String(linha[1]).trim(),
+      armazenamento: String(linha[2]).trim(),
+      preco: Number(linha[3]) || null,
+      parcelas: Number(linha[4]) || null,
+      valorParcela: Number(linha[5]) || null,
+    }))
+}
+
+// Aba "Precos" (ou "Pedido"), por cor: 0=Categoria 1=Modelo 2=Cor
+// 3=Armazenamento 4=Preco 5=Disponivel 6=ID 7=Parcelas 8=ValorParcela
+function lerPorCor(aba) {
+  if (!aba) return []
+  return aba.getDataRange().getValues().slice(1)
+    .filter(linha => linha[6])
+    .map(linha => ({
+      id: String(linha[6]).trim(),
+      armazenamento: String(linha[3]).trim(),
+      preco: Number(linha[4]) || null,
+      disponivel: String(linha[5]).trim().toUpperCase() === 'SIM',
+      parcelas: Number(linha[7]) || null,
+      valorParcela: Number(linha[8]) || null,
+    }))
 }
 
 /**
@@ -88,7 +105,7 @@ function doGet() {
  */
 function onEdit(e) {
   const nomeAba = e.range.getSheet().getName()
-  if (nomeAba === ABA_PRECOS || nomeAba === ABA_PRECOS_MODELO || nomeAba === ABA_SEMINOVOS) {
+  if (ABAS_DO_SITE.includes(nomeAba)) {
     CacheService.getScriptCache().remove('precos-json')
   }
 }
@@ -102,14 +119,63 @@ function onOpen() {
     .addItem('Configurar Preços por Modelo (migração)', 'configurarPrecosPorModelo')
     .addItem('Aplicar atualização em massa', 'aplicarAtualizacaoEmMassa')
     .addItem('Reajustar todos os preços em %', 'aplicarReajustePercentual')
+    .addSeparator()
+    .addItem('Criar abas de pedido (cópia da pronta entrega)', 'criarAbasPedido')
     .addToUi()
 
   SpreadsheetApp.getUi()
     .createMenu('Seminovos')
     .addItem('Importar lista do WhatsApp', 'abrirImportacaoSeminovos')
+    .addItem('Importar lista a pedido do WhatsApp', 'abrirImportacaoSeminovosPedido')
     .addSeparator()
     .addItem('Criar / ajustar aba Seminovos', 'criarAbaSeminovos')
+    .addItem('Criar / ajustar aba Seminovos Pedido', 'criarAbaSeminovosPedido')
     .addToUi()
+}
+
+// ────────────────────────────────────────────────────────────
+// A pedido: cria "Pedido por Modelo" e "Pedido" copiando as linhas das abas
+// de pronta entrega, com os preços em branco pra preencher. Aba que já
+// existe não é tocada
+// ────────────────────────────────────────────────────────────
+
+// "Precos por Modelo" -> "Pedido por Modelo": mesmo cabeçalho e as mesmas
+// linhas, sem Preco e Valor Parcela (as Parcelas continuam)
+function linhasPedidoPorModelo(valores) {
+  return valores.map((linha, i) => i === 0 ? linha.slice() : [linha[0], linha[1], linha[2], '', linha[4], ''])
+}
+
+// "Precos" -> "Pedido": mesmas linhas por cor, sem Preco (usa o da "Pedido
+// por Modelo") e com Disponivel = SIM; Parcelas continuam, Valor Parcela sai
+function linhasPedidoPorCor(valores) {
+  return valores.map((linha, i) => i === 0 ? linha.slice() : [linha[0], linha[1], linha[2], linha[3], '', 'SIM', linha[6], linha[7], ''])
+}
+
+function criarAbasPedido() {
+  const ui = SpreadsheetApp.getUi()
+  const planilha = SpreadsheetApp.getActiveSpreadsheet()
+  const pares = [
+    [ABA_PRECOS_MODELO, ABA_PEDIDO_MODELO, linhasPedidoPorModelo],
+    [ABA_PRECOS, ABA_PEDIDO, linhasPedidoPorCor],
+  ]
+  const feitas = []
+  const puladas = []
+  pares.forEach(([origem, destino, copiar]) => {
+    if (planilha.getSheetByName(destino)) { puladas.push(destino); return }
+    const abaOrigem = planilha.getSheetByName(origem)
+    if (!abaOrigem) { puladas.push(destino + ' (falta a aba "' + origem + '")'); return }
+    const linhas = copiar(abaOrigem.getDataRange().getValues())
+    const aba = planilha.insertSheet(destino)
+    aba.getRange(1, 1, linhas.length, linhas[0].length).setValues(linhas)
+    aba.getRange(1, 1, 1, linhas[0].length).setFontWeight('bold')
+    aba.setFrozenRows(1)
+    feitas.push(destino + ' (' + (linhas.length - 1) + ' linhas)')
+  })
+  CacheService.getScriptCache().remove('precos-json')
+  ui.alert(
+    (feitas.length ? 'Criadas: ' + feitas.join(', ') + '.\nPreencha o Preço a pedido em "' + ABA_PEDIDO_MODELO + '"; linha sem preço não aparece como a pedido no site.' : 'Nenhuma aba criada.') +
+    (puladas.length ? '\nJá existiam (não foram mexidas): ' + puladas.join(', ') + '.' : '')
+  )
 }
 
 /**
@@ -844,8 +910,9 @@ function linhaParaPlanilha(l) {
   })
 }
 
-function lerSeminovosParaSite(planilha) {
-  const aba = planilha.getSheetByName(ABA_SEMINOVOS)
+// A aba "Seminovos" (pronta entrega) ou a "Seminovos Pedido" (a pedido)
+function lerSeminovosParaSite(planilha, nomeAba) {
+  const aba = planilha.getSheetByName(nomeAba || ABA_SEMINOVOS)
   if (!aba) return []
   return lerLinhasSeminovos(aba)
     .filter(l => {
@@ -872,15 +939,26 @@ function lerSeminovosParaSite(planilha) {
     }))
 }
 
+// Só aceita as duas abas de seminovos (o nome vem da janela de importação)
+function abaSeminovos(nomeAba) {
+  return nomeAba === ABA_SEMINOVOS_PEDIDO ? ABA_SEMINOVOS_PEDIDO : ABA_SEMINOVOS
+}
+
 /**
  * Cria a aba "Seminovos" (ou reaplica a formatação, se ela já existir, sem
  * apagar nada): cabeçalho, listas suspensas, formatos e cores por status.
+ * Com nomeAba = "Seminovos Pedido", faz o mesmo na aba dos seminovos a pedido.
  */
-function criarAbaSeminovos(silencioso) {
+function criarAbaSeminovosPedido() {
+  return criarAbaSeminovos(false, ABA_SEMINOVOS_PEDIDO)
+}
+
+function criarAbaSeminovos(silencioso, nomeAba) {
+  const nome = abaSeminovos(nomeAba)
   const planilha = SpreadsheetApp.getActiveSpreadsheet()
-  let aba = planilha.getSheetByName(ABA_SEMINOVOS)
+  let aba = planilha.getSheetByName(nome)
   const criada = !aba
-  if (!aba) aba = planilha.insertSheet(ABA_SEMINOVOS)
+  if (!aba) aba = planilha.insertSheet(nome)
 
   const total = COLUNAS_SEMINOVOS.length
   aba.getRange(1, 1, 1, total).setValues([COLUNAS_SEMINOVOS])
@@ -920,32 +998,44 @@ function criarAbaSeminovos(silencioso) {
   larguras.forEach((px, i) => aba.setColumnWidth(i + 1, px))
 
   if (silencioso !== true) {
+    const menu = nome === ABA_SEMINOVOS_PEDIDO ? 'Importar lista a pedido do WhatsApp' : 'Importar lista do WhatsApp'
     SpreadsheetApp.getUi().alert(criada
-      ? 'Aba "Seminovos" criada. Use o menu Seminovos -> Importar lista do WhatsApp para preenchê-la.'
-      : 'Aba "Seminovos" ajustada (cabeçalho, listas e formatos). Nenhum aparelho foi alterado.')
+      ? 'Aba "' + nome + '" criada. Use o menu Seminovos -> ' + menu + ' para preenchê-la.'
+      : 'Aba "' + nome + '" ajustada (cabeçalho, listas e formatos). Nenhum aparelho foi alterado.')
   }
   return aba
 }
 
 function abrirImportacaoSeminovos() {
-  const html = HtmlService.createHtmlOutput(HTML_IMPORTACAO_SEMINOVOS).setWidth(680).setHeight(600)
-  SpreadsheetApp.getUi().showModalDialog(html, 'Importar seminovos do WhatsApp')
+  abrirImportacao(ABA_SEMINOVOS, 'Importar seminovos do WhatsApp')
+}
+
+function abrirImportacaoSeminovosPedido() {
+  abrirImportacao(ABA_SEMINOVOS_PEDIDO, 'Importar seminovos a pedido do WhatsApp')
+}
+
+// A mesma janela serve às duas abas: o nome da aba vai junto em cada chamada
+function abrirImportacao(nomeAba, titulo) {
+  const html = HtmlService.createHtmlOutput(HTML_IMPORTACAO_SEMINOVOS.replace('__ABA__', abaSeminovos(nomeAba)))
+    .setWidth(680).setHeight(600)
+  SpreadsheetApp.getUi().showModalDialog(html, titulo)
 }
 
 // Chamado pela janela de importação: só confere, não grava nada
-function previaSeminovos(texto) {
-  const aba = SpreadsheetApp.getActiveSpreadsheet().getSheetByName(ABA_SEMINOVOS)
+function previaSeminovos(texto, nomeAba) {
+  const aba = SpreadsheetApp.getActiveSpreadsheet().getSheetByName(abaSeminovos(nomeAba))
   const linhas = aba ? lerLinhasSeminovos(aba) : []
   const lidos = lerListaWhatsApp(texto)
   return resumoDoPlano(planejarSeminovos(lidos, linhas), lidos)
 }
 
 // Chamado pela janela de importação depois do "Conferir"
-function aplicarSeminovos(texto) {
+function aplicarSeminovos(texto, nomeAba) {
+  const nome = abaSeminovos(nomeAba)
   const trava = LockService.getScriptLock()
   trava.waitLock(20000)
   try {
-    const aba = SpreadsheetApp.getActiveSpreadsheet().getSheetByName(ABA_SEMINOVOS) || criarAbaSeminovos(true)
+    const aba = SpreadsheetApp.getActiveSpreadsheet().getSheetByName(nome) || criarAbaSeminovos(true, nome)
     const linhas = lerLinhasSeminovos(aba)
     const lidos = lerListaWhatsApp(texto)
     const plano = planejarSeminovos(lidos, linhas)
@@ -1013,6 +1103,8 @@ Nada muda na planilha até você clicar em <b>Aplicar</b>.</p>
 </div>
 <div id="resultado"></div>
 <script>
+  // Aba de destino ("Seminovos" ou "Seminovos Pedido"), posta ao abrir a janela
+  var ABA = '__ABA__'
   var texto = document.getElementById('texto')
   var btnConferir = document.getElementById('conferir')
   var btnAplicar = document.getElementById('aplicar')
@@ -1057,7 +1149,7 @@ Nada muda na planilha até você clicar em <b>Aplicar</b>.</p>
         mostrar(p)
       })
       .withFailureHandler(falhou)
-      .previaSeminovos(texto.value)
+      .previaSeminovos(texto.value, ABA)
   }
   btnAplicar.onclick = function () {
     btnAplicar.disabled = true
@@ -1069,7 +1161,7 @@ Nada muda na planilha até você clicar em <b>Aplicar</b>.</p>
         resultado.innerHTML = '<p class="ok"><b>' + esc(msg) + '</b></p>'
       })
       .withFailureHandler(falhou)
-      .aplicarSeminovos(texto.value)
+      .aplicarSeminovos(texto.value, ABA)
   }
 </script>
 `

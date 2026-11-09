@@ -77,7 +77,7 @@ export default function SeminovoCard({ aparelho, carrinhoIds = [], onAlternarCar
   const [hover, setHover] = useState(false)
   const {
     imei, modelo, cor, corHex, imagem, armazenamento, preco, parcelas, valorParcela,
-    bateria, ciclos, garantiaApple, garantiaLoja, acompanha, reservado,
+    bateria, ciclos, garantiaApple, garantiaLoja, acompanha, reservado, pedido,
   } = aparelho
   const avisos = aparelho.avisos || []
   const disponivel = !reservado
@@ -99,6 +99,8 @@ export default function SeminovoCard({ aparelho, carrinhoIds = [], onAlternarCar
     cor,
     imagem,
     preco,
+    // Seminovo da aba "Seminovos Pedido": a mensagem e o carrinho dizem que é a pedido
+    ...(pedido && { entrega: 'pedido' }),
   }
   const whatsappUrl = linkWhatsApp(mensagemDoCard(itemCarrinho))
 
@@ -131,7 +133,7 @@ export default function SeminovoCard({ aparelho, carrinhoIds = [], onAlternarCar
             decoding="async"
           />
         ) : FotoGenerica}
-        <span className="selo-seminovo">Seminovo</span>
+        <span className="selo-seminovo">{pedido ? 'Seminovo · A pedido' : 'Seminovo'}</span>
         {reservado && <span className="selo-seminovo selo-seminovo--reservado">Reservado</span>}
       </div>
 
@@ -197,6 +199,9 @@ export default function SeminovoCard({ aparelho, carrinhoIds = [], onAlternarCar
             <p style={{ fontSize: 14, fontWeight: 600, color: '#ddd', marginTop: 4 }}>
               {parcelamento}
             </p>
+          )}
+          {pedido && disponivel && (
+            <p className="entrega-nota entrega-nota--pedido">Chega em até 7 a 8 dias úteis · sinal de 10%</p>
           )}
         </div>
 

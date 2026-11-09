@@ -106,6 +106,7 @@ export default function CarrinhoFlutuante({ aberto, carrinho, onRemover, onLimpa
                         {item.indisponivel ? 'Indisponível no momento' : formatarPreco(item.preco)}
                       </p>
                       {item.seminovo && !item.indisponivel && <span className="carrinho-item-selo">Seminovo</span>}
+                      {item.entrega === 'pedido' && !item.indisponivel && <span className="carrinho-item-selo carrinho-item-selo--pedido">A pedido</span>}
                     </div>
                   </div>
                   <button

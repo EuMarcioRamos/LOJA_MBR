@@ -253,3 +253,68 @@ cadastrada em `src/data/seminovosExtras.js` (uma por modelo + cor).
 
 Também dá para editar qualquer linha à mão (preço, bateria etc.). Só
 lembre que a próxima importação vale o que estiver na lista do WhatsApp.
+
+---
+
+## Pronta entrega e a pedido
+
+As abas que já existem (`Precos por Modelo`, `Precos` e `Seminovos`) são
+os preços de **pronta entrega**. Os preços **a pedido** ficam em três abas
+novas, com as mesmas colunas:
+
+| Aba a pedido | Igual à aba | Para quê |
+|---|---|---|
+| `Pedido por Modelo` | `Precos por Modelo` | Preço a pedido de cada modelo + armazenamento, valendo para todas as cores |
+| `Pedido` | `Precos` | Exceção de preço a pedido por cor, e cor que não dá para encomendar |
+| `Seminovos Pedido` | `Seminovos` | Seminovos a pedido, um aparelho por linha |
+
+### Configuração (uma vez só)
+
+1. Atualize o script como em "Atualizando o script depois de uma mudança":
+   colar o código novo, salvar e publicar uma **Nova versão** na implantação
+   existente. Sem isso o site não enxerga as abas novas.
+2. Feche e abra a planilha.
+3. Menu **Preços → Criar abas de pedido (cópia da pronta entrega)**. Ele cria
+   `Pedido por Modelo` e `Pedido` com as mesmas linhas da pronta entrega:
+   **Preço** e **Valor Parcela** em branco, **Parcelas** iguais e todas as
+   cores com **Disponível = SIM**. Se uma das abas já existir, ela não é
+   mexida.
+4. Se tiver seminovo a pedido: menu **Seminovos → Criar / ajustar aba
+   Seminovos Pedido**.
+
+### No dia a dia
+
+- **Preço a pedido de um modelo** (todas as cores): aba `Pedido por Modelo`,
+  coluna Preço. **Linha sem preço = o produto não aparece a pedido.**
+- **Uma cor com preço a pedido diferente:** aba `Pedido`, Preço na linha
+  daquela cor. Em branco, vale o preço do modelo.
+- **Uma cor que não dá para encomendar:** aba `Pedido`, Disponível = NÃO
+  naquela cor.
+- **Parcelamento a pedido:** mesma regra do resto da planilha (Parcelas e
+  Valor Parcela, com o valor que a maquininha dá para o preço a pedido). Sem
+  Valor Parcela, o card mostra só o preço à vista.
+- **Seminovos a pedido:** menu **Seminovos → Importar lista a pedido do
+  WhatsApp**. É a mesma janela e o mesmo formato da lista de pronta entrega,
+  só que grava na aba `Seminovos Pedido`. O mesmo IMEI pode estar nas duas
+  listas sem se misturar.
+
+### Como aparece no site
+
+- **Sem nenhum preço a pedido** (abas vazias ou que não existem): o site fica
+  exatamente como antes, sem chave, sem selo e sem prazo. Dá para criar as
+  abas e preencher com calma.
+- **Com pelo menos um preço a pedido:** aparece a chave **Pedido** (com o
+  caminhão) ao lado de Lacrados | Seminovos. No celular aparece só o caminhão
+  e o interruptor.
+  - **Chave desligada** (é assim que o site abre): só pronta entrega. Os cards
+    ganham o selo verde "Pronta entrega" e "Entrega imediata" embaixo do
+    preço. Produto que só existe a pedido fica escondido.
+  - **Chave ligada:** aparece o aviso verde "Produtos a pedido chegam em até
+    7 a 8 dias úteis. Para encomendar, pedimos um sinal de 10% do valor." Nos
+    cards que têm os dois tipos aparece a linha **Entrega: Pronta entrega |
+    A pedido**, e o preço muda conforme a escolha. A pedido mostra o selo
+    "A pedido" e "Chega em até 7 a 8 dias úteis · sinal de 10%". Os seminovos
+    a pedido aparecem com o selo "Seminovo · A pedido".
+- No carrinho, o item a pedido leva o selo "A pedido". A mensagem do WhatsApp
+  diz o tipo: "Lacrado · Pronta entrega" ou "Lacrado · A pedido (chega em até
+  7 a 8 dias úteis)".

@@ -21,17 +21,30 @@ export function detalhesDoItem(item) {
   return [item.tamanho, item.armazenamento === 'Padrão' ? null : item.armazenamento, item.cor].filter(Boolean)
 }
 
+// Pronta entrega ou a pedido: só aparece quando o site mostra os dois tipos
+// (item.entrega vem do card); sem isso a mensagem fica como sempre foi
+export const TEXTO_A_PEDIDO = 'A pedido (chega em até 7 a 8 dias úteis)'
+function textoEntrega(item) {
+  if (item.entrega === 'pedido') return TEXTO_A_PEDIDO
+  if (item.entrega === 'pronta') return 'Pronta entrega'
+  return null
+}
+
 function linhaCondicao(item) {
-  if (!item.seminovo) return 'Lacrado'
-  return item.imei ? `Seminovo · IMEI: ${item.imei}` : 'Seminovo'
+  const condicao = !item.seminovo ? 'Lacrado' : item.imei ? `Seminovo · IMEI: ${item.imei}` : 'Seminovo'
+  return [condicao, textoEntrega(item)].filter(Boolean).join(' · ')
 }
 
 // No card do seminovo a abertura já diz "seminovo": a linha fica só com o IMEI
+// (e, no a pedido, o aviso do prazo)
 function blocoDoItem(item, { soImei = false } = {}) {
   const titulo = [item.nome, ...detalhesDoItem({ ...item, cor: null })].join(' ')
   const linhas = [`📱 *${titulo}${item.cor ? ` - ${item.cor}` : ''}*`]
   if (!soImei) linhas.push(linhaCondicao(item))
-  else if (item.imei) linhas.push(`IMEI: ${item.imei}`)
+  else {
+    if (item.imei) linhas.push(`IMEI: ${item.imei}`)
+    if (item.entrega === 'pedido') linhas.push(TEXTO_A_PEDIDO)
+  }
   if (Number.isFinite(item.preco)) linhas.push(`💰 ${emReais(item.preco)}`)
   return linhas.join('\n')
 }

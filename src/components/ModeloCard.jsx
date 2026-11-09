@@ -2,7 +2,7 @@ import { useState, useEffect, useRef } from 'react'
 import { corDaLuz } from '../corDaLuz'
 import { linkWhatsApp, mensagemDoCard } from '../mensagemWhatsApp'
 
-export default function ModeloCard({ modelo, variantes, precosProntos = true, planilhaFalhou = false, carrinhoIds = [], onAlternarCarrinho }) {
+export default function ModeloCard({ modelo, variantes, precosProntos = true, planilhaFalhou = false, carrinhoIds = [], onAlternarCarrinho, mostrarEntrega = false, soPronta = true }) {
   const chips = [...new Set(variantes.map(v => v.chip).filter(Boolean))]
   const temChips = chips.length > 1
 
@@ -28,6 +28,33 @@ export default function ModeloCard({ modelo, variantes, precosProntos = true, pl
   const atual = varsFiltradas[safeIdx] ?? varsPorChip[0] ?? variantes[0]
   const safeOpcaoIdx = Math.max(0, Math.min(opcaoIdx, atual.opcoes.length - 1))
   const opcaoAtual = atual.opcoes[safeOpcaoIdx]
+
+  // Pronta entrega ou a pedido. Só entra em jogo quando a planilha tem preços a
+  // pedido (mostrarEntrega). Com a chave "Pedido" desligada (soPronta) vale só
+  // a pronta entrega; ligada, a pessoa escolhe aqui, e a opção que não tem o
+  // tipo escolhido mostra o outro
+  const [entregaSel, setEntregaSel] = useState('pronta')
+  const temPronta = opcaoAtual.preco != null
+  const temPedido = !!opcaoAtual.pedido
+  // Vale o tipo escolhido se ele estiver disponível nessa cor e configuração;
+  // senão o outro (ex.: escolheu "A pedido" e passou pra uma cor que não dá
+  // pra encomendar: mostra a pronta entrega)
+  const okNoTipo = { pronta: temPronta && !!opcaoAtual.disponivel, pedido: temPedido && !!opcaoAtual.pedido.disponivel }
+  const existeNoTipo = { pronta: temPronta, pedido: temPedido }
+  const preferido = entregaSel === 'pedido' ? 'pedido' : 'pronta'
+  const outro = preferido === 'pedido' ? 'pronta' : 'pedido'
+  const modoEntrega = !mostrarEntrega
+    ? null
+    : soPronta
+      ? 'pronta'
+      : okNoTipo[preferido] ? preferido
+        : okNoTipo[outro] ? outro
+          : existeNoTipo[preferido] ? preferido
+            : existeNoTipo[outro] ? outro : 'pronta'
+  const noPedido = modoEntrega === 'pedido'
+  // { preco, disponivel, parcelas, valorParcela } do tipo que está na tela
+  const precoAtual = noPedido ? opcaoAtual.pedido : opcaoAtual
+  const disponivelAgora = !!precoAtual?.disponivel
 
   // Troca de cor da foto: a nova só entra depois de carregada e dissolve por
   // cima da anterior (que sai ao mesmo tempo), sem ficar um instante sem foto
@@ -79,21 +106,23 @@ export default function ModeloCard({ modelo, variantes, precosProntos = true, pl
   }
 
   // Opção sem preço na planilha vem sem valor (e indisponível): fica um traço
-  const preco = opcaoAtual.preco == null
+  const preco = precoAtual?.preco == null
     ? '—'
-    : opcaoAtual.preco.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })
-  const parcelamento = opcaoAtual.parcelas && opcaoAtual.valorParcela
-    ? `ou ${opcaoAtual.parcelas}x de ${opcaoAtual.valorParcela.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}`
+    : precoAtual.preco.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })
+  const parcelamento = precoAtual?.parcelas && precoAtual?.valorParcela
+    ? `ou ${precoAtual.parcelas}x de ${precoAtual.valorParcela.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}`
     : null
   const linhaBase = modelo.replace(/ M\d+$/, '')
   const nomeCompleto = atual.chip ? `${linhaBase} ${atual.chip}` : atual.modelo
   const eyebrow = temChips ? linhaBase : 'Apple'
   const titulo = temChips ? chipSel : modelo
-  const itemCarrinhoId = `${atual.id}-${opcaoAtual.armazenamento}`
+  // O a pedido é outro item no carrinho (id com "-pedido"); a pronta entrega
+  // mantém o id de sempre, pra os carrinhos já salvos continuarem valendo
+  const itemCarrinhoId = `${atual.id}-${opcaoAtual.armazenamento}${noPedido ? '-pedido' : ''}`
   const noCarrinho = carrinhoIds.includes(itemCarrinhoId)
   // Só entra no carrinho com o preço da planilha na tela: antes dela responder,
   // o preço do item seria o fixo do produtos.json
-  const podeAdicionar = opcaoAtual.disponivel && precosProntos
+  const podeAdicionar = disponivelAgora && precosProntos
   const itemCarrinho = {
     id: itemCarrinhoId,
     nome: nomeCompleto,
@@ -101,7 +130,8 @@ export default function ModeloCard({ modelo, variantes, precosProntos = true, pl
     armazenamento: opcaoAtual.armazenamento,
     cor: atual.cor,
     imagem: atual.imagem,
-    preco: opcaoAtual.preco,
+    preco: precoAtual?.preco ?? null,
+    ...(modoEntrega && { entrega: modoEntrega }),
   }
   const whatsappUrl = linkWhatsApp(mensagemDoCard(itemCarrinho))
 
@@ -194,6 +224,12 @@ export default function ModeloCard({ modelo, variantes, precosProntos = true, pl
             <circle cx="32" cy="98" r="4.5" fill="#2a2a2a"/>
             <rect x="22" y="6" width="20" height="3.5" rx="1.75" fill="#2a2a2a"/>
           </svg>
+        )}
+        {/* Selo do tipo de entrega (só quando a planilha tem preços a pedido) */}
+        {modoEntrega && precoAtual?.preco != null && (
+          <span className={`selo-seminovo selo-entrega selo-entrega--${modoEntrega}`}>
+            {noPedido ? 'A pedido' : 'Pronta entrega'}
+          </span>
         )}
       </div>
 
@@ -301,7 +337,8 @@ export default function ModeloCard({ modelo, variantes, precosProntos = true, pl
           <div className="btn-selector-row">
             {atual.opcoes.map((op, i) => {
               const sel = i === safeOpcaoIdx
-              const indis = !op.disponivel
+              // Com o a pedido na tela, a opção vale se tiver qualquer um dos dois tipos
+              const indis = !(op.disponivel || (mostrarEntrega && !soPronta && op.pedido?.disponivel))
               return (
                 <button
                   key={op.armazenamento}
@@ -316,6 +353,32 @@ export default function ModeloCard({ modelo, variantes, precosProntos = true, pl
             })}
           </div>
         </div>
+
+        {/* Seletor de entrega: aparece com a chave "Pedido" ligada. O tipo que
+            essa opção não tem (ou que está esgotado nessa cor) fica riscado */}
+        {mostrarEntrega && !soPronta && (
+          <div>
+            <p style={{ fontSize: 10, color: 'var(--rotulo-card)', textTransform: 'uppercase', letterSpacing: '1px', marginBottom: 7 }}>
+              Entrega
+            </p>
+            <div className="btn-selector-row">
+              {[['pronta', 'Pronta entrega'], ['pedido', 'A pedido']].map(([tipo, rotulo]) => {
+                const existe = tipo === 'pronta' ? temPronta && opcaoAtual.disponivel : temPedido && opcaoAtual.pedido.disponivel
+                return (
+                  <button
+                    key={tipo}
+                    className="btn-selector"
+                    onClick={() => existe && setEntregaSel(tipo)}
+                    title={existe ? rotulo : 'Não tem nessa configuração'}
+                    style={btnSelector(modoEntrega === tipo, !existe)}
+                  >
+                    {rotulo}
+                  </button>
+                )
+              })}
+            </div>
+          </div>
+        )}
       </div>
 
       {/* Preço + CTA */}
@@ -326,14 +389,19 @@ export default function ModeloCard({ modelo, variantes, precosProntos = true, pl
             <>
               <p style={{
                 fontSize: 24, fontWeight: 700,
-                color: opcaoAtual.disponivel ? '#fff' : '#444',
+                color: disponivelAgora ? '#fff' : '#444',
                 letterSpacing: '-0.5px',
               }}>
                 {preco}
               </p>
-              {parcelamento && opcaoAtual.disponivel && (
+              {parcelamento && disponivelAgora && (
                 <p style={{ fontSize: 14, fontWeight: 600, color: '#ddd', marginTop: 4 }}>
                   {parcelamento}
+                </p>
+              )}
+              {modoEntrega && disponivelAgora && (
+                <p className={`entrega-nota entrega-nota--${modoEntrega}`}>
+                  {noPedido ? 'Chega em até 7 a 8 dias úteis · sinal de 10%' : 'Entrega imediata'}
                 </p>
               )}
             </>
@@ -352,24 +420,24 @@ export default function ModeloCard({ modelo, variantes, precosProntos = true, pl
 
         <div style={{ display: 'flex', gap: 8 }}>
           <a
-            href={opcaoAtual.disponivel ? whatsappUrl : undefined}
+            href={disponivelAgora ? whatsappUrl : undefined}
             target="_blank"
             rel="noreferrer"
             style={{
               flex: 1,
-              background: opcaoAtual.disponivel ? 'var(--vidro-verde)' : '#1a1a1a',
-              color: opcaoAtual.disponivel ? '#fff' : '#3a3a3a',
+              background: disponivelAgora ? 'var(--vidro-verde)' : '#1a1a1a',
+              color: disponivelAgora ? '#fff' : '#3a3a3a',
               padding: '11px 0',
               borderRadius: 10,
               fontSize: 13, fontWeight: 600,
               textDecoration: 'none',
               display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 7,
-              cursor: opcaoAtual.disponivel ? 'pointer' : 'not-allowed',
+              cursor: disponivelAgora ? 'pointer' : 'not-allowed',
               transition: 'opacity 0.2s',
-              border: opcaoAtual.disponivel ? 'none' : '1px solid #222',
+              border: disponivelAgora ? 'none' : '1px solid #222',
             }}
           >
-            {opcaoAtual.disponivel ? (
+            {disponivelAgora ? (
               <>
                 Comprar via
                 <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor">

@@ -52,6 +52,10 @@ function situacaoDosItens(produtos, seminovos) {
   for (const variante of produtos) {
     for (const opcao of variante.opcoes) {
       situacao.set(`${variante.id}-${opcao.armazenamento}`, { preco: opcao.preco, disponivel: opcao.disponivel })
+      // O mesmo aparelho a pedido é outro item (id com "-pedido")
+      if (opcao.pedido) {
+        situacao.set(`${variante.id}-${opcao.armazenamento}-pedido`, { preco: opcao.pedido.preco, disponivel: opcao.pedido.disponivel })
+      }
     }
   }
   for (const aparelho of seminovos || []) {
@@ -163,10 +167,14 @@ export default function App() {
   const [planilhaFalhou, setPlanilhaFalhou] = useState(false)
   // null = a planilha ainda não respondeu ou não tem a aba "Seminovos"
   const [seminovosPlanilha, setSeminovosPlanilha] = useState(null)
+  // Seminovos da aba "Seminovos Pedido" (null = a planilha ainda não respondeu ou não tem a aba)
+  const [seminovosPedidoPlanilha, setSeminovosPedidoPlanilha] = useState(null)
   const [filtroCategoria, setFiltroCategoria] = useState('Destaque')
   const [filtroModelo, setFiltroModelo] = useState('Todos')
   const [busca, setBusca] = useState('')
   const [condicao, setCondicao] = useState('lacrado')
+  // Chave "Pedido" da barra: começa desligada (só pronta entrega)
+  const [pedido, setPedido] = useState(false)
   const [mostrarTodos, setMostrarTodos] = useState(false)
   const [carrinho, setCarrinho] = useState(lerCarrinhoSalvo)
   const [carrinhoAberto, setCarrinhoAberto] = useState(false)
@@ -202,6 +210,9 @@ export default function App() {
     const precosCache = lerPrecosCache()
     const aplicarSeminovos = (dados) => {
       if (Array.isArray(dados.seminovos)) setSeminovosPlanilha(montarSeminovos(dados.seminovos, produtosBase))
+      if (Array.isArray(dados.seminovosPedido)) {
+        setSeminovosPedidoPlanilha(montarSeminovos(dados.seminovosPedido, produtosBase, { pedido: true }))
+      }
     }
 
     if (precosCache) {
@@ -258,23 +269,25 @@ export default function App() {
   // indisponível e fora do total
   const carrinhoAtual = useMemo(() => {
     if (!precosProntos) return carrinho
-    const situacao = situacaoDosItens(produtos, seminovosPlanilha)
+    const situacao = situacaoDosItens(produtos, [...(seminovosPlanilha || []), ...(seminovosPedidoPlanilha || [])])
     return carrinho.map(item => {
       // Sem a lista real de seminovos (planilha fora do ar) não dá pra saber
-      // se o aparelho ainda existe: fica como foi salvo
-      if (item.id.startsWith('semi-') && !seminovosPlanilha) return item
+      // se o aparelho ainda existe: fica como foi salvo. O a pedido vem da
+      // outra lista ("Seminovos Pedido")
+      const listaDoSeminovo = item.id.startsWith('semi-pedido-') ? seminovosPedidoPlanilha : seminovosPlanilha
+      if (item.id.startsWith('semi-') && !listaDoSeminovo) return item
       const agora = situacao.get(item.id)
       if (!agora?.disponivel) return { ...item, indisponivel: true }
       return { ...item, preco: agora.preco, ...(agora.imei && { imei: agora.imei }) }
     })
-  }, [carrinho, produtos, seminovosPlanilha, precosProntos])
+  }, [carrinho, produtos, seminovosPlanilha, seminovosPedidoPlanilha, precosProntos])
 
   const isDesktop = useIsDesktop()
   const filtrosRef = useRef(null)
 
   useEffect(() => {
     setMostrarTodos(false)
-  }, [filtroCategoria, filtroModelo, busca, condicao])
+  }, [filtroCategoria, filtroModelo, busca, condicao, pedido])
 
   // Trocou o filtro (Lacrados/Seminovos, categoria, modelo, busca) com a lista
   // já rolada: o conteúdo novo pode ser bem mais curto (29 seminovos -> 6
@@ -292,7 +305,7 @@ export default function App() {
     if (!loja) return
     const topo = loja.getBoundingClientRect().top
     if (topo < 69) window.scrollTo(0, topo + window.scrollY - 70)
-  }, [filtroCategoria, filtroModelo, busca, condicao])
+  }, [filtroCategoria, filtroModelo, busca, condicao, pedido])
 
   // Rola até a lista, deixando o começo dela logo abaixo do Header (70px).
   // scrollTo com a posição calculada: o scrollIntoView parava antes no celular.
@@ -328,10 +341,26 @@ export default function App() {
   // "Seminovos". Antes de ela responder, ou se ela falhou, não mostra nenhum
   // (nem o exemplo, pra não mostrar aparelho e preço que não existem)
   const usandoExemplo = seminovosPlanilha === null && precosProntos && !planilhaFalhou
-  const seminovosBase = useMemo(
-    () => seminovosPlanilha ?? (usandoExemplo ? montarSeminovos(seminovosExemplo, produtosBase) : []),
-    [seminovosPlanilha, usandoExemplo]
+
+  // A pedido: a chave "Pedido" só aparece quando a planilha tem algum preço a
+  // pedido (abas "Pedido por Modelo"/"Pedido") ou seminovo a pedido. Enquanto
+  // não tiver, o site fica exatamente como antes
+  const temPedido = useMemo(
+    () => produtos.some(v => v.opcoes.some(o => o.pedido)) || (seminovosPedidoPlanilha?.length ?? 0) > 0,
+    [produtos, seminovosPedidoPlanilha]
   )
+  const pedidoLigado = temPedido && pedido
+  // Desligada, some o que só existe a pedido (nenhuma opção com preço de
+  // pronta entrega e alguma com preço a pedido); o resto segue como sempre
+  const produtosVisiveis = useMemo(
+    () => (pedidoLigado ? produtos : produtos.filter(v => !v.opcoes.every(o => o.preco == null && o.pedido))),
+    [produtos, pedidoLigado]
+  )
+
+  const seminovosBase = useMemo(() => {
+    const prontos = seminovosPlanilha ?? (usandoExemplo ? montarSeminovos(seminovosExemplo, produtosBase) : [])
+    return pedidoLigado && seminovosPedidoPlanilha ? [...prontos, ...seminovosPedidoPlanilha] : prontos
+  }, [seminovosPlanilha, usandoExemplo, pedidoLigado, seminovosPedidoPlanilha])
   const seminovosCarregados = seminovosPlanilha !== null || usandoExemplo
 
   const ordemAtual = ORDEM_MODELOS[filtroCategoria] || []
@@ -339,20 +368,20 @@ export default function App() {
 
   // Na linha de modelos do menu, só entram os que existem na condição escolhida
   const modelos = useMemo(() => {
-    const fonte = condicao === 'seminovo' ? seminovosBase : produtos
+    const fonte = condicao === 'seminovo' ? seminovosBase : produtosVisiveis
     if (linhasAtual) {
       return linhasAtual
         .filter(l => l.modelos.some(m => fonte.some(p => p.modelo === m)))
         .map(l => l.linha)
     }
     return ordemAtual.filter(m => fonte.some(p => p.modelo === m))
-  }, [filtroCategoria, produtos, condicao, seminovosBase])
+  }, [filtroCategoria, produtosVisiveis, condicao, seminovosBase])
 
   const termoBusca = busca.trim().toLowerCase()
 
   const grupos = useMemo(() => {
     if (termoBusca) {
-      const variantesFiltradas = produtos.filter(p => p.modelo.toLowerCase().includes(termoBusca))
+      const variantesFiltradas = produtosVisiveis.filter(p => p.modelo.toLowerCase().includes(termoBusca))
       const map = {}
       variantesFiltradas.forEach(p => {
         if (!map[p.modelo]) map[p.modelo] = []
@@ -362,10 +391,10 @@ export default function App() {
     }
     if (filtroCategoria === 'Destaque') {
       return DESTAQUE_MODELOS
-        .map(({ modelo }) => ({ modelo, variantes: produtos.filter(p => p.modelo === modelo) }))
+        .map(({ modelo }) => ({ modelo, variantes: produtosVisiveis.filter(p => p.modelo === modelo) }))
         .filter(g => g.variantes.length > 0)
     }
-    const variantesFiltradas = produtos.filter(p => {
+    const variantesFiltradas = produtosVisiveis.filter(p => {
       const naCategoria = ordemAtual.includes(p.modelo)
       let okModelo = filtroModelo === 'Todos'
       if (!okModelo) {
@@ -380,7 +409,7 @@ export default function App() {
       map[p.modelo].push(p)
     })
     return ordemAtual.filter(m => map[m]).map(m => ({ modelo: m, variantes: map[m] }))
-  }, [filtroCategoria, filtroModelo, produtos, termoBusca])
+  }, [filtroCategoria, filtroModelo, produtosVisiveis, termoBusca])
 
   // Seminovos com os mesmos filtros da lista de lacrados (busca, categoria e
   // linha/modelo); no Destaque aparecem todos
@@ -432,6 +461,9 @@ export default function App() {
           condicao={condicao}
           setCondicao={setCondicao}
           onIrParaLista={irParaProdutos}
+          temPedido={temPedido}
+          pedido={pedido}
+          setPedido={setPedido}
         />
 
         <div style={{ maxWidth: 1200, margin: '0 auto', padding: '24px 24px 60px' }}>
@@ -441,6 +473,14 @@ export default function App() {
               <AvisoValores>
                 Preços e disponibilidade sujeitos a alteração sem aviso prévio. O valor final é confirmado no atendimento via WhatsApp.
               </AvisoValores>
+              {/* Aviso verde do a pedido: aparece ao ligar a chave "Pedido" */}
+              {pedidoLigado && (
+                <div className="aviso-entrando">
+                  <AvisoValores tom="verde">
+                    Produtos a pedido chegam em até 7 a 8 dias úteis. Para encomendar, pedimos um sinal de 10% do valor.
+                  </AvisoValores>
+                </div>
+              )}
             </div>
           )}
           {categoriaIndisponivel ? (
@@ -506,6 +546,8 @@ export default function App() {
                         planilhaFalhou={planilhaFalhou}
                         carrinhoIds={carrinhoIds}
                         onAlternarCarrinho={alternarCarrinho}
+                        mostrarEntrega={temPedido}
+                        soPronta={!pedidoLigado}
                       />
                     </div>
                   </Protegido>

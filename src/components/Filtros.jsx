@@ -135,7 +135,17 @@ const CONDICOES = [
   },
 ]
 
-export default function Filtros({ modelos, filtroCategoria, setFiltroCategoria, filtroModelo, setFiltroModelo, busca, setBusca, condicao, setCondicao, onIrParaLista }) {
+// Caminhão da chave "Pedido", no mesmo traço dos ícones de Lacrados e Seminovos
+const IconeCaminhao = (
+  <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+    <path d="M2 7h11v9H2z" />
+    <path d="M13 10h4.5l3.5 3.5V16h-8" />
+    <circle cx="6" cy="17.5" r="1.8" />
+    <circle cx="17" cy="17.5" r="1.8" />
+  </svg>
+)
+
+export default function Filtros({ modelos, filtroCategoria, setFiltroCategoria, filtroModelo, setFiltroModelo, busca, setBusca, condicao, setCondicao, onIrParaLista, temPedido = false, pedido = false, setPedido }) {
   const [modelosVisiveis, setModelosVisiveis] = useState(modelos)
   const [categoriaVisivel, setCategoriaVisivel] = useState(filtroCategoria)
   const [aberto, setAberto] = useState(false)
@@ -247,7 +257,7 @@ export default function Filtros({ modelos, filtroCategoria, setFiltroCategoria, 
 
       {/* ── Barra (fica presa embaixo do header ao rolar a lista) ── */}
       <div className="filtros-barra">
-        <div className="filtros-barra-conteudo">
+        <div className={`filtros-barra-conteudo${temPedido ? ' filtros-barra-conteudo--com-pedido' : ''}`}>
           <div className={`busca-pilula${pilulaAberta ? ' busca-pilula--aberta' : ''}`} onKeyDown={aoTeclarNoMenu}>
             {/* Brilho girando na borda (a camada interna gira pela placa de vídeo) */}
             <span className="busca-pilula-anel" aria-hidden="true">
@@ -329,6 +339,25 @@ export default function Filtros({ modelos, filtroCategoria, setFiltroCategoria, 
               </button>
             ))}
           </div>
+
+          {/* Chave "Pedido": começa desligada (só pronta entrega); ligada,
+              mostra também os aparelhos a pedido. Só aparece quando a
+              planilha tem algo a pedido. No celular fica só o caminhão */}
+          {temPedido && (
+            <button
+              type="button"
+              role="switch"
+              aria-checked={pedido}
+              aria-label="Mostrar aparelhos a pedido"
+              title={pedido ? 'Mostrando também os aparelhos a pedido' : 'Mostrando só pronta entrega'}
+              className={`pedido-chave${pedido ? ' pedido-chave--ligada' : ''}`}
+              onClick={() => setPedido?.(!pedido)}
+            >
+              {IconeCaminhao}
+              <span className="pedido-rotulo">Pedido</span>
+              <span className="pedido-interruptor" aria-hidden="true" />
+            </button>
+          )}
 
           {!pilulaAberta && !recolhendo && filtroAtivo && (
             <button
