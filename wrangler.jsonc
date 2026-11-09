@@ -3,8 +3,9 @@
 // publica a pasta dist. Não tem código rodando no servidor: o site é só
 // arquivos estáticos, e esse tipo de acesso é grátis e sem limite.
 // O "name" precisa ser igual ao nome do projeto no painel da Cloudflare.
+// Endereço: loja.masterbr.workers.dev (projeto "loja", conta "masterbr").
 {
-  "name": "masterbr",
+  "name": "loja",
   "compatibility_date": "2026-10-01",
   "assets": {
     "directory": "./dist",
