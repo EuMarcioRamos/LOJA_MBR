@@ -1,0 +1,14 @@
+// Hospedagem na Cloudflare (Workers com arquivos estáticos).
+// A Cloudflare roda "npm run build" e depois "npx wrangler deploy", que
+// publica a pasta dist. Não tem código rodando no servidor: o site é só
+// arquivos estáticos, e esse tipo de acesso é grátis e sem limite.
+// O "name" precisa ser igual ao nome do projeto no painel da Cloudflare.
+{
+  "name": "masterbr",
+  "compatibility_date": "2026-10-01",
+  "assets": {
+    "directory": "./dist",
+    // Endereço que não existe abre a página principal em vez de dar erro
+    "not_found_handling": "single-page-application"
+  }
+}

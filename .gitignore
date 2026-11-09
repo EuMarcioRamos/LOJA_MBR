@@ -12,6 +12,9 @@ dist
 dist-ssr
 *.local
 
+# Arquivos locais da ferramenta da Cloudflare (wrangler)
+.wrangler
+
 # Fotos de clientes (originais do iCloud): ficam só no computador, o repositório é público
 Img_clientes/
 
