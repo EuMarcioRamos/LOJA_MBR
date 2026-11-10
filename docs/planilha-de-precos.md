@@ -260,13 +260,13 @@ lembre que a próxima importação vale o que estiver na lista do WhatsApp.
 
 As abas que já existem (`Precos por Modelo`, `Precos` e `Seminovos`) são
 os preços de **pronta entrega**. Os preços **a pedido** ficam em três abas
-novas, com as mesmas colunas:
+novas:
 
-| Aba a pedido | Igual à aba | Para quê |
+| Aba a pedido | Formato | Para quê |
 |---|---|---|
-| `Pedido por Modelo` | `Precos por Modelo` | Preço a pedido de cada modelo + armazenamento, valendo para todas as cores |
-| `Pedido` | `Precos` | Exceção de preço a pedido por cor, e cor que não dá para encomendar |
-| `Seminovos Pedido` | `Seminovos` | Seminovos a pedido, um aparelho por linha |
+| `Pedido por Modelo` | igual à `Precos por Modelo` | Preço a pedido de cada modelo + armazenamento, valendo para todas as cores |
+| `Pedido` | igual à `Precos` | Exceção de preço a pedido por cor, e cor que não dá para encomendar |
+| `Seminovos Pedido` | tabela de preços (abaixo) | A tabela fixa de seminovos a pedido que a loja divulga |
 
 ### Configuração (uma vez só)
 
@@ -279,8 +279,12 @@ novas, com as mesmas colunas:
    **Preço** e **Valor Parcela** em branco, **Parcelas** iguais e todas as
    cores com **Disponível = SIM**. Se uma das abas já existir, ela não é
    mexida.
-4. Se tiver seminovo a pedido: menu **Seminovos → Criar / ajustar aba
-   Seminovos Pedido**.
+   Ele também cria a `Seminovos Pedido`, já preenchida com a tabela da loja
+   de 10/11/2026 (50 preços). Se você já tinha as duas abas de preço, use
+   **Seminovos → Criar aba Seminovos Pedido (tabela de preços)**, que cria só
+   essa. Se existir uma `Seminovos Pedido` antiga (um aparelho por linha),
+   vazia ela é trocada pela tabela; com aparelhos, fica guardada como
+   `Seminovos Pedido (antiga)`.
 
 ### No dia a dia
 
@@ -293,10 +297,29 @@ novas, com as mesmas colunas:
 - **Parcelamento a pedido:** mesma regra do resto da planilha (Parcelas e
   Valor Parcela, com o valor que a maquininha dá para o preço a pedido). Sem
   Valor Parcela, o card mostra só o preço à vista.
-- **Seminovos a pedido:** menu **Seminovos → Importar lista a pedido do
-  WhatsApp**. É a mesma janela e o mesmo formato da lista de pronta entrega,
-  só que grava na aba `Seminovos Pedido`. O mesmo IMEI pode estar nas duas
-  listas sem se misturar.
+- **Seminovos a pedido:** é só editar a tabela da aba `Seminovos Pedido`
+  (explicada abaixo). Os seminovos da loja, com IMEI, continuam na aba
+  `Seminovos`, pela importação do WhatsApp.
+
+### A tabela de seminovos a pedido (aba `Seminovos Pedido`)
+
+Não é um aparelho por linha: é o preço da tabela que a loja divulga, um por
+modelo e armazenamento.
+
+| Coluna | O que vai |
+|---|---|
+| **Modelo** | Ex.: `iPhone 15 Pro Max`. Pode escrever em maiúsculas (`IPHONE 15 PRO MAX`) |
+| **Armazenamento** | Ex.: `256GB`, `1TB` |
+| **Cores** | **Em branco = o mesmo preço em qualquer cor.** Quando a cor muda o preço (linha 17), uma linha por preço com as cores separadas por vírgula, ex.: `Prata, Azul Profundo`. Também aceita como nas artes: `Silver \| Azul`, `Laranja` |
+| **Preco** | O preço à vista. **Sem preço, a linha não aparece no site** |
+| **Parcelas / Valor Parcela** | Como nas outras abas (opcional) |
+| **Bateria** | Aparece na ficha, ex.: `80% a 90%` |
+| **Garantia** | Ex.: `6 meses` |
+| **Brindes** | Ex.: `Fonte 20W, case, película e cabo` |
+
+Uma linha com uma cor que não existe naquele modelo (ou modelo escrito
+errado) fica de fora do site, em vez de valer para todas as cores. Se algum
+preço sumir do site, confira o nome da cor e do modelo.
 
 ### Como aparece no site
 
@@ -313,8 +336,13 @@ novas, com as mesmas colunas:
     7 a 8 dias úteis. Para encomendar, pedimos um sinal de 10% do valor." Nos
     cards que têm os dois tipos aparece a linha **Entrega: Pronta entrega |
     A pedido**, e o preço muda conforme a escolha. A pedido mostra o selo
-    "A pedido" e "Chega em até 7 a 8 dias úteis · sinal de 10%". Os seminovos
-    a pedido aparecem com o selo "Seminovo · A pedido".
+    "A pedido" e "Chega em até 7 a 8 dias úteis · sinal de 10%".
+  - **Seminovos com a chave ligada:** depois dos seminovos da loja de cada
+    modelo vem o card da tabela a pedido, com o selo "Seminovo · A pedido".
+    A pessoa escolhe a cor e o armazenamento (na linha 17 o preço muda com a
+    cor); quando a tabela não separa por cor, aparece "sujeita à
+    disponibilidade". A ficha mostra bateria, garantia e brindes.
 - No carrinho, o item a pedido leva o selo "A pedido". A mensagem do WhatsApp
-  diz o tipo: "Lacrado · Pronta entrega" ou "Lacrado · A pedido (chega em até
-  7 a 8 dias úteis)".
+  diz o tipo: "Lacrado · Pronta entrega", "Lacrado · A pedido (chega em até
+  7 a 8 dias úteis)" ou, no seminovo a pedido, "Seminovo · A pedido (...)"
+  com a linha "Bateria: 80% a 90%".

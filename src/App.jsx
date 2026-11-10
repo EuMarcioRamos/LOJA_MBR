@@ -3,6 +3,7 @@ import Header from './components/Header'
 import Filtros from './components/Filtros'
 import ModeloCard from './components/ModeloCard'
 import SeminovoCard from './components/SeminovoCard'
+import SeminovoPedidoCard from './components/SeminovoPedidoCard'
 import GiroIphone from './components/GiroIphone'
 import FaixaBeneficios from './components/FaixaBeneficios'
 import ProvaSocial from './components/ProvaSocial'
@@ -16,7 +17,7 @@ import produtosBase from './data/produtos.json'
 // "Seminovos" (script antigo, que não devolve o campo "seminovos")
 import seminovosExemplo from './data/seminovos.json'
 import { PLANILHA_PRECOS_URL } from './config'
-import { buscarPrecosRemotos, aplicarPrecos, montarSeminovos, lerPrecosCache, salvarPrecosCache } from './data/precosRemotos'
+import { buscarPrecosRemotos, aplicarPrecos, montarSeminovos, montarSeminovosPedido, precoSeminovoPedido, idSeminovoPedido, lerPrecosCache, salvarPrecosCache } from './data/precosRemotos'
 import { revelar } from './revelar'
 
 const CARRINHO_STORAGE_KEY = 'mbr-carrinho-v1'
@@ -47,7 +48,7 @@ function lerCarrinhoSalvo() {
 
 // Preço e disponibilidade de agora de tudo que pode estar no carrinho, pelo
 // mesmo id que os cards usam ao adicionar (lacrado: variante + armazenamento)
-function situacaoDosItens(produtos, seminovos) {
+function situacaoDosItens(produtos, seminovos, seminovosPedido) {
   const situacao = new Map()
   for (const variante of produtos) {
     for (const opcao of variante.opcoes) {
@@ -60,6 +61,16 @@ function situacaoDosItens(produtos, seminovos) {
   }
   for (const aparelho of seminovos || []) {
     situacao.set(aparelho.id, { preco: aparelho.preco, disponivel: !aparelho.reservado, imei: aparelho.imei })
+  }
+  // Seminovo a pedido: um item por modelo + armazenamento + cor, com o preço da tabela
+  for (const aparelho of seminovosPedido || []) {
+    const cores = aparelho.cores.length ? aparelho.cores.map(c => c.cor) : [null]
+    for (const armazenamento of aparelho.armazenamentos) {
+      for (const cor of cores) {
+        const linha = precoSeminovoPedido(aparelho, cor, armazenamento)
+        if (linha) situacao.set(idSeminovoPedido(aparelho, cor, armazenamento), { preco: linha.preco, disponivel: true })
+      }
+    }
   }
   return situacao
 }
@@ -167,8 +178,9 @@ export default function App() {
   const [planilhaFalhou, setPlanilhaFalhou] = useState(false)
   // null = a planilha ainda não respondeu ou não tem a aba "Seminovos"
   const [seminovosPlanilha, setSeminovosPlanilha] = useState(null)
-  // Seminovos da aba "Seminovos Pedido" (null = a planilha ainda não respondeu ou não tem a aba)
-  const [seminovosPedidoPlanilha, setSeminovosPedidoPlanilha] = useState(null)
+  // Seminovos a pedido: a tabela da aba "Seminovos Pedido", um item por modelo
+  // (null = a planilha ainda não respondeu ou o script ainda não manda a tabela)
+  const [seminovosPedidoTabela, setSeminovosPedidoTabela] = useState(null)
   const [filtroCategoria, setFiltroCategoria] = useState('Destaque')
   const [filtroModelo, setFiltroModelo] = useState('Todos')
   const [busca, setBusca] = useState('')
@@ -210,8 +222,8 @@ export default function App() {
     const precosCache = lerPrecosCache()
     const aplicarSeminovos = (dados) => {
       if (Array.isArray(dados.seminovos)) setSeminovosPlanilha(montarSeminovos(dados.seminovos, produtosBase))
-      if (Array.isArray(dados.seminovosPedido)) {
-        setSeminovosPedidoPlanilha(montarSeminovos(dados.seminovosPedido, produtosBase, { pedido: true }))
+      if (Array.isArray(dados.tabelaSeminovosPedido)) {
+        setSeminovosPedidoTabela(montarSeminovosPedido(dados.tabelaSeminovosPedido, produtosBase))
       }
     }
 
@@ -269,18 +281,18 @@ export default function App() {
   // indisponível e fora do total
   const carrinhoAtual = useMemo(() => {
     if (!precosProntos) return carrinho
-    const situacao = situacaoDosItens(produtos, [...(seminovosPlanilha || []), ...(seminovosPedidoPlanilha || [])])
+    const situacao = situacaoDosItens(produtos, seminovosPlanilha, seminovosPedidoTabela)
     return carrinho.map(item => {
       // Sem a lista real de seminovos (planilha fora do ar) não dá pra saber
       // se o aparelho ainda existe: fica como foi salvo. O a pedido vem da
-      // outra lista ("Seminovos Pedido")
-      const listaDoSeminovo = item.id.startsWith('semi-pedido-') ? seminovosPedidoPlanilha : seminovosPlanilha
+      // tabela ("Seminovos Pedido")
+      const listaDoSeminovo = item.id.startsWith('semi-pedido-') ? seminovosPedidoTabela : seminovosPlanilha
       if (item.id.startsWith('semi-') && !listaDoSeminovo) return item
       const agora = situacao.get(item.id)
       if (!agora?.disponivel) return { ...item, indisponivel: true }
       return { ...item, preco: agora.preco, ...(agora.imei && { imei: agora.imei }) }
     })
-  }, [carrinho, produtos, seminovosPlanilha, seminovosPedidoPlanilha, precosProntos])
+  }, [carrinho, produtos, seminovosPlanilha, seminovosPedidoTabela, precosProntos])
 
   const isDesktop = useIsDesktop()
   const filtrosRef = useRef(null)
@@ -346,8 +358,8 @@ export default function App() {
   // pedido (abas "Pedido por Modelo"/"Pedido") ou seminovo a pedido. Enquanto
   // não tiver, o site fica exatamente como antes
   const temPedido = useMemo(
-    () => produtos.some(v => v.opcoes.some(o => o.pedido)) || (seminovosPedidoPlanilha?.length ?? 0) > 0,
-    [produtos, seminovosPedidoPlanilha]
+    () => produtos.some(v => v.opcoes.some(o => o.pedido)) || (seminovosPedidoTabela?.length ?? 0) > 0,
+    [produtos, seminovosPedidoTabela]
   )
   const pedidoLigado = temPedido && pedido
   // Desligada, some o que só existe a pedido (nenhuma opção com preço de
@@ -359,8 +371,8 @@ export default function App() {
 
   const seminovosBase = useMemo(() => {
     const prontos = seminovosPlanilha ?? (usandoExemplo ? montarSeminovos(seminovosExemplo, produtosBase) : [])
-    return pedidoLigado && seminovosPedidoPlanilha ? [...prontos, ...seminovosPedidoPlanilha] : prontos
-  }, [seminovosPlanilha, usandoExemplo, pedidoLigado, seminovosPedidoPlanilha])
+    return pedidoLigado && seminovosPedidoTabela ? [...prontos, ...seminovosPedidoTabela] : prontos
+  }, [seminovosPlanilha, usandoExemplo, pedidoLigado, seminovosPedidoTabela])
   const seminovosCarregados = seminovosPlanilha !== null || usandoExemplo
 
   const ordemAtual = ORDEM_MODELOS[filtroCategoria] || []
@@ -423,7 +435,8 @@ export default function App() {
         const linhaSel = linhasAtual?.find(l => l.linha === filtroModelo)
         return linhaSel ? linhaSel.modelos.includes(s.modelo) : s.modelo === filtroModelo
       })
-      .sort((a, b) => ordemDoModelo(a.modelo) - ordemDoModelo(b.modelo) || b.preco - a.preco)
+      // No mesmo modelo, primeiro os aparelhos da loja e depois o card a pedido
+      .sort((a, b) => ordemDoModelo(a.modelo) - ordemDoModelo(b.modelo) || Number(!!a.tabela) - Number(!!b.tabela) || b.preco - a.preco)
   }, [filtroCategoria, filtroModelo, termoBusca, linhasAtual, seminovosBase])
 
   const emSeminovos = condicao === 'seminovo'
@@ -510,11 +523,19 @@ export default function App() {
                   {seminovosExibidos.map(aparelho => (
                     <Protegido key={aparelho.id}>
                       <div className="revelar" ref={revelar}>
-                        <SeminovoCard
-                          aparelho={aparelho}
-                          carrinhoIds={carrinhoIds}
-                          onAlternarCarrinho={alternarCarrinho}
-                        />
+                        {aparelho.tabela ? (
+                          <SeminovoPedidoCard
+                            aparelho={aparelho}
+                            carrinhoIds={carrinhoIds}
+                            onAlternarCarrinho={alternarCarrinho}
+                          />
+                        ) : (
+                          <SeminovoCard
+                            aparelho={aparelho}
+                            carrinhoIds={carrinhoIds}
+                            onAlternarCarrinho={alternarCarrinho}
+                          />
+                        )}
                       </div>
                     </Protegido>
                   ))}

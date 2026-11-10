@@ -15,6 +15,10 @@
  * Seminovos ficam numa aba à parte, "Seminovos": uma linha por aparelho,
  * identificado pelo final do IMEI. Ela é preenchida colando a lista do
  * WhatsApp no menu "Seminovos -> Importar lista do WhatsApp" (seção 3).
+ *
+ * A pedido (encomenda): "Pedido por Modelo" e "Pedido", iguais às duas abas
+ * de preço, e "Seminovos Pedido", a tabela fixa de seminovos a pedido (um
+ * preço por modelo e armazenamento, às vezes por cor).
  */
 
 const ABA_PRECOS = 'Precos'
@@ -22,12 +26,11 @@ const ABA_PRECOS_MODELO = 'Precos por Modelo'
 const ABA_ATUALIZACAO = 'Atualizar em Massa'
 const ABA_SEMINOVOS = 'Seminovos'
 
-// A pedido (encomenda, chega em até 7 a 8 dias úteis): as mesmas três listas
-// de pronta entrega, com as mesmas colunas. As de cima continuam valendo
-// para pronta entrega, como sempre
+// A pedido (encomenda, chega em até 7 a 8 dias úteis). As abas de cima
+// continuam valendo para pronta entrega, como sempre
 const ABA_PEDIDO_MODELO = 'Pedido por Modelo'   // igual à "Precos por Modelo"
 const ABA_PEDIDO = 'Pedido'                     // igual à "Precos" (por cor)
-const ABA_SEMINOVOS_PEDIDO = 'Seminovos Pedido' // igual à "Seminovos"
+const ABA_SEMINOVOS_PEDIDO = 'Seminovos Pedido' // tabela: preço por modelo e armazenamento
 const ABAS_DO_SITE = [ABA_PRECOS, ABA_PRECOS_MODELO, ABA_SEMINOVOS, ABA_PEDIDO, ABA_PEDIDO_MODELO, ABA_SEMINOVOS_PEDIDO]
 
 // ────────────────────────────────────────────────────────────
@@ -57,14 +60,15 @@ function doGet() {
   // Pronta entrega nas abas de sempre; a pedido nas abas "Pedido...", com as
   // mesmas colunas (aba que não existe vira lista vazia). Do a pedido só vão
   // as linhas que mudam alguma coisa no site: modelo com preço, e cor com
-  // preço próprio ou que não dá para encomendar (Disponível diferente de SIM)
+  // preço próprio ou que não dá para encomendar (Disponível diferente de SIM).
+  // Os seminovos a pedido vêm da tabela da aba "Seminovos Pedido"
   const resposta = JSON.stringify({
     porModelo: lerPorModelo(planilha.getSheetByName(ABA_PRECOS_MODELO)),
     porCor: lerPorCor(planilha.getSheetByName(ABA_PRECOS)),
     seminovos: lerSeminovosParaSite(planilha),
     pedidoPorModelo: lerPorModelo(planilha.getSheetByName(ABA_PEDIDO_MODELO)).filter(linha => linha.preco),
     pedidoPorCor: lerPorCor(planilha.getSheetByName(ABA_PEDIDO)).filter(linha => linha.preco || !linha.disponivel),
-    seminovosPedido: lerSeminovosParaSite(planilha, ABA_SEMINOVOS_PEDIDO),
+    tabelaSeminovosPedido: lerTabelaSeminovosPedido(planilha.getSheetByName(ABA_SEMINOVOS_PEDIDO)),
   })
   guardarRespostaNoCache(cache, resposta)
 
@@ -182,17 +186,16 @@ function onOpen() {
   SpreadsheetApp.getUi()
     .createMenu('Seminovos')
     .addItem('Importar lista do WhatsApp', 'abrirImportacaoSeminovos')
-    .addItem('Importar lista a pedido do WhatsApp', 'abrirImportacaoSeminovosPedido')
     .addSeparator()
     .addItem('Criar / ajustar aba Seminovos', 'criarAbaSeminovos')
-    .addItem('Criar / ajustar aba Seminovos Pedido', 'criarAbaSeminovosPedido')
+    .addItem('Criar aba Seminovos Pedido (tabela de preços)', 'criarAbaSeminovosPedido')
     .addToUi()
 }
 
 // ────────────────────────────────────────────────────────────
 // A pedido: cria "Pedido por Modelo" e "Pedido" copiando as linhas das abas
-// de pronta entrega, com os preços em branco pra preencher. Aba que já
-// existe não é tocada
+// de pronta entrega, com os preços em branco pra preencher, e a "Seminovos
+// Pedido" já com a tabela da loja. Aba que já existe não é tocada
 // ────────────────────────────────────────────────────────────
 
 // "Precos por Modelo" -> "Pedido por Modelo": mesmo cabeçalho e as mesmas
@@ -227,10 +230,15 @@ function criarAbasPedido() {
     aba.setFrozenRows(1)
     feitas.push(destino + ' (' + (linhas.length - 1) + ' linhas)')
   })
+  const semi = prepararAbaSeminovosPedido(planilha)
+  if (semi.criada) feitas.push(ABA_SEMINOVOS_PEDIDO + ' (' + semi.linhas + ' preços da tabela de ' + DATA_TABELA_SEMINOVOS_PEDIDO + ')')
+  else puladas.push(ABA_SEMINOVOS_PEDIDO)
   limparCacheDoSite()
   ui.alert(
-    (feitas.length ? 'Criadas: ' + feitas.join(', ') + '.\nPreencha o Preço a pedido em "' + ABA_PEDIDO_MODELO + '"; linha sem preço não aparece como a pedido no site.' : 'Nenhuma aba criada.') +
-    (puladas.length ? '\nJá existiam (não foram mexidas): ' + puladas.join(', ') + '.' : '')
+    (feitas.length ? 'Criadas: ' + feitas.join(', ') + '.' : 'Nenhuma aba criada.') +
+    (feitas.some(f => f.indexOf(ABA_PEDIDO_MODELO) === 0) ? '\nPreencha o Preço a pedido em "' + ABA_PEDIDO_MODELO + '"; linha sem preço não aparece como a pedido no site.' : '') +
+    (puladas.length ? '\nJá existiam (não foram mexidas): ' + puladas.join(', ') + '.' : '') +
+    (semi.aviso ? '\n' + semi.aviso : '')
   )
 }
 
@@ -554,8 +562,10 @@ const APELIDOS_COR = {
   'PINK': ['Rosa', 'Rosa Pálido'],
   'ROSA': ['Rosa', 'Rosa Pálido'],
   'SOFT PINK': ['Rosa Pálido'],
-  'BLUE': ['Azul', 'Titânio Azul', 'Azul-Sierra', 'Azul-Pacífico', 'Azul Céu'],
-  'AZUL': ['Azul', 'Titânio Azul', 'Azul-Sierra', 'Azul-Pacífico', 'Azul Céu'],
+  // Azul Profundo, Azul Glacial e Azul Névoa são o único azul do modelo
+  // (17 Pro, 18 Pro e 17): "AZUL" sozinho, como nas artes, já basta
+  'BLUE': ['Azul', 'Titânio Azul', 'Azul-Sierra', 'Azul-Pacífico', 'Azul Céu', 'Azul Profundo', 'Azul Glacial', 'Azul Névoa'],
+  'AZUL': ['Azul', 'Titânio Azul', 'Azul-Sierra', 'Azul-Pacífico', 'Azul Céu', 'Azul Profundo', 'Azul Glacial', 'Azul Névoa'],
   'SKY BLUE': ['Azul Céu'],
   'GREEN': ['Verde', 'Verde-Alpino', 'Verde-meia-noite'],
   'VERDE': ['Verde', 'Verde-Alpino', 'Verde-meia-noite'],
@@ -966,9 +976,8 @@ function linhaParaPlanilha(l) {
   })
 }
 
-// A aba "Seminovos" (pronta entrega) ou a "Seminovos Pedido" (a pedido)
-function lerSeminovosParaSite(planilha, nomeAba) {
-  const aba = planilha.getSheetByName(nomeAba || ABA_SEMINOVOS)
+function lerSeminovosParaSite(planilha) {
+  const aba = planilha.getSheetByName(ABA_SEMINOVOS)
   if (!aba) return []
   return lerLinhasSeminovos(aba)
     .filter(l => {
@@ -995,26 +1004,174 @@ function lerSeminovosParaSite(planilha, nomeAba) {
     }))
 }
 
-// Só aceita as duas abas de seminovos (o nome vem da janela de importação)
-function abaSeminovos(nomeAba) {
-  return nomeAba === ABA_SEMINOVOS_PEDIDO ? ABA_SEMINOVOS_PEDIDO : ABA_SEMINOVOS
+// ────────────────────────────────────────────────────────────
+// Seminovos a pedido: a tabela fixa que a loja divulga (o fornecedor passa os
+// valores). Não é um aparelho por linha: é um preço por modelo e
+// armazenamento, às vezes separado por cor (linha 17). No site, cada modelo
+// vira um card em que a pessoa escolhe a cor e o armazenamento
+// ────────────────────────────────────────────────────────────
+const COLUNAS_SEMINOVOS_PEDIDO = ['Modelo', 'Armazenamento', 'Cores', 'Preco', 'Parcelas', 'Valor Parcela', 'Bateria', 'Garantia', 'Brindes']
+
+// A tabela da loja em 10/11/2026 (artes do Instagram). Só serve pra preencher
+// a aba quando ela é criada; depois vale o que estiver na planilha.
+// Cores em branco = o mesmo preço em qualquer cor
+const DATA_TABELA_SEMINOVOS_PEDIDO = '10/11/2026'
+const TABELA_SEMINOVOS_PEDIDO_INICIAL = [
+  ['iPhone 17 Pro Max', '256GB', 'Laranja Cósmico', 6390],
+  ['iPhone 17 Pro Max', '256GB', 'Prata, Azul Profundo', 6690],
+  ['iPhone 17 Pro Max', '512GB', 'Laranja Cósmico', 7690],
+  ['iPhone 17 Pro Max', '512GB', 'Prata, Azul Profundo', 7390],
+  ['iPhone 17 Pro Max', '1TB', 'Azul Profundo, Prata', 8490],
+  ['iPhone 17 Pro Max', '1TB', 'Laranja Cósmico', 8290],
+  ['iPhone 17 Pro', '256GB', 'Azul Profundo, Laranja Cósmico', 6190],
+  ['iPhone 17 Pro', '256GB', 'Prata', 6350],
+  ['iPhone 17 Pro', '512GB', '', 6690],
+  ['iPhone 17', '256GB', '', 4500],
+  ['iPhone 16 Pro Max', '256GB', '', 5390],
+  ['iPhone 16 Pro Max', '512GB', '', 5990],
+  ['iPhone 16 Pro', '128GB', '', 4290],
+  ['iPhone 16 Pro', '256GB', '', 4890],
+  ['iPhone 16', '128GB', '', 3890],
+  ['iPhone 16', '256GB', '', 4290],
+  ['iPhone 15 Pro Max', '256GB', '', 4190],
+  ['iPhone 15 Pro Max', '512GB', '', 4590],
+  ['iPhone 15 Pro', '128GB', '', 3490],
+  ['iPhone 15 Pro', '256GB', '', 3890],
+  ['iPhone 15 Plus', '128GB', '', 3190],
+  ['iPhone 15', '128GB', '', 2890],
+  ['iPhone 15', '256GB', '', 3490],
+  ['iPhone 14 Pro Max', '128GB', '', 3490],
+  ['iPhone 14 Pro Max', '256GB', '', 3890],
+  ['iPhone 14 Pro', '128GB', '', 2990],
+  ['iPhone 14 Pro', '256GB', '', 3390],
+  ['iPhone 14 Plus', '128GB', '', 2690],
+  ['iPhone 14', '128GB', '', 2490],
+  ['iPhone 14', '256GB', '', 2890],
+  ['iPhone 13 Pro Max', '128GB', '', 2790],
+  ['iPhone 13 Pro Max', '256GB', '', 3290],
+  ['iPhone 13 Pro', '128GB', '', 2590],
+  ['iPhone 13 Pro', '256GB', '', 2890],
+  ['iPhone 13', '128GB', '', 2090],
+  ['iPhone 13', '256GB', '', 2390],
+  ['iPhone 12 Pro Max', '128GB', '', 2290],
+  ['iPhone 12 Pro Max', '256GB', '', 2490],
+  ['iPhone 12 Pro', '128GB', '', 2090],
+  ['iPhone 12 Pro', '256GB', '', 2399],
+  ['iPhone 12', '64GB', '', 1490],
+  ['iPhone 12', '128GB', '', 1690],
+  ['iPhone 11 Pro Max', '64GB', '', 1690],
+  ['iPhone 11 Pro Max', '256GB', '', 1990],
+  ['iPhone 11 Pro', '64GB', '', 1390],
+  ['iPhone 11 Pro', '256GB', '', 1590],
+  ['iPhone 11', '64GB', '', 990],
+  ['iPhone 11', '128GB', '', 1190],
+  ['iPhone XR', '64GB', '', 590],
+  ['iPhone XR', '128GB', '', 690],
+]
+
+// Linhas prontas pra aba: bateria, garantia e brindes como nas artes (a
+// linha 17 não leva o cabo)
+function linhasSeminovosPedidoIniciais() {
+  return TABELA_SEMINOVOS_PEDIDO_INICIAL.map(([modelo, armazenamento, cores, preco]) => [
+    modelo, armazenamento, cores, preco, '', '', '80% a 90%', '6 meses',
+    /^iPhone 17/.test(modelo) ? 'Fonte 20W, case e película' : 'Fonte 20W, case, película e cabo',
+  ])
+}
+
+// A aba está no formato de tabela (e não no antigo, um aparelho por linha)?
+function ehTabelaSeminovosPedido(aba) {
+  const cabecalho = (aba.getDataRange().getValues()[0] || []).map(normalizar)
+  return cabecalho[0] === 'MODELO' && cabecalho[2] === 'CORES'
+}
+
+// "256 gb" -> "256GB"; número sozinho ganha a unidade (1 e 2 = TB)
+function armazenamentoTabela(valor) {
+  const t = String(valor == null ? '' : valor).toUpperCase().replace(/\s+/g, '')
+  if (/^\d+$/.test(t)) return t + (Number(t) <= 2 ? 'TB' : 'GB')
+  return t
+}
+
+// Aba "Seminovos Pedido": 0=Modelo 1=Armazenamento 2=Cores 3=Preco 4=Parcelas
+// 5=Valor Parcela 6=Bateria 7=Garantia 8=Brindes. Modelo e cores podem vir do
+// jeito que se escreve no dia a dia ("IPHONE 17 PRO MAX", "Silver | Azul"): o
+// script acha o nome do site. Fica de fora a linha sem preço, com modelo que
+// não existe, ou com cores escritas sem nenhuma reconhecida (melhor sumir do
+// site do que valer pra todas as cores)
+function lerTabelaSeminovosPedido(aba) {
+  if (!aba || !ehTabelaSeminovosPedido(aba)) return []
+  const texto = v => String(v == null ? '' : v).trim()
+  return aba.getDataRange().getValues().slice(1)
+    .map(linha => {
+      const modelo = resolverModelo(linha[0])
+      const armazenamento = armazenamentoTabela(linha[1])
+      const preco = Number(linha[3]) || null
+      if (!modelo || !armazenamento || !preco) return null
+      const escritas = texto(linha[2]).split(/[,;/|]|\s+e\s+/i).map(c => c.trim()).filter(Boolean)
+      const cores = []
+      escritas.forEach(c => {
+        const cor = resolverCor(modelo, c)
+        if (cor && cores.indexOf(cor) < 0) cores.push(cor)
+      })
+      if (escritas.length && !cores.length) return null
+      return {
+        modelo,
+        armazenamento,
+        cores,
+        preco,
+        parcelas: Number(linha[4]) || null,
+        valorParcela: Number(linha[5]) || null,
+        bateria: texto(linha[6]),
+        garantia: texto(linha[7]),
+        brindes: texto(linha[8]),
+      }
+    })
+    .filter(Boolean)
+}
+
+// Cria a aba "Seminovos Pedido" já com a tabela da loja. Se ela existir no
+// formato antigo (um aparelho por linha): vazia, é trocada; com aparelhos,
+// fica guardada com outro nome. Se já for a tabela, nada muda
+function prepararAbaSeminovosPedido(planilha) {
+  let aba = planilha.getSheetByName(ABA_SEMINOVOS_PEDIDO)
+  if (aba && ehTabelaSeminovosPedido(aba)) return { criada: false, linhas: 0, aviso: '' }
+  let aviso = ''
+  if (aba) {
+    const comAparelhos = aba.getDataRange().getValues().slice(1).some(l => l.some(v => String(v).trim() !== ''))
+    if (comAparelhos) {
+      let nome = ABA_SEMINOVOS_PEDIDO + ' (antiga)'
+      for (let n = 2; planilha.getSheetByName(nome); n++) nome = ABA_SEMINOVOS_PEDIDO + ' (antiga ' + n + ')'
+      aba.setName(nome)
+      aviso = 'A aba antiga, com um aparelho por linha, foi guardada como "' + nome + '". Pode apagar se não precisar mais dela.'
+    } else {
+      planilha.deleteSheet(aba)
+    }
+  }
+  const linhas = [COLUNAS_SEMINOVOS_PEDIDO].concat(linhasSeminovosPedidoIniciais())
+  aba = planilha.insertSheet(ABA_SEMINOVOS_PEDIDO)
+  aba.getRange(1, 1, linhas.length, COLUNAS_SEMINOVOS_PEDIDO.length).setValues(linhas)
+  aba.getRange(1, 1, 1, COLUNAS_SEMINOVOS_PEDIDO.length).setFontWeight('bold')
+  aba.setFrozenRows(1)
+  return { criada: true, linhas: linhas.length - 1, aviso }
+}
+
+function criarAbaSeminovosPedido() {
+  const r = prepararAbaSeminovosPedido(SpreadsheetApp.getActiveSpreadsheet())
+  limparCacheDoSite()
+  SpreadsheetApp.getUi().alert(r.criada
+    ? 'Aba "' + ABA_SEMINOVOS_PEDIDO + '" criada com a tabela de seminovos a pedido de ' + DATA_TABELA_SEMINOVOS_PEDIDO +
+      ' (' + r.linhas + ' preços). Confira os valores: o site mostra o que estiver nela.' + (r.aviso ? '\n' + r.aviso : '')
+    : 'A aba "' + ABA_SEMINOVOS_PEDIDO + '" já existe e não foi mexida.')
 }
 
 /**
  * Cria a aba "Seminovos" (ou reaplica a formatação, se ela já existir, sem
  * apagar nada): cabeçalho, listas suspensas, formatos e cores por status.
- * Com nomeAba = "Seminovos Pedido", faz o mesmo na aba dos seminovos a pedido.
  */
-function criarAbaSeminovosPedido() {
-  return criarAbaSeminovos(false, ABA_SEMINOVOS_PEDIDO)
-}
-
-function criarAbaSeminovos(silencioso, nomeAba) {
-  const nome = abaSeminovos(nomeAba)
+function criarAbaSeminovos(silencioso) {
   const planilha = SpreadsheetApp.getActiveSpreadsheet()
-  let aba = planilha.getSheetByName(nome)
+  let aba = planilha.getSheetByName(ABA_SEMINOVOS)
   const criada = !aba
-  if (!aba) aba = planilha.insertSheet(nome)
+  if (!aba) aba = planilha.insertSheet(ABA_SEMINOVOS)
 
   const total = COLUNAS_SEMINOVOS.length
   aba.getRange(1, 1, 1, total).setValues([COLUNAS_SEMINOVOS])
@@ -1054,44 +1211,32 @@ function criarAbaSeminovos(silencioso, nomeAba) {
   larguras.forEach((px, i) => aba.setColumnWidth(i + 1, px))
 
   if (silencioso !== true) {
-    const menu = nome === ABA_SEMINOVOS_PEDIDO ? 'Importar lista a pedido do WhatsApp' : 'Importar lista do WhatsApp'
     SpreadsheetApp.getUi().alert(criada
-      ? 'Aba "' + nome + '" criada. Use o menu Seminovos -> ' + menu + ' para preenchê-la.'
-      : 'Aba "' + nome + '" ajustada (cabeçalho, listas e formatos). Nenhum aparelho foi alterado.')
+      ? 'Aba "Seminovos" criada. Use o menu Seminovos -> Importar lista do WhatsApp para preenchê-la.'
+      : 'Aba "Seminovos" ajustada (cabeçalho, listas e formatos). Nenhum aparelho foi alterado.')
   }
   return aba
 }
 
 function abrirImportacaoSeminovos() {
-  abrirImportacao(ABA_SEMINOVOS, 'Importar seminovos do WhatsApp')
-}
-
-function abrirImportacaoSeminovosPedido() {
-  abrirImportacao(ABA_SEMINOVOS_PEDIDO, 'Importar seminovos a pedido do WhatsApp')
-}
-
-// A mesma janela serve às duas abas: o nome da aba vai junto em cada chamada
-function abrirImportacao(nomeAba, titulo) {
-  const html = HtmlService.createHtmlOutput(HTML_IMPORTACAO_SEMINOVOS.replace('__ABA__', abaSeminovos(nomeAba)))
-    .setWidth(680).setHeight(600)
-  SpreadsheetApp.getUi().showModalDialog(html, titulo)
+  const html = HtmlService.createHtmlOutput(HTML_IMPORTACAO_SEMINOVOS).setWidth(680).setHeight(600)
+  SpreadsheetApp.getUi().showModalDialog(html, 'Importar seminovos do WhatsApp')
 }
 
 // Chamado pela janela de importação: só confere, não grava nada
-function previaSeminovos(texto, nomeAba) {
-  const aba = SpreadsheetApp.getActiveSpreadsheet().getSheetByName(abaSeminovos(nomeAba))
+function previaSeminovos(texto) {
+  const aba = SpreadsheetApp.getActiveSpreadsheet().getSheetByName(ABA_SEMINOVOS)
   const linhas = aba ? lerLinhasSeminovos(aba) : []
   const lidos = lerListaWhatsApp(texto)
   return resumoDoPlano(planejarSeminovos(lidos, linhas), lidos)
 }
 
 // Chamado pela janela de importação depois do "Conferir"
-function aplicarSeminovos(texto, nomeAba) {
-  const nome = abaSeminovos(nomeAba)
+function aplicarSeminovos(texto) {
   const trava = LockService.getScriptLock()
   trava.waitLock(20000)
   try {
-    const aba = SpreadsheetApp.getActiveSpreadsheet().getSheetByName(nome) || criarAbaSeminovos(true, nome)
+    const aba = SpreadsheetApp.getActiveSpreadsheet().getSheetByName(ABA_SEMINOVOS) || criarAbaSeminovos(true)
     const linhas = lerLinhasSeminovos(aba)
     const lidos = lerListaWhatsApp(texto)
     const plano = planejarSeminovos(lidos, linhas)
@@ -1159,8 +1304,6 @@ Nada muda na planilha até você clicar em <b>Aplicar</b>.</p>
 </div>
 <div id="resultado"></div>
 <script>
-  // Aba de destino ("Seminovos" ou "Seminovos Pedido"), posta ao abrir a janela
-  var ABA = '__ABA__'
   var texto = document.getElementById('texto')
   var btnConferir = document.getElementById('conferir')
   var btnAplicar = document.getElementById('aplicar')
@@ -1205,7 +1348,7 @@ Nada muda na planilha até você clicar em <b>Aplicar</b>.</p>
         mostrar(p)
       })
       .withFailureHandler(falhou)
-      .previaSeminovos(texto.value, ABA)
+      .previaSeminovos(texto.value)
   }
   btnAplicar.onclick = function () {
     btnAplicar.disabled = true
@@ -1217,7 +1360,7 @@ Nada muda na planilha até você clicar em <b>Aplicar</b>.</p>
         resultado.innerHTML = '<p class="ok"><b>' + esc(msg) + '</b></p>'
       })
       .withFailureHandler(falhou)
-      .aplicarSeminovos(texto.value, ABA)
+      .aplicarSeminovos(texto.value)
   }
 </script>
 `

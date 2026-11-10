@@ -45,6 +45,8 @@ function blocoDoItem(item, { soImei = false } = {}) {
     if (item.imei) linhas.push(`IMEI: ${item.imei}`)
     if (item.entrega === 'pedido') linhas.push(TEXTO_A_PEDIDO)
   }
+  // Seminovo a pedido: a bateria da tabela da loja (ex.: "80% a 90%")
+  if (item.bateria) linhas.push(`Bateria: ${item.bateria}`)
   if (Number.isFinite(item.preco)) linhas.push(`💰 ${emReais(item.preco)}`)
   return linhas.join('\n')
 }

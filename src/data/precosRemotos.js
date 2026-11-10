@@ -83,10 +83,8 @@ function listaDeAvisos(valor) {
 // Seminovos vêm da aba "Seminovos" (uma linha por aparelho, identificado pelo
 // final do IMEI + modelo). A planilha só traz modelo e cor; a foto e o tom da
 // cor saem do catálogo, do lacrado de mesmo modelo e cor, ou do
-// seminovosExtras.js nos modelos que não são vendidos lacrados.
-// Os da aba "Seminovos Pedido" (a pedido) passam por aqui com { pedido: true }:
-// ganham a marca e um id próprio, pra não se misturar com os de pronta entrega
-export function montarSeminovos(lista, produtosBase, { pedido = false } = {}) {
+// seminovosExtras.js nos modelos que não são vendidos lacrados
+export function montarSeminovos(lista, produtosBase) {
   return lista
     // Sem modelo ou sem preço o aparelho não entra: um seminovo sem preço
     // derrubava a página inteira. O script da planilha já tira essas linhas;
@@ -103,12 +101,90 @@ export function montarSeminovos(lista, produtosBase, { pedido = false } = {}) {
         avisos: listaDeAvisos(aparelho.avisos),
         ...parcelasQueFecham(aparelho.preco, numeroOuNulo(aparelho.parcelas), numeroOuNulo(aparelho.valorParcela)),
         reservado: aparelho.reservado === true,
-        pedido,
-        id: `${pedido ? 'semi-pedido-' : 'semi-'}${aparelho.imei}-${slug}`,
+        id: `semi-${aparelho.imei}-${slug}`,
         imagem: variante?.imagem || FOTOS_SEMINOVOS[`${aparelho.modelo}|${aparelho.cor}`] || null,
         corHex: variante?.corHex || CORES_SEMINOVOS[aparelho.cor] || mesmaCor?.corHex || '#8a8a8a',
       }
     })
+}
+
+const textoOuVazio = (valor) => (typeof valor === 'string' ? valor.trim() : '')
+
+// "iPhone 15 Pro Max" -> "iphone-15-pro-max"; "Titânio Natural" -> "titanio-natural"
+const slugDe = (texto) => String(texto).toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '')
+  .replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '')
+
+// Fotos de cada cor do modelo: do catálogo dos lacrados ou, nos modelos que a
+// loja não vende lacrados, do seminovosExtras.js. Só entram cores com foto
+function coresComFoto(modelo, produtosBase) {
+  const vistas = new Set()
+  const doCatalogo = []
+  produtosBase.forEach(v => {
+    if (v.modelo === modelo && v.imagem && !vistas.has(v.cor)) {
+      vistas.add(v.cor)
+      doCatalogo.push({ cor: v.cor, corHex: v.corHex, imagem: v.imagem })
+    }
+  })
+  if (doCatalogo.length) return doCatalogo
+  return Object.entries(FOTOS_SEMINOVOS)
+    .filter(([chave]) => chave.startsWith(`${modelo}|`))
+    .map(([chave, imagem]) => {
+      const cor = chave.slice(modelo.length + 1)
+      const mesmaCor = produtosBase.find(p => p.cor === cor)
+      return { cor, corHex: CORES_SEMINOVOS[cor] || mesmaCor?.corHex || '#8a8a8a', imagem }
+    })
+}
+
+// Seminovos a pedido: a tabela fixa da loja (aba "Seminovos Pedido"), com um
+// preço por modelo e armazenamento, às vezes por cor (linha 17). Cada modelo
+// vira um card: a pessoa escolhe a cor e o armazenamento, e o preço sai da
+// linha que vale pra essa combinação. Com alguma linha valendo pra qualquer
+// cor, todas as cores do modelo entram; senão, só as citadas na tabela
+export function montarSeminovosPedido(tabela, produtosBase) {
+  const linhas = (Array.isArray(tabela) ? tabela : []).filter(l =>
+    typeof l?.modelo === 'string' && l.modelo &&
+    typeof l.armazenamento === 'string' && l.armazenamento &&
+    numeroOuNulo(l.preco) > 0)
+  return [...new Set(linhas.map(l => l.modelo))]
+    .map(modelo => {
+      const precos = linhas.filter(l => l.modelo === modelo).map(l => ({
+        armazenamento: l.armazenamento,
+        cores: Array.isArray(l.cores) ? l.cores.filter(c => typeof c === 'string' && c) : [],
+        preco: l.preco,
+        ...parcelasQueFecham(l.preco, numeroOuNulo(l.parcelas), numeroOuNulo(l.valorParcela)),
+        bateria: textoOuVazio(l.bateria),
+        garantia: textoOuVazio(l.garantia),
+        brindes: textoOuVazio(l.brindes),
+      }))
+      const citadas = new Set(precos.flatMap(p => p.cores))
+      const qualquerCor = precos.some(p => !p.cores.length)
+      const todas = coresComFoto(modelo, produtosBase)
+      return {
+        id: `semi-pedido-${slugDe(modelo)}`,
+        modelo,
+        tabela: true,
+        cores: qualquerCor ? todas : todas.filter(c => citadas.has(c.cor)),
+        armazenamentos: [...new Set(precos.map(p => p.armazenamento))],
+        precos,
+        // O menor preço do modelo: só pra ordenar a lista
+        preco: Math.min(...precos.map(p => p.preco)),
+      }
+    })
+    // Sem foto de nenhuma cor, só fica se tiver preço que vale pra qualquer cor
+    .filter(m => m.cores.length || m.precos.some(p => !p.cores.length))
+}
+
+// A linha da tabela pra essa cor e armazenamento: a da cor, se houver; senão a
+// que vale pra qualquer cor. null = não tem nessa combinação
+export function precoSeminovoPedido(aparelho, cor, armazenamento) {
+  const doArmazenamento = aparelho.precos.filter(p => p.armazenamento === armazenamento)
+  return doArmazenamento.find(p => cor && p.cores.includes(cor)) || doArmazenamento.find(p => !p.cores.length) || null
+}
+
+// Id no carrinho: modelo + armazenamento + cor
+// ("semi-pedido-iphone-15-pro-max-256gb-titanio-natural")
+export function idSeminovoPedido(aparelho, cor, armazenamento) {
+  return [aparelho.id, slugDe(armazenamento), cor ? slugDe(cor) : 'cor-a-combinar'].join('-')
 }
 
 // A pedido: a mesma regra da pronta entrega (a exceção da cor, senão o preço
