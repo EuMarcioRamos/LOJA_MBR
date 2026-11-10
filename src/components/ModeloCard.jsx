@@ -2,7 +2,7 @@ import { useState, useEffect, useRef } from 'react'
 import { corDaLuz } from '../corDaLuz'
 import { linkWhatsApp, mensagemDoCard } from '../mensagemWhatsApp'
 
-export default function ModeloCard({ modelo, variantes, precosProntos = true, planilhaFalhou = false, carrinhoIds = [], onAlternarCarrinho, mostrarEntrega = false, soPronta = true }) {
+export default function ModeloCard({ modelo, variantes, precosProntos = true, planilhaFalhou = false, carrinhoIds = [], onAlternarCarrinho, entrega = null }) {
   const chips = [...new Set(variantes.map(v => v.chip).filter(Boolean))]
   const temChips = chips.length > 1
 
@@ -16,8 +16,14 @@ export default function ModeloCard({ modelo, variantes, precosProntos = true, pl
   const temTamanhos = tamanhos.length > 1
 
   const [tamanhoSel, setTamanhoSel] = useState(tamanhos[0] || null)
-  const [indice, setIndice] = useState(0)
-  const [opcaoIdx, setOpcaoIdx] = useState(0)
+  // A pedido (chave "Pedido" ligada): o card começa na primeira cor e na
+  // primeira opção que dá pra encomendar. Na pronta entrega, como sempre
+  const noModoPedido = entrega === 'pedido'
+  const encomendavel = (op) => !!op.pedido?.disponivel
+  const opcaoInicial = (v) => (noModoPedido && v ? Math.max(0, v.opcoes.findIndex(encomendavel)) : 0)
+  const varsIniciais = tamanhos.length > 1 ? varsPorChip.filter(v => v.tamanho === tamanhos[0]) : varsPorChip
+  const [indice, setIndice] = useState(() => (noModoPedido ? Math.max(0, varsIniciais.findIndex(v => v.opcoes.some(encomendavel))) : 0))
+  const [opcaoIdx, setOpcaoIdx] = useState(() => opcaoInicial(varsIniciais[Math.max(0, varsIniciais.findIndex(v => v.opcoes.some(encomendavel)))]))
   const [hover, setHover] = useState(false)
 
   const varsFiltradas = temTamanhos
@@ -29,28 +35,10 @@ export default function ModeloCard({ modelo, variantes, precosProntos = true, pl
   const safeOpcaoIdx = Math.max(0, Math.min(opcaoIdx, atual.opcoes.length - 1))
   const opcaoAtual = atual.opcoes[safeOpcaoIdx]
 
-  // Pronta entrega ou a pedido. Só entra em jogo quando a planilha tem preços a
-  // pedido (mostrarEntrega). Com a chave "Pedido" desligada (soPronta) vale só
-  // a pronta entrega; ligada, a pessoa escolhe aqui, e a opção que não tem o
-  // tipo escolhido mostra o outro
-  const [entregaSel, setEntregaSel] = useState('pronta')
-  const temPronta = opcaoAtual.preco != null
-  const temPedido = !!opcaoAtual.pedido
-  // Vale o tipo escolhido se ele estiver disponível nessa cor e configuração;
-  // senão o outro (ex.: escolheu "A pedido" e passou pra uma cor que não dá
-  // pra encomendar: mostra a pronta entrega)
-  const okNoTipo = { pronta: temPronta && !!opcaoAtual.disponivel, pedido: temPedido && !!opcaoAtual.pedido.disponivel }
-  const existeNoTipo = { pronta: temPronta, pedido: temPedido }
-  const preferido = entregaSel === 'pedido' ? 'pedido' : 'pronta'
-  const outro = preferido === 'pedido' ? 'pronta' : 'pedido'
-  const modoEntrega = !mostrarEntrega
-    ? null
-    : soPronta
-      ? 'pronta'
-      : okNoTipo[preferido] ? preferido
-        : okNoTipo[outro] ? outro
-          : existeNoTipo[preferido] ? preferido
-            : existeNoTipo[outro] ? outro : 'pronta'
+  // Pronta entrega ou a pedido: quem decide é a chave "Pedido" da barra (o App
+  // manda "pronta" ou "pedido"; null = a planilha não tem nada a pedido e o
+  // card fica como sempre). Ligada, o card mostra só o preço a pedido
+  const modoEntrega = entrega
   const noPedido = modoEntrega === 'pedido'
   // { preco, disponivel, parcelas, valorParcela } do tipo que está na tela
   const precoAtual = noPedido ? opcaoAtual.pedido : opcaoAtual
@@ -89,20 +77,22 @@ export default function ModeloCard({ modelo, variantes, precosProntos = true, pl
 
   const irPara = (novoIdx) => {
     setIndice(novoIdx)
-    setOpcaoIdx(0)
+    setOpcaoIdx(opcaoInicial(varsFiltradas[novoIdx]))
   }
 
   const selecionarChip = (c) => {
     setChipSel(c)
-    const tamanhosDoChip = [...new Set(variantes.filter(v => v.chip === c).map(v => v.tamanho).filter(Boolean))]
+    const doChip = variantes.filter(v => v.chip === c)
+    const tamanhosDoChip = [...new Set(doChip.map(v => v.tamanho).filter(Boolean))]
     setTamanhoSel(tamanhosDoChip[0] || null)
     setIndice(0)
-    setOpcaoIdx(0)
+    setOpcaoIdx(opcaoInicial(tamanhosDoChip.length > 1 ? doChip.find(v => v.tamanho === tamanhosDoChip[0]) : doChip[0]))
   }
 
   const selecionarTamanho = (t) => {
     setTamanhoSel(t)
-    setOpcaoIdx(0)
+    const doTamanho = varsPorChip.filter(v => v.tamanho === t)
+    setOpcaoIdx(opcaoInicial(doTamanho[Math.min(indice, doTamanho.length - 1)]))
   }
 
   // Opção sem preço na planilha vem sem valor (e indisponível): fica um traço
@@ -337,8 +327,8 @@ export default function ModeloCard({ modelo, variantes, precosProntos = true, pl
           <div className="btn-selector-row">
             {atual.opcoes.map((op, i) => {
               const sel = i === safeOpcaoIdx
-              // Com o a pedido na tela, a opção vale se tiver qualquer um dos dois tipos
-              const indis = !(op.disponivel || (mostrarEntrega && !soPronta && op.pedido?.disponivel))
+              // Com a chave "Pedido" ligada, vale o que dá pra encomendar
+              const indis = noPedido ? !encomendavel(op) : !op.disponivel
               return (
                 <button
                   key={op.armazenamento}
@@ -353,32 +343,6 @@ export default function ModeloCard({ modelo, variantes, precosProntos = true, pl
             })}
           </div>
         </div>
-
-        {/* Seletor de entrega: aparece com a chave "Pedido" ligada. O tipo que
-            essa opção não tem (ou que está esgotado nessa cor) fica riscado */}
-        {mostrarEntrega && !soPronta && (
-          <div>
-            <p style={{ fontSize: 10, color: 'var(--rotulo-card)', textTransform: 'uppercase', letterSpacing: '1px', marginBottom: 7 }}>
-              Entrega
-            </p>
-            <div className="btn-selector-row">
-              {[['pronta', 'Pronta entrega'], ['pedido', 'A pedido']].map(([tipo, rotulo]) => {
-                const existe = tipo === 'pronta' ? temPronta && opcaoAtual.disponivel : temPedido && opcaoAtual.pedido.disponivel
-                return (
-                  <button
-                    key={tipo}
-                    className="btn-selector"
-                    onClick={() => existe && setEntregaSel(tipo)}
-                    title={existe ? rotulo : 'Não tem nessa configuração'}
-                    style={btnSelector(modoEntrega === tipo, !existe)}
-                  >
-                    {rotulo}
-                  </button>
-                )
-              })}
-            </div>
-          </div>
-        )}
       </div>
 
       {/* Preço + CTA */}

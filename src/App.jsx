@@ -357,21 +357,26 @@ export default function App() {
   // A pedido: a chave "Pedido" só aparece quando a planilha tem algum preço a
   // pedido (abas "Pedido por Modelo"/"Pedido") ou seminovo a pedido. Enquanto
   // não tiver, o site fica exatamente como antes
-  const temPedido = useMemo(
-    () => produtos.some(v => v.opcoes.some(o => o.pedido)) || (seminovosPedidoTabela?.length ?? 0) > 0,
-    [produtos, seminovosPedidoTabela]
-  )
+  const temLacradoPedido = useMemo(() => produtos.some(v => v.opcoes.some(o => o.pedido)), [produtos])
+  const temSeminovoPedido = (seminovosPedidoTabela?.length ?? 0) > 0
+  const temPedido = temLacradoPedido || temSeminovoPedido
   const pedidoLigado = temPedido && pedido
-  // Desligada, some o que só existe a pedido (nenhuma opção com preço de
-  // pronta entrega e alguma com preço a pedido); o resto segue como sempre
+
+  // Chave "Pedido": desligada, só o que tem pronta entrega (some o que só existe
+  // a pedido); ligada, só o que tem a pedido. Sem nada a pedido na planilha,
+  // a chave nem aparece e a lista fica como sempre
   const produtosVisiveis = useMemo(
-    () => (pedidoLigado ? produtos : produtos.filter(v => !v.opcoes.every(o => o.preco == null && o.pedido))),
+    () => (pedidoLigado
+      ? produtos.filter(v => v.opcoes.some(o => o.pedido))
+      : produtos.filter(v => !v.opcoes.every(o => o.preco == null && o.pedido))),
     [produtos, pedidoLigado]
   )
+  // Pronta entrega ou a pedido nos cards de lacrados (null = como sempre)
+  const entregaDosCards = temPedido ? (pedidoLigado ? 'pedido' : 'pronta') : null
 
   const seminovosBase = useMemo(() => {
     const prontos = seminovosPlanilha ?? (usandoExemplo ? montarSeminovos(seminovosExemplo, produtosBase) : [])
-    return pedidoLigado && seminovosPedidoTabela ? [...prontos, ...seminovosPedidoTabela] : prontos
+    return pedidoLigado ? (seminovosPedidoTabela || []) : prontos
   }, [seminovosPlanilha, usandoExemplo, pedidoLigado, seminovosPedidoTabela])
   const seminovosCarregados = seminovosPlanilha !== null || usandoExemplo
 
@@ -513,10 +518,21 @@ export default function App() {
                 </p>
               ) : seminovos.length === 0 ? (
                 <div style={{ textAlign: 'center', padding: '60px 0', color: '#8a8a8a' }}>
-                  <p style={{ fontSize: 16, marginBottom: 16 }}>Nenhum seminovo disponível nesse filtro agora.</p>
-                  <button className="btn-ver-mais" style={{ marginTop: 0 }} onClick={() => setCondicao('lacrado')}>
-                    Ver lacrados
-                  </button>
+                  <p style={{ fontSize: 16, marginBottom: 16 }}>
+                    {pedidoLigado ? 'Nenhum seminovo a pedido nesse filtro agora.' : 'Nenhum seminovo disponível nesse filtro agora.'}
+                  </p>
+                  <div className="lista-vazia-botoes">
+                    {(!pedidoLigado || temLacradoPedido) && (
+                      <button className="btn-ver-mais" style={{ marginTop: 0 }} onClick={() => setCondicao('lacrado')}>
+                        {pedidoLigado ? 'Ver lacrados a pedido' : 'Ver lacrados'}
+                      </button>
+                    )}
+                    {pedidoLigado && (
+                      <button className="btn-ver-mais" style={{ marginTop: 0 }} onClick={() => setPedido(false)}>
+                        Ver pronta entrega
+                      </button>
+                    )}
+                  </div>
                 </div>
               ) : (
                 <div className="produtos-grid">
@@ -548,9 +564,27 @@ export default function App() {
               )}
             </>
           ) : grupos.length === 0 ? (
-            <div style={{ textAlign: 'center', padding: '80px 0', color: '#606060' }}>
-              <p style={{ fontSize: 16 }}>Nenhum produto encontrado.</p>
-            </div>
+            pedidoLigado ? (
+              // Chave "Pedido" ligada e nada a pedido nesse filtro: atalhos pros
+              // seminovos a pedido (se houver) e de volta pra pronta entrega
+              <div style={{ textAlign: 'center', padding: '60px 0', color: '#8a8a8a' }}>
+                <p style={{ fontSize: 16, marginBottom: 16 }}>Nenhum lacrado a pedido nesse filtro agora.</p>
+                <div className="lista-vazia-botoes">
+                  {temSeminovoPedido && (
+                    <button className="btn-ver-mais" style={{ marginTop: 0 }} onClick={() => setCondicao('seminovo')}>
+                      Ver seminovos a pedido
+                    </button>
+                  )}
+                  <button className="btn-ver-mais" style={{ marginTop: 0 }} onClick={() => setPedido(false)}>
+                    Ver pronta entrega
+                  </button>
+                </div>
+              </div>
+            ) : (
+              <div style={{ textAlign: 'center', padding: '80px 0', color: '#606060' }}>
+                <p style={{ fontSize: 16 }}>Nenhum produto encontrado.</p>
+              </div>
+            )
           ) : (
             <>
               <div className="produtos-grid">
@@ -558,7 +592,7 @@ export default function App() {
                   // O aparecer fica num envoltório porque o card usa transform e
                   // transition inline no hover, que anulariam o efeito nele.
                   // Protegido por fora: um card que quebrar some sem deixar buraco
-                  <Protegido key={modelo}>
+                  <Protegido key={`${modelo}-${entregaDosCards}`}>
                     <div className="revelar" ref={revelar}>
                       <ModeloCard
                         modelo={modelo}
@@ -567,8 +601,7 @@ export default function App() {
                         planilhaFalhou={planilhaFalhou}
                         carrinhoIds={carrinhoIds}
                         onAlternarCarrinho={alternarCarrinho}
-                        mostrarEntrega={temPedido}
-                        soPronta={!pedidoLigado}
+                        entrega={entregaDosCards}
                       />
                     </div>
                   </Protegido>

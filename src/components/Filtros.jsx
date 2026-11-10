@@ -341,15 +341,15 @@ export default function Filtros({ modelos, filtroCategoria, setFiltroCategoria, 
           </div>
 
           {/* Chave "Pedido": começa desligada (só pronta entrega); ligada,
-              mostra também os aparelhos a pedido. Só aparece quando a
-              planilha tem algo a pedido. No celular fica só o caminhão */}
+              mostra só os aparelhos a pedido. Só aparece quando a planilha
+              tem algo a pedido. No celular fica só o caminhão */}
           {temPedido && (
             <button
               type="button"
               role="switch"
               aria-checked={pedido}
-              aria-label="Mostrar aparelhos a pedido"
-              title={pedido ? 'Mostrando também os aparelhos a pedido' : 'Mostrando só pronta entrega'}
+              aria-label="Mostrar só os aparelhos a pedido"
+              title={pedido ? 'Mostrando só os aparelhos a pedido' : 'Mostrando só pronta entrega'}
               className={`pedido-chave${pedido ? ' pedido-chave--ligada' : ''}`}
               onClick={() => setPedido?.(!pedido)}
             >

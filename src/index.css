@@ -2359,6 +2359,21 @@ html:has(.carrinho-modal[open]) {
    Só aparece quando a planilha tem preços a pedido (abas "Pedido por Modelo"
    e "Pedido") ou seminovos a pedido; sem isso o site fica como sempre */
 
+/* Lista vazia com a chave ligada: os atalhos lado a lado (um embaixo do outro
+   quando não cabem) */
+.lista-vazia-botoes {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px;
+}
+
+/* O botão normal se centraliza com margem automática, que aqui empurraria os
+   dois pras pontas */
+.lista-vazia-botoes .btn-ver-mais {
+  margin: 0;
+}
+
 /* Chave "Pedido" ao lado de Lacrados | Seminovos: a mesma pílula escura da
    barra, com o caminhão no traço dos outros ícones e um interruptor estilo
    iPhone menor (36 x 22). Começa desligada */

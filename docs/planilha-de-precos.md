@@ -332,16 +332,21 @@ preço sumir do site, confira o nome da cor e do modelo.
   - **Chave desligada** (é assim que o site abre): só pronta entrega. Os cards
     ganham o selo verde "Pronta entrega" e "Entrega imediata" embaixo do
     preço. Produto que só existe a pedido fica escondido.
-  - **Chave ligada:** aparece o aviso verde "Produtos a pedido chegam em até
-    7 a 8 dias úteis. Para encomendar, pedimos um sinal de 10% do valor." Nos
-    cards que têm os dois tipos aparece a linha **Entrega: Pronta entrega |
-    A pedido**, e o preço muda conforme a escolha. A pedido mostra o selo
-    "A pedido" e "Chega em até 7 a 8 dias úteis · sinal de 10%".
-  - **Seminovos com a chave ligada:** depois dos seminovos da loja de cada
-    modelo vem o card da tabela a pedido, com o selo "Seminovo · A pedido".
-    A pessoa escolhe a cor e o armazenamento (na linha 17 o preço muda com a
-    cor); quando a tabela não separa por cor, aparece "sujeita à
-    disponibilidade". A ficha mostra bateria, garantia e brindes.
+  - **Chave ligada:** só os produtos a pedido; os de pronta entrega somem.
+    Aparece o aviso verde "Produtos a pedido chegam em até 7 a 8 dias úteis.
+    Para encomendar, pedimos um sinal de 10% do valor."
+    - Lacrados: o card mostra o preço a pedido, com o selo "A pedido" e
+      "Chega em até 7 a 8 dias úteis · sinal de 10%". Opção sem preço a
+      pedido fica riscada, e o card já abre numa cor e opção que dá para
+      encomendar.
+    - Seminovos: só os cards da tabela a pedido, com o selo "Seminovo · A
+      pedido". A pessoa escolhe a cor e o armazenamento (na linha 17 o preço
+      muda com a cor); quando a tabela não separa por cor, aparece "sujeita à
+      disponibilidade". A ficha mostra bateria, garantia e brindes.
+  - **Nada a pedido no filtro escolhido** (ex.: iPad, ou os lacrados enquanto a
+    aba `Pedido por Modelo` estiver sem preço): aparece "Nenhum lacrado a
+    pedido nesse filtro agora", com atalhos para os seminovos a pedido e de
+    volta para a pronta entrega.
 - No carrinho, o item a pedido leva o selo "A pedido". A mensagem do WhatsApp
   diz o tipo: "Lacrado · Pronta entrega", "Lacrado · A pedido (chega em até
   7 a 8 dias úteis)" ou, no seminovo a pedido, "Seminovo · A pedido (...)"
