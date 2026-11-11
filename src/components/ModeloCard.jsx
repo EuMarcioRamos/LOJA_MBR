@@ -1,4 +1,5 @@
-import { useState, useEffect, useRef } from 'react'
+import { useState, useRef } from 'react'
+import useTrocaDeFoto from '../useTrocaDeFoto'
 import { corDaLuz } from '../corDaLuz'
 import { linkWhatsApp, mensagemDoCard } from '../mensagemWhatsApp'
 
@@ -44,26 +45,8 @@ export default function ModeloCard({ modelo, variantes, precosProntos = true, pl
   const precoAtual = noPedido ? opcaoAtual.pedido : opcaoAtual
   const disponivelAgora = !!precoAtual?.disponivel
 
-  // Troca de cor da foto: a nova só entra depois de carregada e dissolve por
-  // cima da anterior (que sai ao mesmo tempo), sem ficar um instante sem foto
-  const [fotoAtual, setFotoAtual] = useState(atual.imagem)
-  const [fotoAnterior, setFotoAnterior] = useState(null)
-  const fotoAtualRef = useRef(atual.imagem)
-  useEffect(() => {
-    const nova = atual.imagem
-    if (!nova || nova === fotoAtualRef.current) return
-    let cancelado = false
-    const img = new Image()
-    img.src = nova
-    const trocar = () => {
-      if (cancelado) return
-      setFotoAnterior(fotoAtualRef.current)
-      fotoAtualRef.current = nova
-      setFotoAtual(nova)
-    }
-    ;(img.decode ? img.decode() : Promise.resolve()).then(trocar, trocar)
-    return () => { cancelado = true }
-  }, [atual.imagem])
+  // Troca de cor da foto: a nova dissolve por cima da anterior (useTrocaDeFoto.js)
+  const { fotoAtual, fotoAnterior, saiu: fotoSaiu } = useTrocaDeFoto(atual.imagem)
 
   // Baixa as fotos das outras cores quando a pessoa mostra que vai trocar
   // (mouse no card, toque ou foco nas cores), pra a troca não esperar a rede.
@@ -165,7 +148,7 @@ export default function ModeloCard({ modelo, variantes, precosProntos = true, pl
                 src={fotoAnterior}
                 alt=""
                 aria-hidden="true"
-                onAnimationEnd={() => setFotoAnterior(null)}
+                onAnimationEnd={fotoSaiu}
               />
             )}
             <img
@@ -215,11 +198,9 @@ export default function ModeloCard({ modelo, variantes, precosProntos = true, pl
             <rect x="22" y="6" width="20" height="3.5" rx="1.75" fill="#2a2a2a"/>
           </svg>
         )}
-        {/* Selo do tipo de entrega (só quando a planilha tem preços a pedido) */}
-        {modoEntrega && precoAtual?.preco != null && (
-          <span className={`selo-seminovo selo-entrega selo-entrega--${modoEntrega}`}>
-            {noPedido ? 'A pedido' : 'Pronta entrega'}
-          </span>
+        {/* Selo "A pedido" na foto; a pronta entrega fica sem selo */}
+        {noPedido && precoAtual?.preco != null && (
+          <span className="selo-seminovo">A pedido</span>
         )}
       </div>
 
@@ -363,10 +344,9 @@ export default function ModeloCard({ modelo, variantes, precosProntos = true, pl
                   {parcelamento}
                 </p>
               )}
-              {modoEntrega && disponivelAgora && (
-                <p className={`entrega-nota entrega-nota--${modoEntrega}`}>
-                  {noPedido ? 'Chega em até 7 a 8 dias úteis · sinal de 10%' : 'Entrega imediata'}
-                </p>
+              {/* Prazo do a pedido embaixo do preço; a pronta entrega fica sem nota */}
+              {noPedido && disponivelAgora && (
+                <p className="entrega-nota entrega-nota--pedido">Chega em até 7 a 8 dias úteis · sinal de 10%</p>
               )}
             </>
           ) : planilhaFalhou ? (

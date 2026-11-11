@@ -113,15 +113,30 @@ const ORDEM_MODELOS = {
   ],
 }
 
-// Aba "Destaque": mostra a linha topo de cada categoria, uma ao lado da outra
-// (no iPhone, o lançamento 18 Pro Max vem antes do 17 Pro Max).
+// Aba "Destaque" dos lacrados: no iPhone, as linhas 18 e 17 (Pro Max e Pro), o
+// 17 e o 16; das outras categorias, um modelo de cada. Modelo sem aparelho na
+// chave escolhida fica de fora sozinho
 const DESTAQUE_MODELOS = [
   { categoria: 'iPhone', modelo: 'iPhone 18 Pro Max' },
+  { categoria: 'iPhone', modelo: 'iPhone 18 Pro' },
   { categoria: 'iPhone', modelo: 'iPhone 17 Pro Max' },
-  { categoria: 'iPad', modelo: 'iPad Pro M5' },
+  { categoria: 'iPhone', modelo: 'iPhone 17 Pro' },
+  { categoria: 'iPhone', modelo: 'iPhone 17' },
+  { categoria: 'iPhone', modelo: 'iPhone 16' },
+  { categoria: 'iPad', modelo: 'iPad 11 A16' },
   { categoria: 'Apple Watch', modelo: 'Apple Watch Ultra 3' },
-  { categoria: 'MacBook', modelo: 'MacBook Pro M5' },
+  { categoria: 'MacBook', modelo: 'MacBook Neo' },
   { categoria: 'AirPods', modelo: 'AirPods Pro 3' },
+]
+
+// Com a chave "Pedido" ligada, o destaque mostra as linhas 18 e 17 inteiras
+// (Pro Max e Pro); das outras categorias, o mesmo da pronta entrega
+const DESTAQUE_MODELOS_PEDIDO = [
+  { categoria: 'iPhone', modelo: 'iPhone 18 Pro Max' },
+  { categoria: 'iPhone', modelo: 'iPhone 18 Pro' },
+  { categoria: 'iPhone', modelo: 'iPhone 17 Pro Max' },
+  { categoria: 'iPhone', modelo: 'iPhone 17 Pro' },
+  ...DESTAQUE_MODELOS.filter(d => d.categoria !== 'iPhone'),
 ]
 
 // No filtro, o iPhone é exibido por linha (geração) — cada linha engloba
@@ -354,13 +369,15 @@ export default function App() {
   // (nem o exemplo, pra não mostrar aparelho e preço que não existem)
   const usandoExemplo = seminovosPlanilha === null && precosProntos && !planilhaFalhou
 
-  // A pedido: a chave "Pedido" só aparece quando a planilha tem algum preço a
-  // pedido (abas "Pedido por Modelo"/"Pedido") ou seminovo a pedido. Enquanto
-  // não tiver, o site fica exatamente como antes
+  // A pedido: a chave "Pedido" aparece junto com o resto da barra, sem esperar
+  // a planilha (que leva de 2 a 5 s pra responder). Se ela responder sem nada a
+  // pedido (abas "Pedido por Modelo"/"Pedido" e "Seminovos Pedido" vazias), a
+  // chave some e o site fica exatamente como antes
   const temLacradoPedido = useMemo(() => produtos.some(v => v.opcoes.some(o => o.pedido)), [produtos])
   const temSeminovoPedido = (seminovosPedidoTabela?.length ?? 0) > 0
   const temPedido = temLacradoPedido || temSeminovoPedido
-  const pedidoLigado = temPedido && pedido
+  const mostrarChavePedido = temPedido || !precosProntos
+  const pedidoLigado = mostrarChavePedido && pedido
 
   // Chave "Pedido": desligada, só o que tem pronta entrega (some o que só existe
   // a pedido); ligada, só o que tem a pedido. Sem nada a pedido na planilha,
@@ -394,6 +411,18 @@ export default function App() {
     return ordemAtual.filter(m => fonte.some(p => p.modelo === m))
   }, [filtroCategoria, produtosVisiveis, condicao, seminovosBase])
 
+  // Categorias do menu com algum aparelho na condição (Lacrados/Seminovos) e na
+  // chave "Pedido" escolhidas: as outras ficam indisponíveis (riscadas, sem
+  // clique), como o armazenamento sem estoque no card. null = a planilha ainda
+  // não respondeu e todas ficam liberadas, pra nada piscar riscado no começo
+  const categoriasComProduto = useMemo(() => {
+    const emSemi = condicao === 'seminovo'
+    const carregou = emSemi && !pedidoLigado ? seminovosCarregados : precosProntos
+    if (!carregou) return null
+    const fonte = emSemi ? seminovosBase : produtosVisiveis
+    return new Set(fonte.map(p => categoriaDoModelo(p.modelo)).filter(Boolean))
+  }, [condicao, pedidoLigado, seminovosCarregados, precosProntos, seminovosBase, produtosVisiveis])
+
   const termoBusca = busca.trim().toLowerCase()
 
   const grupos = useMemo(() => {
@@ -407,7 +436,7 @@ export default function App() {
       return Object.keys(map).map(m => ({ modelo: m, variantes: map[m] }))
     }
     if (filtroCategoria === 'Destaque') {
-      return DESTAQUE_MODELOS
+      return (pedidoLigado ? DESTAQUE_MODELOS_PEDIDO : DESTAQUE_MODELOS)
         .map(({ modelo }) => ({ modelo, variantes: produtosVisiveis.filter(p => p.modelo === modelo) }))
         .filter(g => g.variantes.length > 0)
     }
@@ -426,7 +455,7 @@ export default function App() {
       map[p.modelo].push(p)
     })
     return ordemAtual.filter(m => map[m]).map(m => ({ modelo: m, variantes: map[m] }))
-  }, [filtroCategoria, filtroModelo, produtosVisiveis, termoBusca])
+  }, [filtroCategoria, filtroModelo, produtosVisiveis, termoBusca, pedidoLigado])
 
   // Seminovos com os mesmos filtros da lista de lacrados (busca, categoria e
   // linha/modelo); no Destaque aparecem todos
@@ -451,6 +480,13 @@ export default function App() {
   const limitarLista = !isDesktop && (termoBusca || filtroModelo === 'Todos') && itensDaLista.length > LIMITE_INICIAL && !mostrarTodos
   const gruposExibidos = limitarLista ? grupos.slice(0, LIMITE_INICIAL) : grupos
   const seminovosExibidos = limitarLista ? seminovos.slice(0, LIMITE_INICIAL) : seminovos
+
+  // No lugar da lista enquanto a planilha não responde (ou se ela falhou)
+  const avisoCarregando = (
+    <p style={{ textAlign: 'center', padding: '60px 0', color: '#8a8a8a', fontSize: 15 }}>
+      {planilhaFalhou ? 'Não foi possível carregar os aparelhos. Tente recarregar a página.' : 'Carregando aparelhos…'}
+    </p>
+  )
 
   return (
     <div style={{ minHeight: '100vh', background: '#0a0a0a' }}>
@@ -479,7 +515,8 @@ export default function App() {
           condicao={condicao}
           setCondicao={setCondicao}
           onIrParaLista={irParaProdutos}
-          temPedido={temPedido}
+          mostrarChavePedido={mostrarChavePedido}
+          categoriasComProduto={categoriasComProduto}
           pedido={pedido}
           setPedido={setPedido}
         />
@@ -495,7 +532,7 @@ export default function App() {
               {pedidoLigado && (
                 <div className="aviso-entrando">
                   <AvisoValores tom="verde">
-                    Produtos a pedido chegam em até 7 a 8 dias úteis. Para encomendar, pedimos um sinal de 10% do valor.
+                    iPhones a pedido chegam em até 7 a 8 dias úteis. Para encomendar, pedimos um sinal de 10% do valor.
                   </AvisoValores>
                 </div>
               )}
@@ -513,9 +550,7 @@ export default function App() {
                 <p className="aviso-prototipo">Protótipo · aparelhos e preços de exemplo</p>
               )}
               {!seminovosCarregados ? (
-                <p style={{ textAlign: 'center', padding: '60px 0', color: '#8a8a8a', fontSize: 15 }}>
-                  {planilhaFalhou ? 'Não foi possível carregar os aparelhos. Tente recarregar a página.' : 'Carregando aparelhos…'}
-                </p>
+                avisoCarregando
               ) : seminovos.length === 0 ? (
                 <div style={{ textAlign: 'center', padding: '60px 0', color: '#8a8a8a' }}>
                   <p style={{ fontSize: 16, marginBottom: 16 }}>
@@ -563,6 +598,10 @@ export default function App() {
                 </button>
               )}
             </>
+          ) : pedidoLigado && !precosProntos ? (
+            // Chave "Pedido" ligada antes de a planilha responder: ainda não dá
+            // pra saber quais aparelhos são a pedido
+            avisoCarregando
           ) : grupos.length === 0 ? (
             pedidoLigado ? (
               // Chave "Pedido" ligada e nada a pedido nesse filtro: atalhos pros

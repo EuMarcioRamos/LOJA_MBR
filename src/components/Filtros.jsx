@@ -145,7 +145,7 @@ const IconeCaminhao = (
   </svg>
 )
 
-export default function Filtros({ modelos, filtroCategoria, setFiltroCategoria, filtroModelo, setFiltroModelo, busca, setBusca, condicao, setCondicao, onIrParaLista, temPedido = false, pedido = false, setPedido }) {
+export default function Filtros({ modelos, filtroCategoria, setFiltroCategoria, filtroModelo, setFiltroModelo, busca, setBusca, condicao, setCondicao, onIrParaLista, mostrarChavePedido = false, categoriasComProduto = null, pedido = false, setPedido }) {
   const [modelosVisiveis, setModelosVisiveis] = useState(modelos)
   const [categoriaVisivel, setCategoriaVisivel] = useState(filtroCategoria)
   const [aberto, setAberto] = useState(false)
@@ -212,6 +212,11 @@ export default function Filtros({ modelos, filtroCategoria, setFiltroCategoria, 
     }
   }, [])
 
+  // Tocar no filtro que já está escolhido (Lacrados/Seminovos, a categoria ou
+  // o modelo) leva de volta ao começo da lista, com a barra logo abaixo do
+  // header. Ex.: no fim dos seminovos, toca em "Seminovos" e sobe pro topo
+  const subirAoTopo = () => { onIrParaLista?.() }
+
   const limparFiltro = () => {
     setFiltroCategoria('Destaque')
     setFiltroModelo('Todos')
@@ -257,7 +262,7 @@ export default function Filtros({ modelos, filtroCategoria, setFiltroCategoria, 
 
       {/* ── Barra (fica presa embaixo do header ao rolar a lista) ── */}
       <div className="filtros-barra">
-        <div className={`filtros-barra-conteudo${temPedido ? ' filtros-barra-conteudo--com-pedido' : ''}`}>
+        <div className={`filtros-barra-conteudo${mostrarChavePedido ? ' filtros-barra-conteudo--com-pedido' : ''}`}>
           <div className={`busca-pilula${pilulaAberta ? ' busca-pilula--aberta' : ''}`} onKeyDown={aoTeclarNoMenu}>
             {/* Brilho girando na borda (a camada interna gira pela placa de vídeo) */}
             <span className="busca-pilula-anel" aria-hidden="true">
@@ -332,7 +337,7 @@ export default function Filtros({ modelos, filtroCategoria, setFiltroCategoria, 
                 role="radio"
                 aria-checked={condicao === c.id}
                 className={`condicao-opcao${condicao === c.id ? ' condicao-opcao--ativa' : ''}`}
-                onClick={() => setCondicao(c.id)}
+                onClick={() => (condicao === c.id ? subirAoTopo() : setCondicao(c.id))}
               >
                 {c.icon}
                 {c.label}
@@ -341,9 +346,10 @@ export default function Filtros({ modelos, filtroCategoria, setFiltroCategoria, 
           </div>
 
           {/* Chave "Pedido": começa desligada (só pronta entrega); ligada,
-              mostra só os aparelhos a pedido. Só aparece quando a planilha
-              tem algo a pedido. No celular fica só o caminhão */}
-          {temPedido && (
+              mostra só os aparelhos a pedido. Aparece junto com o resto da
+              barra, sem esperar a planilha; some só se ela responder sem nada
+              a pedido. No celular fica só o caminhão */}
+          {mostrarChavePedido && (
             <button
               type="button"
               role="switch"
@@ -386,24 +392,35 @@ export default function Filtros({ modelos, filtroCategoria, setFiltroCategoria, 
           {/* ── Categorias ── */}
           <div className="filtros-row">
             <div className="filtros-scroll categorias-scroll">
-              {CATEGORIAS.map(cat => (
-                <button
-                  key={cat.id}
-                  disabled={!cat.disponivel}
-                  onClick={() => {
-                    if (cat.disponivel) {
-                      setFiltroCategoria(cat.id)
-                      setFiltroModelo('Todos')
-                      setBusca('')
-                    }
-                  }}
-                  className={`categoria-btn${!termo && filtroCategoria === cat.id ? ' ativo' : ''}${!cat.disponivel ? ' em-breve' : ''}`}
-                >
-                  <span className="categoria-icon">{cat.icon}</span>
-                  <span className="categoria-label">{cat.label}</span>
-                  {!cat.disponivel && <span className="badge-breve">Em breve</span>}
-                </button>
-              ))}
+              {CATEGORIAS.map(cat => {
+                const ativa = !termo && filtroCategoria === cat.id
+                // Sem nenhum aparelho nessa categoria (em Lacrados/Seminovos e na
+                // chave "Pedido" de agora): riscada e sem clique, como o
+                // armazenamento sem estoque no card. A que já está escolhida
+                // continua marcada (a lista explica que não tem nada)
+                const semProduto = cat.id !== 'Destaque' && categoriasComProduto != null && !categoriasComProduto.has(cat.id)
+                const clicavel = cat.disponivel && !semProduto
+                return (
+                  <button
+                    key={cat.id}
+                    disabled={!clicavel}
+                    title={semProduto ? `Nenhum ${cat.label} disponível aqui agora` : undefined}
+                    onClick={() => {
+                      if (ativa && filtroModelo === 'Todos') subirAoTopo()
+                      else if (clicavel) {
+                        setFiltroCategoria(cat.id)
+                        setFiltroModelo('Todos')
+                        setBusca('')
+                      }
+                    }}
+                    className={`categoria-btn${ativa ? ' ativo' : ''}${!cat.disponivel ? ' em-breve' : ''}${semProduto && !ativa ? ' categoria-btn--sem-produto' : ''}`}
+                  >
+                    <span className="categoria-icon">{cat.icon}</span>
+                    <span className="categoria-label">{cat.label}</span>
+                    {!cat.disponivel && <span className="badge-breve">Em breve</span>}
+                  </button>
+                )
+              })}
             </div>
             <div className="filtros-fade-right" />
           </div>
@@ -421,7 +438,7 @@ export default function Filtros({ modelos, filtroCategoria, setFiltroCategoria, 
                   <div className="filtros-scroll">
                     <button
                       className={`filtro-btn${filtroModelo === 'Todos' ? ' ativo' : ''}`}
-                      onClick={() => setFiltroModelo('Todos')}
+                      onClick={() => (filtroModelo === 'Todos' ? subirAoTopo() : setFiltroModelo('Todos'))}
                     >
                       Todos
                     </button>
@@ -429,7 +446,7 @@ export default function Filtros({ modelos, filtroCategoria, setFiltroCategoria, 
                       <button
                         key={m}
                         className={`filtro-btn${filtroModelo === m ? ' ativo' : ''}`}
-                        onClick={() => setFiltroModelo(m)}
+                        onClick={() => (filtroModelo === m ? subirAoTopo() : setFiltroModelo(m))}
                       >
                         {rotuloCurto(m)}
                       </button>

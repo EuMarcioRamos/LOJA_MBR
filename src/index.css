@@ -911,6 +911,15 @@ body {
   cursor: default;
 }
 
+/* Categoria sem nenhum aparelho na condição/chave escolhida: o mesmo visual do
+   armazenamento sem estoque no card (borda e texto apagados, riscado) */
+.categoria-btn--sem-produto {
+  border-color: #2a2a2a;
+  color: #2e2e2e;
+  text-decoration: line-through;
+  cursor: not-allowed;
+}
+
 .categoria-icon {
   display: flex;
   align-items: center;
@@ -2429,15 +2438,7 @@ html:has(.carrinho-modal[open]) {
   transform: translateX(14px);
 }
 
-/* Selo do tipo de entrega na foto do card: verde na pronta entrega, escuro
-   (o mesmo do "Seminovo") no a pedido */
-.selo-entrega--pronta {
-  background: rgba(37, 211, 102, 0.9);
-  border-color: transparent;
-  color: #03140a;
-}
-
-/* Linha embaixo do preço: entrega imediata (verde) ou o prazo do a pedido (âmbar) */
+/* Linha embaixo do preço com o prazo do a pedido (âmbar) */
 .entrega-nota {
   display: flex;
   align-items: center;
@@ -2454,9 +2455,6 @@ html:has(.carrinho-modal[open]) {
   height: 7px;
   border-radius: 50%;
   background: currentColor;
-}
-.entrega-nota--pronta {
-  color: var(--whatsapp);
 }
 .entrega-nota--pedido {
   color: #e0a028;

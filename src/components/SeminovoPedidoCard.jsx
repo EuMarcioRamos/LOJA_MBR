@@ -1,4 +1,5 @@
 import { useRef, useState } from 'react'
+import useTrocaDeFoto from '../useTrocaDeFoto'
 import { corDaLuz } from '../corDaLuz'
 import { linkWhatsApp, mensagemDoCard } from '../mensagemWhatsApp'
 import { precoSeminovoPedido, idSeminovoPedido } from '../data/precosRemotos'
@@ -88,6 +89,10 @@ export default function SeminovoPedidoCard({ aparelho, carrinhoIds = [], onAlter
     }
   }
 
+  // Troca de cor da foto: a nova dissolve por cima da anterior, como nos
+  // lacrados (useTrocaDeFoto.js)
+  const { fotoAtual, fotoAnterior, saiu: fotoSaiu } = useTrocaDeFoto(corAtual?.imagem ?? null)
+
   // Baixa as fotos das outras cores quando a pessoa mostra que vai trocar
   const coresPreCarregadas = useRef(false)
   const preCarregarCores = () => {
@@ -140,14 +145,26 @@ export default function SeminovoPedidoCard({ aparelho, carrinhoIds = [], onAlter
       }}>
         <div className="modelo-card-luz" style={{ '--luz-cor': corDaLuz(corAtual?.corHex ?? '#8a8a8a') }} />
         {corAtual?.imagem ? (
-          <img
-            key={corAtual.imagem}
-            className="modelo-card-foto modelo-card-foto--entrando"
-            src={corAtual.imagem}
-            alt={`${modelo} ${corAtual.cor} seminovo`}
-            loading="lazy"
-            decoding="async"
-          />
+          <>
+            {fotoAnterior && (
+              <img
+                key={fotoAnterior}
+                className="modelo-card-foto modelo-card-foto--saindo"
+                src={fotoAnterior}
+                alt=""
+                aria-hidden="true"
+                onAnimationEnd={fotoSaiu}
+              />
+            )}
+            <img
+              key={fotoAtual}
+              className="modelo-card-foto modelo-card-foto--entrando"
+              src={fotoAtual}
+              alt={`${modelo} ${corAtual.cor} seminovo`}
+              loading="lazy"
+              decoding="async"
+            />
+          </>
         ) : FotoGenerica}
         <span className="selo-seminovo">Seminovo · A pedido</span>
       </div>
