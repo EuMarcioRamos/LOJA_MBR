@@ -302,6 +302,41 @@ body {
   to   { transform: translate(-50%, -50%) rotate(360deg); }
 }
 
+/* Girando em ângulo a partir do centro, a luz andava devagar no meio da pílula
+   e disparava nas pontas, porque a pílula é bem mais larga que alta (fechada,
+   236 x 52; aberta, 520 x 52). Nas pontas ela parecia sumir de um lado e
+   aparecer do outro, sem completar a volta. Onde o navegador permite (todos os
+   atuais), a luz corre pela própria borda (offset-path), com a mesma
+   velocidade em toda a volta e em qualquer largura. Navegador antigo fica com
+   o giro de cima */
+@supports (offset-path: inset(0 round 50px)) {
+  .busca-pilula-anel {
+    /* o cinza da borda, que antes vinha do próprio degradê que girava */
+    background: #3a3a3a;
+  }
+  .busca-pilula-anel-luz {
+    top: 0;
+    left: 0;
+    width: 60%;
+    height: 100%;
+    aspect-ratio: auto;
+    /* a borda da pílula (o arredondado de 50px vira meia-volta nas pontas) */
+    offset-path: inset(0 round 50px);
+    /* preso pela ponta branca: ela fica sempre em cima da borda, até nas
+       curvas das pontas, e o rastro verde vem atrás */
+    offset-anchor: 86% 50%;
+    offset-rotate: auto;
+    /* deitado na direção em que anda: rastro verde atrás, ponta branca na frente */
+    background: linear-gradient(90deg, rgba(37, 211, 102, 0) 0%, var(--whatsapp) 62%, #fff 86%, rgba(255, 255, 255, 0) 100%);
+    animation-name: buscaBrilhoBorda;
+  }
+}
+
+@keyframes buscaBrilhoBorda {
+  from { offset-distance: 0%; }
+  to   { offset-distance: 100%; }
+}
+
 .busca-pilula:hover {
   box-shadow: 0 8px 34px rgba(37, 211, 102, 0.26);
 }
@@ -853,6 +888,11 @@ body {
   }
   .busca-pilula-anel-luz {
     transform: translate(-50%, -50%);
+  }
+  @supports (offset-path: inset(0 round 50px)) {
+    .busca-pilula-anel-luz {
+      transform: none;
+    }
   }
   .busca-pilula,
   .busca-pilula-input,
