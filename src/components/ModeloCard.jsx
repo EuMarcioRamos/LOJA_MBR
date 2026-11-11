@@ -303,7 +303,10 @@ export default function ModeloCard({ modelo, variantes, precosProntos = true, pl
               ? 'Conectividade'
               : modelo.startsWith('MacBook') || modelo.startsWith('Mac mini')
                 ? 'Configuração'
-                : 'Armazenamento'}
+                // AirPods: o estojo de recarga ("Padrão" ou "Indução")
+                : modelo.startsWith('AirPods')
+                  ? 'Estojo'
+                  : 'Armazenamento'}
           </p>
           <div className="btn-selector-row">
             {atual.opcoes.map((op, i) => {

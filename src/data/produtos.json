@@ -3680,6 +3680,11 @@
         "armazenamento": "Padrão",
         "preco": 1499,
         "disponivel": true
+      },
+      {
+        "armazenamento": "Indução",
+        "preco": 1699,
+        "disponivel": true
       }
     ]
   },
