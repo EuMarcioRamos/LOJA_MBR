@@ -4,7 +4,11 @@ import { corDaLuz } from '../corDaLuz'
 import { linkWhatsApp, mensagemDoCard } from '../mensagemWhatsApp'
 
 export default function ModeloCard({ modelo, variantes, precosProntos = true, planilhaFalhou = false, carrinhoIds = [], onAlternarCarrinho, entrega = null }) {
-  const chips = [...new Set(variantes.map(v => v.chip).filter(Boolean))]
+  // Chips do mais novo pro mais antigo (MacBook Air: M5, M4... M1), e o card
+  // abre no mais novo. Na mesma geração fica a ordem do catálogo (MacBook Pro:
+  // M5, M5 Pro, M5 Max)
+  const geracao = (chip) => Number((chip.match(/\d+/) || [0])[0])
+  const chips = [...new Set(variantes.map(v => v.chip).filter(Boolean))].sort((a, b) => geracao(b) - geracao(a))
   const temChips = chips.length > 1
 
   const [chipSel, setChipSel] = useState(chips[0] || null)
