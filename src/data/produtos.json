@@ -1875,6 +1875,306 @@
     ]
   },
   {
+    "id": "13promax-graphite",
+    "modelo": "iPhone 13 Pro Max",
+    "cor": "Grafite",
+    "corHex": "#54524F",
+    "imagem": "/iphones/13/13promax-graphite.png",
+    "destaque": false,
+    "opcoes": [
+      {
+        "armazenamento": "128GB",
+        "preco": 3950,
+        "disponivel": true
+      },
+      {
+        "armazenamento": "256GB",
+        "preco": 4450,
+        "disponivel": true
+      },
+      {
+        "armazenamento": "512GB",
+        "preco": 5450,
+        "disponivel": true
+      },
+      {
+        "armazenamento": "1TB",
+        "preco": 6450,
+        "disponivel": true
+      }
+    ]
+  },
+  {
+    "id": "13promax-gold",
+    "modelo": "iPhone 13 Pro Max",
+    "cor": "Dourado",
+    "corHex": "#F4E8CE",
+    "imagem": "/iphones/13/13promax-gold.png",
+    "destaque": false,
+    "opcoes": [
+      {
+        "armazenamento": "128GB",
+        "preco": 3950,
+        "disponivel": true
+      },
+      {
+        "armazenamento": "256GB",
+        "preco": 4450,
+        "disponivel": true
+      },
+      {
+        "armazenamento": "512GB",
+        "preco": 5450,
+        "disponivel": true
+      },
+      {
+        "armazenamento": "1TB",
+        "preco": 6450,
+        "disponivel": true
+      }
+    ]
+  },
+  {
+    "id": "13promax-silver",
+    "modelo": "iPhone 13 Pro Max",
+    "cor": "Prata",
+    "corHex": "#E3E4E5",
+    "imagem": "/iphones/13/13promax-silver.png",
+    "destaque": false,
+    "opcoes": [
+      {
+        "armazenamento": "128GB",
+        "preco": 3950,
+        "disponivel": true
+      },
+      {
+        "armazenamento": "256GB",
+        "preco": 4450,
+        "disponivel": true
+      },
+      {
+        "armazenamento": "512GB",
+        "preco": 5450,
+        "disponivel": true
+      },
+      {
+        "armazenamento": "1TB",
+        "preco": 6450,
+        "disponivel": true
+      }
+    ]
+  },
+  {
+    "id": "13promax-sierrablue",
+    "modelo": "iPhone 13 Pro Max",
+    "cor": "Azul-Sierra",
+    "corHex": "#9BB5CE",
+    "imagem": "/iphones/13/13promax-sierrablue.png",
+    "destaque": false,
+    "opcoes": [
+      {
+        "armazenamento": "128GB",
+        "preco": 3950,
+        "disponivel": true
+      },
+      {
+        "armazenamento": "256GB",
+        "preco": 4450,
+        "disponivel": true
+      },
+      {
+        "armazenamento": "512GB",
+        "preco": 5450,
+        "disponivel": true
+      },
+      {
+        "armazenamento": "1TB",
+        "preco": 6450,
+        "disponivel": true
+      }
+    ]
+  },
+  {
+    "id": "13promax-alpinegreen",
+    "modelo": "iPhone 13 Pro Max",
+    "cor": "Verde-Alpino",
+    "corHex": "#576856",
+    "imagem": "/iphones/13/13promax-alpinegreen.png",
+    "destaque": false,
+    "opcoes": [
+      {
+        "armazenamento": "128GB",
+        "preco": 3950,
+        "disponivel": true
+      },
+      {
+        "armazenamento": "256GB",
+        "preco": 4450,
+        "disponivel": true
+      },
+      {
+        "armazenamento": "512GB",
+        "preco": 5450,
+        "disponivel": true
+      },
+      {
+        "armazenamento": "1TB",
+        "preco": 6450,
+        "disponivel": true
+      }
+    ]
+  },
+  {
+    "id": "13pro-graphite",
+    "modelo": "iPhone 13 Pro",
+    "cor": "Grafite",
+    "corHex": "#54524F",
+    "imagem": "/iphones/13/13pro-graphite.png",
+    "destaque": false,
+    "opcoes": [
+      {
+        "armazenamento": "128GB",
+        "preco": 3690,
+        "disponivel": true
+      },
+      {
+        "armazenamento": "256GB",
+        "preco": 3790,
+        "disponivel": true
+      },
+      {
+        "armazenamento": "512GB",
+        "preco": 4790,
+        "disponivel": true
+      },
+      {
+        "armazenamento": "1TB",
+        "preco": 5790,
+        "disponivel": true
+      }
+    ]
+  },
+  {
+    "id": "13pro-gold",
+    "modelo": "iPhone 13 Pro",
+    "cor": "Dourado",
+    "corHex": "#F4E8CE",
+    "imagem": "/iphones/13/13pro-gold.png",
+    "destaque": false,
+    "opcoes": [
+      {
+        "armazenamento": "128GB",
+        "preco": 3690,
+        "disponivel": true
+      },
+      {
+        "armazenamento": "256GB",
+        "preco": 3790,
+        "disponivel": true
+      },
+      {
+        "armazenamento": "512GB",
+        "preco": 4790,
+        "disponivel": true
+      },
+      {
+        "armazenamento": "1TB",
+        "preco": 5790,
+        "disponivel": true
+      }
+    ]
+  },
+  {
+    "id": "13pro-silver",
+    "modelo": "iPhone 13 Pro",
+    "cor": "Prata",
+    "corHex": "#E3E4E5",
+    "imagem": "/iphones/13/13pro-silver.png",
+    "destaque": false,
+    "opcoes": [
+      {
+        "armazenamento": "128GB",
+        "preco": 3690,
+        "disponivel": true
+      },
+      {
+        "armazenamento": "256GB",
+        "preco": 3790,
+        "disponivel": true
+      },
+      {
+        "armazenamento": "512GB",
+        "preco": 4790,
+        "disponivel": true
+      },
+      {
+        "armazenamento": "1TB",
+        "preco": 5790,
+        "disponivel": true
+      }
+    ]
+  },
+  {
+    "id": "13pro-sierrablue",
+    "modelo": "iPhone 13 Pro",
+    "cor": "Azul-Sierra",
+    "corHex": "#9BB5CE",
+    "imagem": "/iphones/13/13pro-sierrablue.png",
+    "destaque": false,
+    "opcoes": [
+      {
+        "armazenamento": "128GB",
+        "preco": 3690,
+        "disponivel": true
+      },
+      {
+        "armazenamento": "256GB",
+        "preco": 3790,
+        "disponivel": true
+      },
+      {
+        "armazenamento": "512GB",
+        "preco": 4790,
+        "disponivel": true
+      },
+      {
+        "armazenamento": "1TB",
+        "preco": 5790,
+        "disponivel": true
+      }
+    ]
+  },
+  {
+    "id": "13pro-alpinegreen",
+    "modelo": "iPhone 13 Pro",
+    "cor": "Verde-Alpino",
+    "corHex": "#576856",
+    "imagem": "/iphones/13/13pro-alpinegreen.png",
+    "destaque": false,
+    "opcoes": [
+      {
+        "armazenamento": "128GB",
+        "preco": 3690,
+        "disponivel": true
+      },
+      {
+        "armazenamento": "256GB",
+        "preco": 3790,
+        "disponivel": true
+      },
+      {
+        "armazenamento": "512GB",
+        "preco": 4790,
+        "disponivel": true
+      },
+      {
+        "armazenamento": "1TB",
+        "preco": 5790,
+        "disponivel": true
+      }
+    ]
+  },
+  {
     "id": "13-midnight",
     "modelo": "iPhone 13",
     "cor": "Meia-noite",

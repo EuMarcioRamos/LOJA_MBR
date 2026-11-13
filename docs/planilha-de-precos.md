@@ -236,7 +236,7 @@ Separadores (`-`) e o título da mensagem são ignorados.
 Dois aparelhos podem ter o mesmo final de IMEI se forem de modelos
 diferentes: a identidade de cada um é **IMEI + modelo**.
 
-### Modelos sem foto (13 Pro, 12, 11, XR…)
+### Modelos sem foto (13 mini, 12, 11, XR…)
 
 Os modelos que a loja não vende lacrados entram normalmente na planilha e
 no site, mas aparecem com uma silhueta no lugar da foto até a foto ser

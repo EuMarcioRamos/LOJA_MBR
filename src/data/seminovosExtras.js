@@ -1,4 +1,4 @@
-// Seminovos de modelos que a loja não vende lacrados (13 Pro, 12, 11, XR...):
+// Seminovos de modelos que a loja não vende lacrados (13 mini, 12, 11, XR...):
 // eles não estão no produtos.json, então a foto e o tom da cor vêm daqui.
 // Sem foto cadastrada, o card mostra uma foto genérica.
 
@@ -23,20 +23,6 @@ export const FOTOS_SEMINOVOS = {
     'Azul': '/iphones/14/14plus-blue.png',
     'Roxo': '/iphones/14/14plus-purple.png',
     'Amarelo': '/iphones/14/14plus-yellow.png',
-  }),
-  ...pares(['iPhone 13 Pro Max'], {
-    'Grafite': '/iphones/13/13promax-graphite.png',
-    'Dourado': '/iphones/13/13promax-gold.png',
-    'Prata': '/iphones/13/13promax-silver.png',
-    'Azul-Sierra': '/iphones/13/13promax-sierrablue.png',
-    'Verde-Alpino': '/iphones/13/13promax-alpinegreen.png',
-  }),
-  ...pares(['iPhone 13 Pro'], {
-    'Grafite': '/iphones/13/13pro-graphite.png',
-    'Dourado': '/iphones/13/13pro-gold.png',
-    'Prata': '/iphones/13/13pro-silver.png',
-    'Azul-Sierra': '/iphones/13/13pro-sierrablue.png',
-    'Verde-Alpino': '/iphones/13/13pro-alpinegreen.png',
   }),
   ...pares(['iPhone 13 mini'], {
     'Meia-noite': '/iphones/13/13mini-midnight.png',
